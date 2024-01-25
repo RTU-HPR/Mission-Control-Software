@@ -1,0 +1,977 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SpaceSystem name="basestation" xmlns="http://www.omg.org/spec/XTCE/20180204" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.omg.org/spec/XTCE/20180204 https://www.omg.org/spec/XTCE/20180204/SpaceSystem.xsd">
+	<TelemetryMetaData>
+		<ParameterTypeSet>
+      <!-- CCSDS PACKET PARAMETER TYPES -->
+			<AggregateParameterType name="CCSDS_Packet_ID_Type">
+				<MemberList>
+					<Member name="Version" typeRef="CCSDS_Version_Type" />
+					<Member name="Type" typeRef="CCSDS_Type_Type" />
+					<Member name="SecHdrFlag" typeRef="CCSDS_Sec_Hdr_Flag_Type" />
+					<Member name="APID" typeRef="CCSDS_APID_Type" />
+				</MemberList>
+			</AggregateParameterType>
+			<IntegerParameterType name="CCSDS_Version_Type" signed="false">
+				<UnitSet />
+				<IntegerDataEncoding sizeInBits="3" />
+			</IntegerParameterType>
+			<BooleanParameterType name="CCSDS_Type_Type" zeroStringValue="TM" oneStringValue="TC">
+				<UnitSet />
+				<IntegerDataEncoding sizeInBits="1" />
+			</BooleanParameterType>
+			<BooleanParameterType name="CCSDS_Sec_Hdr_Flag_Type" zeroStringValue="NotPresent" oneStringValue="Present">
+				<UnitSet />
+				<IntegerDataEncoding sizeInBits="1" />
+			</BooleanParameterType>
+			<IntegerParameterType name="CCSDS_APID_Type" signed="false">
+				<UnitSet />
+				<IntegerDataEncoding sizeInBits="11" />
+			</IntegerParameterType>
+			<AggregateParameterType name="CCSDS_Packet_Sequence_Type">
+				<MemberList>
+					<Member name="GroupFlags" typeRef="CCSDS_Group_Flags_Type" />
+					<Member name="Count" typeRef="CCSDS_Source_Sequence_Count_Type" />
+				</MemberList>
+			</AggregateParameterType>
+			<EnumeratedParameterType name="CCSDS_Group_Flags_Type">
+				<UnitSet />
+				<IntegerDataEncoding sizeInBits="2" />
+				<EnumerationList>
+					<Enumeration value="0" label="Continuation" />
+					<Enumeration value="1" label="First" />
+					<Enumeration value="2" label="Last" />
+					<Enumeration value="3" label="Standalone" />
+				</EnumerationList>
+			</EnumeratedParameterType>
+			<IntegerParameterType name="CCSDS_Source_Sequence_Count_Type" signed="false">
+				<UnitSet />
+				<IntegerDataEncoding sizeInBits="14" />
+			</IntegerParameterType>
+			<IntegerParameterType name="CCSDS_Packet_Length_Type" signed="false" initialValue="0">
+				<UnitSet>
+					<Unit description="Size">Octets</Unit>
+				</UnitSet>
+				<IntegerDataEncoding sizeInBits="16" />
+			</IntegerParameterType>
+      <IntegerParameterType name="CCSDS_Sec_Hed_Time" signed="false" initialValue="0">
+				<UnitSet />
+				<IntegerDataEncoding sizeInBits="32" />
+			</IntegerParameterType>
+      <IntegerParameterType name="CCSDS_Sec_Hed_Subseconds" signed="false" initialValue="0">
+				<UnitSet />
+				<IntegerDataEncoding sizeInBits="16" />
+			</IntegerParameterType>
+      <AggregateParameterType name="CCSDS_Packet_Sec_Hed">
+				<MemberList>
+					<Member name="Seconds" typeRef="CCSDS_Sec_Hed_Time" />
+					<Member name="Subseconds" typeRef="CCSDS_Sec_Hed_Subseconds" />
+				</MemberList>
+			</AggregateParameterType>
+
+
+      <!-- VARIABLE PARAMETER TYPES -->
+			<IntegerParameterType name="uint32_t" signed="false">
+				<UnitSet />
+				<IntegerDataEncoding encoding="unsigned" sizeInBits="32" />
+			</IntegerParameterType>
+      <IntegerParameterType name="int32_t" signed="true">
+				<UnitSet />
+				<IntegerDataEncoding sizeInBits="32" />
+			</IntegerParameterType>
+			<FloatParameterType name="float_t" signed="true">
+				<UnitSet />
+				<FloatDataEncoding sizeInBits="32" />
+			</FloatParameterType>
+			<BooleanParameterType name="bool_t">
+				<UnitSet />
+				<IntegerDataEncoding sizeInBits="32" />
+			</BooleanParameterType>
+      <StringParameterType name="fixed_string_64">
+        <StringDataEncoding encoding="UTF-8">
+          <SizeInBits>
+              <Fixed>
+                <FixedValue>64</FixedValue>
+              </Fixed>
+          </SizeInBits>
+        </StringDataEncoding>
+      </StringParameterType>
+      <StringParameterType name="dynamic_string_1024">
+        <StringDataEncoding encoding="UTF-8">
+            <Variable maxSizeInBits="1024">
+                <DynamicValue>
+                    <ParameterInstanceRef parameterRef="_yamcs_ignore" />
+                </DynamicValue>
+                <!-- 0a is the hex value for the newline character -->
+                <TerminationChar>0a</TerminationChar>
+            </Variable>
+        </StringDataEncoding>
+      </StringParameterType>
+		</ParameterTypeSet>
+
+
+    <!-- PARAMETER DEFINITION -->
+		<ParameterSet>
+      <!-- CCSDS PARCKET PARAMETERS -->
+			<Parameter name="CCSDS_Packet_ID" parameterTypeRef="CCSDS_Packet_ID_Type" />
+			<Parameter name="CCSDS_Packet_Sequence" parameterTypeRef="CCSDS_Packet_Sequence_Type" />
+			<Parameter name="CCSDS_Packet_Length" parameterTypeRef="CCSDS_Packet_Length_Type" />
+      <Parameter name="CCSDS_Sec_Hed" parameterTypeRef="CCSDS_Packet_Sec_Hed" />
+
+      <!-- PARAMETERS THAT CAN BE RECEIVED FROM PFC -->
+      <!-- Data esential -->
+			<Parameter name="PFC_GPS_Latitude" parameterTypeRef="float_t" />
+			<Parameter name="PFC_GPS_Longitude" parameterTypeRef="float_t" />
+			<Parameter name="PFC_GPS_Altitude" parameterTypeRef="float_t" />
+      <Parameter name="PFC_Baro_Altitude" parameterTypeRef="float_t" />
+      <Parameter name="PFC_GPS_Satellites" parameterTypeRef="uint32_t" />
+      <Parameter name="PFC_GPS_Time" parameterTypeRef="uint32_t" />
+      <Parameter name="PFC_Error_Info_In_Queue" parameterTypeRef="bool_t" />
+
+      <!-- Data complete -->
+      <Parameter name="PFC_Temperature_Internal_Baro" parameterTypeRef="float_t" />
+      <Parameter name="PFC_Temperature_Internal_Probe" parameterTypeRef="float_t" />
+      <Parameter name="PFC_Temperature_External" parameterTypeRef="float_t" />
+      <Parameter name="PFC_Pressure_Internal" parameterTypeRef="uint32_t" />
+      <Parameter name="PFC_Heater_Power" parameterTypeRef="uint32_t" />
+      <Parameter name="PFC_Ranging_0" parameterTypeRef="float_t" />
+      <Parameter name="PFC_Ranging_1" parameterTypeRef="float_t" />
+      <Parameter name="PFC_Ranging_0_Time_Since" parameterTypeRef="uint32_t" />
+      <Parameter name="PFC_Ranging_1_Time_Since" parameterTypeRef="uint32_t" />
+      <Parameter name="PFC_Battery_Voltage" parameterTypeRef="float_t" />
+
+      <!-- Info / Error -->
+      <Parameter name="PFC_Info_Error_Message" parameterTypeRef="dynamic_string_1024" />
+
+      <!-- Format storage -->
+      <Parameter name="PFC_Format_Storage_Command_Excecuted" parameterTypeRef="bool_t" />
+
+      <!-- Heater -->
+      <Parameter name="PFC_Heater_Command_Excecuted" parameterTypeRef="bool_t" />
+
+      <!-- Ejection charge -->
+      <Parameter name="PFC_Ejection_Charge_Command_Excecuted" parameterTypeRef="bool_t" />
+
+      <!-- Radio -->
+      <Parameter name="PFC_Rssi" parameterTypeRef="float_t" />
+      <Parameter name="PFC_Snr" parameterTypeRef="float_t" />
+
+      
+      <!-- PARAMETERS THAT CAN BE RECEIVED FROM BFC -->
+      <!-- Data esential -->
+			<Parameter name="BFC_GPS_Latitude" parameterTypeRef="float_t" />
+			<Parameter name="BFC_GPS_Longitude" parameterTypeRef="float_t" />
+			<Parameter name="BFC_GPS_Altitude" parameterTypeRef="float_t" />
+      <Parameter name="BFC_Baro_Altitude" parameterTypeRef="float_t" />
+      <Parameter name="BFC_GPS_Satellites" parameterTypeRef="uint32_t" />
+      <Parameter name="BFC_GPS_Time" parameterTypeRef="uint32_t" />
+      <Parameter name="BFC_Error_Info_In_Queue" parameterTypeRef="bool_t" />
+
+      <!-- Data complete -->
+      <Parameter name="BFC_Temperature_Internal" parameterTypeRef="float_t" /> 
+      <Parameter name="BFC_Temperature_External" parameterTypeRef="float_t" />
+      <Parameter name="BFC_Angular_Velocity_Z_Axis" parameterTypeRef="float_t" />
+      <Parameter name="BFC_Pointing_Location_Z_Axis" parameterTypeRef="float_t" />
+      <Parameter name="BFC_Motor_RPM" parameterTypeRef="uint32_t" />
+      <Parameter name="BFC_RWC_Battery_Voltage" parameterTypeRef="float_t" />
+      <Parameter name="BFC_BFC_Battery_Voltage" parameterTypeRef="float_t" />
+
+      <!-- Info / Error -->
+      <Parameter name="BFC_Info_Error_Message" parameterTypeRef="dynamic_string_1024" />
+
+      <!-- Format storage -->
+      <Parameter name="BFC_Format_Storage_Command_Excecuted" parameterTypeRef="bool_t" />
+
+      <!-- RWC Mode -->
+      <Parameter name="BFC_RWC_Mode_Command_Excecuted" parameterTypeRef="uint32_t" />
+
+      <!-- Ejection charge -->
+      <Parameter name="BFC_Ejection_Charge_Command_Excecuted" parameterTypeRef="bool_t" />
+
+      <!-- Radio -->
+      <Parameter name="BFC_Rssi" parameterTypeRef="float_t" />
+      <Parameter name="BFC_Snr" parameterTypeRef="float_t" />
+
+      <!-- ROTATOR -->
+      <!-- Rotator Position -->
+      <Parameter name="Rotator_Latitude" parameterTypeRef="float_t" />
+      <Parameter name="Rotator_Longitude" parameterTypeRef="float_t" />
+      <Parameter name="Rotator_Altitude" parameterTypeRef="float_t" />
+
+      <!-- CALCULATIONS -->
+      <!-- PFC -->
+      <Parameter name="PFC_GPS_Vertical_Speed" parameterTypeRef="float_t" />
+      <Parameter name="PFC_Baro_Vertical_Speed" parameterTypeRef="float_t" />
+      <Parameter name="PFC_GPS_Horizontal_Speed" parameterTypeRef="float_t" />
+      <Parameter name="PFC_GPS_Total_Speed" parameterTypeRef="float_t" />
+      <Parameter name="PFC_GPS_Ground_Distance_To_Rotator" parameterTypeRef="float_t" />
+      <Parameter name="PFC_GPS_Straight_Distance_To_Rotator" parameterTypeRef="float_t" />
+
+      <!-- BFC -->
+      <Parameter name="BFC_GPS_Vertical_Speed" parameterTypeRef="float_t" />
+      <Parameter name="BFC_Baro_Vertical_Speed" parameterTypeRef="float_t" />
+      <Parameter name="BFC_GPS_Horizontal_Speed" parameterTypeRef="float_t" />
+      <Parameter name="BFC_GPS_Total_Speed" parameterTypeRef="float_t" />
+      <Parameter name="BFC_GPS_Ground_Distance_To_Rotator" parameterTypeRef="float_t" />
+      <Parameter name="BFC_GPS_Straight_Distance_To_Rotator" parameterTypeRef="float_t" />
+
+      <!-- ROTATOR -->
+      <Parameter name="Calculated_Azimuth" parameterTypeRef="float_t" />
+      <Parameter name="Calculated_Elevation" parameterTypeRef="float_t" />
+    </ParameterSet>
+
+    <!-- RECEIVABLE PACKET DEFINITION -->
+		<ContainerSet>
+      <!-- ABSTRACT PACKET CONTAINERS -->
+			<SequenceContainer abstract="true" name="CCSDSPacket">
+				<EntryList>
+					<ParameterRefEntry parameterRef="CCSDS_Packet_ID" />
+					<ParameterRefEntry parameterRef="CCSDS_Packet_Sequence" />
+					<ParameterRefEntry parameterRef="CCSDS_Packet_Length" />
+          <ParameterRefEntry parameterRef="CCSDS_Sec_Hed" />
+				</EntryList>
+			</SequenceContainer>
+
+			<SequenceContainer name="TelemetryPacket">
+				<BaseContainer containerRef="CCSDSPacket">
+					<RestrictionCriteria>
+						<ComparisonList>
+							<Comparison value="0" parameterRef="CCSDS_Packet_ID/Version" />
+							<Comparison value="TM" parameterRef="CCSDS_Packet_ID/Type" />
+						</ComparisonList>
+					</RestrictionCriteria>
+				</BaseContainer>
+			</SequenceContainer>
+
+      <!-- RECEIVABLE PACKETS -->
+      <!-- PFC -->
+      <!-- Data esential -->
+			<SequenceContainer name="PayloadEssentialPacket">
+        <EntryList>
+          <ParameterRefEntry parameterRef="PFC_GPS_Latitude" />
+          <ParameterRefEntry parameterRef="PFC_GPS_Longitude" />
+          <ParameterRefEntry parameterRef="PFC_GPS_Altitude" />
+          <ParameterRefEntry parameterRef="PFC_Baro_Altitude" />
+          <ParameterRefEntry parameterRef="PFC_GPS_Satellites" />
+          <ParameterRefEntry parameterRef="PFC_Error_Info_In_Queue" />
+          <ParameterRefEntry parameterRef="PFC_Rssi" />
+          <ParameterRefEntry parameterRef="PFC_Snr" />
+        </EntryList>
+				<BaseContainer containerRef="TelemetryPacket">
+					<RestrictionCriteria>
+						<ComparisonList>
+							<Comparison value="Present" parameterRef="CCSDS_Packet_ID/SecHdrFlag" />
+							<Comparison value="100" parameterRef="CCSDS_Packet_ID/APID" />
+						</ComparisonList>
+					</RestrictionCriteria>
+				</BaseContainer>
+			</SequenceContainer>
+
+      <!-- Data complete -->
+      <SequenceContainer name="PayloadFullPakcet">
+        <EntryList>
+          <ParameterRefEntry parameterRef="PFC_Temperature_Internal_Baro" />
+          <ParameterRefEntry parameterRef="PFC_Temperature_Internal_Probe" />
+          <ParameterRefEntry parameterRef="PFC_Temperature_External" />
+          <ParameterRefEntry parameterRef="PFC_Pressure_Internal" />
+          <ParameterRefEntry parameterRef="PFC_Heater_Power" />
+          <ParameterRefEntry parameterRef="PFC_Ranging_0" />
+          <ParameterRefEntry parameterRef="PFC_Ranging_1" />
+          <ParameterRefEntry parameterRef="PFC_Ranging_0_Time_Since" />
+          <ParameterRefEntry parameterRef="PFC_Ranging_1_Time_Since" />
+          <ParameterRefEntry parameterRef="PFC_Battery_Voltage"/>
+          <ParameterRefEntry parameterRef="PFC_Rssi" />
+          <ParameterRefEntry parameterRef="PFC_Snr" />
+        </EntryList>
+				<BaseContainer containerRef="TelemetryPacket">
+					<RestrictionCriteria>
+						<ComparisonList>
+							<Comparison value="Present" parameterRef="CCSDS_Packet_ID/SecHdrFlag" />
+							<Comparison value="101" parameterRef="CCSDS_Packet_ID/APID" />
+						</ComparisonList>
+					</RestrictionCriteria>
+				</BaseContainer>
+			</SequenceContainer>
+
+      <!-- Info / Error -->
+			<SequenceContainer name="PayloadInfoPacket">
+        <EntryList>
+          <ParameterRefEntry parameterRef="PFC_Info_Error_Message" />
+          <ParameterRefEntry parameterRef="PFC_Rssi" />
+          <ParameterRefEntry parameterRef="PFC_Snr" />
+        </EntryList>
+				<BaseContainer containerRef="TelemetryPacket">
+					<RestrictionCriteria>
+						<ComparisonList>
+							<Comparison value="Present" parameterRef="CCSDS_Packet_ID/SecHdrFlag" />
+							<Comparison value="102" parameterRef="CCSDS_Packet_ID/APID" />
+						</ComparisonList>
+					</RestrictionCriteria>
+				</BaseContainer>
+			</SequenceContainer>
+
+      <!-- Format -->
+			<SequenceContainer name="PayloadFormatPacket">
+        <EntryList>
+          <ParameterRefEntry parameterRef="PFC_Format_Storage_Command_Excecuted" />
+          <ParameterRefEntry parameterRef="PFC_Rssi" />
+          <ParameterRefEntry parameterRef="PFC_Snr" />
+        </EntryList>
+				<BaseContainer containerRef="TelemetryPacket">
+					<RestrictionCriteria>
+						<ComparisonList>
+							<Comparison value="Present" parameterRef="CCSDS_Packet_ID/SecHdrFlag" />
+							<Comparison value="103" parameterRef="CCSDS_Packet_ID/APID" />
+						</ComparisonList>
+					</RestrictionCriteria>
+				</BaseContainer>
+			</SequenceContainer>
+
+      <!-- Ejection -->
+			<SequenceContainer name="PayloadEjectionChargeReceivedPacket">
+        <EntryList>
+          <ParameterRefEntry parameterRef="PFC_Ejection_Charge_Command_Excecuted" />
+          <ParameterRefEntry parameterRef="PFC_Rssi" />
+          <ParameterRefEntry parameterRef="PFC_Snr" />
+        </EntryList>
+				<BaseContainer containerRef="TelemetryPacket">
+					<RestrictionCriteria>
+						<ComparisonList>
+							<Comparison value="Present" parameterRef="CCSDS_Packet_ID/SecHdrFlag" />
+							<Comparison value="104" parameterRef="CCSDS_Packet_ID/APID" />
+						</ComparisonList>
+					</RestrictionCriteria>
+				</BaseContainer>
+			</SequenceContainer>
+
+      <!-- BFC -->
+      <!-- Data esential -->
+			<SequenceContainer name="BalloonEssentialPacket">
+        <EntryList>
+          <ParameterRefEntry parameterRef="BFC_GPS_Latitude" />
+          <ParameterRefEntry parameterRef="BFC_GPS_Longitude" />
+          <ParameterRefEntry parameterRef="BFC_GPS_Altitude" />
+          <ParameterRefEntry parameterRef="BFC_Baro_Altitude" />
+          <ParameterRefEntry parameterRef="BFC_GPS_Satellites" />
+          <ParameterRefEntry parameterRef="BFC_GPS_Time" />
+          <ParameterRefEntry parameterRef="BFC_Error_Info_In_Queue" />
+          <ParameterRefEntry parameterRef="BFC_Rssi" />
+          <ParameterRefEntry parameterRef="BFC_Snr" />
+        </EntryList>
+				<BaseContainer containerRef="TelemetryPacket">
+					<RestrictionCriteria>
+						<ComparisonList>
+							<Comparison value="Present" parameterRef="CCSDS_Packet_ID/SecHdrFlag" />
+							<Comparison value="200" parameterRef="CCSDS_Packet_ID/APID" />
+						</ComparisonList>
+					</RestrictionCriteria>
+				</BaseContainer>
+			</SequenceContainer>
+
+      <!-- Data complete -->
+      <SequenceContainer name="BalloonFullPakcet">
+        <EntryList>
+          <ParameterRefEntry parameterRef="BFC_Temperature_Internal" /> 
+          <ParameterRefEntry parameterRef="PFC_Temperature_External" />
+          <ParameterRefEntry parameterRef="BFC_Angular_Velocity_Z_Axis" />
+          <ParameterRefEntry parameterRef="BFC_Pointing_Location_Z_Axis" />
+          <ParameterRefEntry parameterRef="BFC_Motor_RPM" />
+          <ParameterRefEntry parameterRef="BFC_RWC_Battery_Voltage" />
+          <ParameterRefEntry parameterRef="BFC_BFC_Battery_Voltage" />
+          <ParameterRefEntry parameterRef="BFC_Rssi" />
+          <ParameterRefEntry parameterRef="BFC_Snr" />
+        </EntryList>
+				<BaseContainer containerRef="TelemetryPacket">
+					<RestrictionCriteria>
+						<ComparisonList>
+							<Comparison value="Present" parameterRef="CCSDS_Packet_ID/SecHdrFlag" />
+							<Comparison value="201" parameterRef="CCSDS_Packet_ID/APID" />
+						</ComparisonList>
+					</RestrictionCriteria>
+				</BaseContainer>
+			</SequenceContainer>
+
+      <!-- Info / Error -->
+			<SequenceContainer name="BalloonInfoErrorPacket">
+        <EntryList>
+          <ParameterRefEntry parameterRef="BFC_Info_Error_Message" />
+          <ParameterRefEntry parameterRef="BFC_Rssi" />
+          <ParameterRefEntry parameterRef="BFC_Snr" />
+        </EntryList>
+				<BaseContainer containerRef="TelemetryPacket">
+					<RestrictionCriteria>
+						<ComparisonList>
+							<Comparison value="Present" parameterRef="CCSDS_Packet_ID/SecHdrFlag" />
+							<Comparison value="202" parameterRef="CCSDS_Packet_ID/APID" />
+						</ComparisonList>
+					</RestrictionCriteria>
+				</BaseContainer>
+			</SequenceContainer>
+
+      <!-- Format -->
+			<SequenceContainer name="BalloonFormatPacket">
+        <EntryList>
+          <ParameterRefEntry parameterRef="BFC_Format_Storage_Command_Excecuted" />
+          <ParameterRefEntry parameterRef="BFC_Rssi" />
+          <ParameterRefEntry parameterRef="BFC_Snr" />
+        </EntryList>
+				<BaseContainer containerRef="TelemetryPacket">
+					<RestrictionCriteria>
+						<ComparisonList>
+							<Comparison value="Present" parameterRef="CCSDS_Packet_ID/SecHdrFlag" />
+							<Comparison value="203" parameterRef="CCSDS_Packet_ID/APID" />
+						</ComparisonList>
+					</RestrictionCriteria>
+				</BaseContainer>
+			</SequenceContainer>
+
+      <!-- RWC Mode -->
+			<SequenceContainer name="BalloonRwcModePacket">
+        <EntryList>
+          <ParameterRefEntry parameterRef="BFC_RWC_Mode_Command_Excecuted" />
+          <ParameterRefEntry parameterRef="BFC_Rssi" />
+          <ParameterRefEntry parameterRef="BFC_Snr" />
+        </EntryList>
+				<BaseContainer containerRef="TelemetryPacket">
+					<RestrictionCriteria>
+						<ComparisonList>
+							<Comparison value="Present" parameterRef="CCSDS_Packet_ID/SecHdrFlag" />
+							<Comparison value="204" parameterRef="CCSDS_Packet_ID/APID" />
+						</ComparisonList>
+					</RestrictionCriteria>
+				</BaseContainer>
+			</SequenceContainer>
+
+      <!-- Ejection -->
+			<SequenceContainer name="BalloonEjectionChargeReceivedPacket">
+        <EntryList>
+          <ParameterRefEntry parameterRef="BFC_Ejection_Charge_Command_Excecuted" />
+          <ParameterRefEntry parameterRef="BFC_Rssi" />
+          <ParameterRefEntry parameterRef="BFC_Snr" />
+        </EntryList>
+				<BaseContainer containerRef="TelemetryPacket">
+					<RestrictionCriteria>
+						<ComparisonList>
+							<Comparison value="Present" parameterRef="CCSDS_Packet_ID/SecHdrFlag" />
+							<Comparison value="205" parameterRef="CCSDS_Packet_ID/APID" />
+						</ComparisonList>
+					</RestrictionCriteria>
+				</BaseContainer>
+			</SequenceContainer>
+
+      <!-- ROTATOR -->
+      <!-- Rotator Position -->
+      <SequenceContainer name="RotatorPositionPacket">
+        <EntryList>
+          <ParameterRefEntry parameterRef="Rotator_Latitude" />
+          <ParameterRefEntry parameterRef="Rotator_Longitude" />
+          <ParameterRefEntry parameterRef="Rotator_Altitude" />
+        </EntryList>
+				<BaseContainer containerRef="TelemetryPacket">
+					<RestrictionCriteria>
+						<ComparisonList>
+							<Comparison value="Present" parameterRef="CCSDS_Packet_ID/SecHdrFlag" />
+							<Comparison value="50" parameterRef="CCSDS_Packet_ID/APID" />
+						</ComparisonList>
+					</RestrictionCriteria>
+				</BaseContainer>
+			</SequenceContainer>
+
+      <!-- CALCULATIONS -->
+      <!-- PFC -->
+      <SequenceContainer name="PFC_Telemetry_Calculations">
+        <EntryList>
+          <ParameterRefEntry parameterRef="PFC_GPS_Vertical_Speed" />
+          <ParameterRefEntry parameterRef="PFC_Baro_Vertical_Speed" />
+          <ParameterRefEntry parameterRef="PFC_GPS_Horizontal_Speed" />
+          <ParameterRefEntry parameterRef="PFC_GPS_Total_Speed" />
+          <ParameterRefEntry parameterRef="PFC_GPS_Ground_Distance_To_Rotator" />
+          <ParameterRefEntry parameterRef="PFC_GPS_Straight_Distance_To_Rotator" />
+        </EntryList>
+				<BaseContainer containerRef="TelemetryPacket">
+					<RestrictionCriteria>
+						<ComparisonList>
+							<Comparison value="Present" parameterRef="CCSDS_Packet_ID/SecHdrFlag" />
+							<Comparison value="60" parameterRef="CCSDS_Packet_ID/APID" />
+						</ComparisonList>
+					</RestrictionCriteria>
+				</BaseContainer>
+			</SequenceContainer>
+
+      <!-- BFC -->
+      <SequenceContainer name="BFC_Telemetry_Calculations">
+        <EntryList>
+          <ParameterRefEntry parameterRef="BFC_GPS_Vertical_Speed" />
+          <ParameterRefEntry parameterRef="BFC_Baro_Vertical_Speed" />
+          <ParameterRefEntry parameterRef="BFC_GPS_Horizontal_Speed" />
+          <ParameterRefEntry parameterRef="BFC_GPS_Total_Speed" />
+          <ParameterRefEntry parameterRef="BFC_GPS_Ground_Distance_To_Rotator" />
+          <ParameterRefEntry parameterRef="BFC_GPS_Straight_Distance_To_Rotator" />
+        </EntryList>
+				<BaseContainer containerRef="TelemetryPacket">
+					<RestrictionCriteria>
+						<ComparisonList>
+							<Comparison value="Present" parameterRef="CCSDS_Packet_ID/SecHdrFlag" />
+							<Comparison value="70" parameterRef="CCSDS_Packet_ID/APID" />
+						</ComparisonList>
+					</RestrictionCriteria>
+				</BaseContainer>
+			</SequenceContainer>
+
+      <!-- ROTATOR -->
+      <SequenceContainer name="Rotator_Calculated_Angles">
+        <EntryList>
+          <ParameterRefEntry parameterRef="Calculated_Azimuth" />
+          <ParameterRefEntry parameterRef="Calculated_Elevation" />
+        </EntryList>
+				<BaseContainer containerRef="TelemetryPacket">
+					<RestrictionCriteria>
+						<ComparisonList>
+							<Comparison value="Present" parameterRef="CCSDS_Packet_ID/SecHdrFlag" />
+							<Comparison value="80" parameterRef="CCSDS_Packet_ID/APID" />
+						</ComparisonList>
+					</RestrictionCriteria>
+				</BaseContainer>
+			</SequenceContainer>
+		</ContainerSet>
+	</TelemetryMetaData>
+
+
+	<CommandMetaData>
+		<ArgumentTypeSet>
+      <!-- CCSDS ARGUMENT TYPES -->
+			<IntegerArgumentType name="CCSDS_Version_Type" signed="false">
+				<UnitSet />
+				<IntegerDataEncoding sizeInBits="3" />
+			</IntegerArgumentType>
+			<BooleanArgumentType name="CCSDS_Type_Type" zeroStringValue="TM" oneStringValue="TC">
+				<UnitSet />
+				<IntegerDataEncoding sizeInBits="1" />
+			</BooleanArgumentType>
+			<BooleanArgumentType name="CCSDS_Sec_Hdr_Flag_Type" zeroStringValue="NotPresent" oneStringValue="Present">
+				<UnitSet />
+				<IntegerDataEncoding sizeInBits="1" />
+			</BooleanArgumentType>
+			<IntegerArgumentType name="CCSDS_APID_Type" signed="false">
+				<UnitSet />
+				<IntegerDataEncoding sizeInBits="11" />
+			</IntegerArgumentType>
+			<EnumeratedArgumentType name="CCSDS_Group_Flags_Type">
+				<UnitSet />
+				<IntegerDataEncoding sizeInBits="2" />
+				<EnumerationList>
+					<Enumeration value="0" label="Continuation" />
+					<Enumeration value="1" label="First" />
+					<Enumeration value="2" label="Last" />
+					<Enumeration value="3" label="Standalone" />
+				</EnumerationList>
+			</EnumeratedArgumentType>
+			<IntegerArgumentType name="Packet_ID_Type" signed="false">
+				<UnitSet />
+				<IntegerDataEncoding sizeInBits="16" />
+			</IntegerArgumentType>
+
+      <!-- VARIABLE ARGUMENT TYPES -->
+      <IntegerArgumentType name="uint32_t" signed="false">
+				<UnitSet />
+				<IntegerDataEncoding encoding="unsigned" sizeInBits="32" />
+			</IntegerArgumentType>
+			<FloatArgumentType name="float_t" signed="true">
+				<UnitSet />
+				<FloatDataEncoding sizeInBits="32" />
+			</FloatArgumentType>
+			<BooleanArgumentType name="bool_t">
+				<UnitSet />
+				<IntegerDataEncoding sizeInBits="8" />
+			</BooleanArgumentType>
+      <EnumeratedArgumentType name="Heater_Mode_Type">
+				<UnitSet />
+				<IntegerDataEncoding sizeInBits="8" />
+				<EnumerationList>
+					<Enumeration value="0" label="OFF" />
+					<Enumeration value="1" label="ON" />
+				</EnumerationList>
+			</EnumeratedArgumentType>
+      <EnumeratedArgumentType name="Rotator_Target_Type">
+				<UnitSet />
+				<IntegerDataEncoding sizeInBits="8" />
+				<EnumerationList>
+					<Enumeration value="0" label="Payload" />
+					<Enumeration value="1" label="Balloon" />
+				</EnumerationList>
+			</EnumeratedArgumentType>
+      <EnumeratedArgumentType name="Ejection_Charge_Channel_Type">
+				<UnitSet />
+				<IntegerDataEncoding sizeInBits="8" />
+				<EnumerationList>
+					<Enumeration value="1" label="Channel 1" />
+					<Enumeration value="2" label="Channel 2" />
+				</EnumerationList>
+			</EnumeratedArgumentType>
+      <EnumeratedArgumentType name="Rwc_Mode_Type">
+				<UnitSet />
+				<IntegerDataEncoding sizeInBits="8" />
+				<EnumerationList>
+					<Enumeration value="0" label="Disabled" />
+					<Enumeration value="1" label="Despin" />
+					<Enumeration value="2" label="Pointing" />
+				</EnumerationList>
+			</EnumeratedArgumentType>
+		</ArgumentTypeSet>
+  
+    <!-- SENDABLE COMMAND DEFINITION -->
+		<MetaCommandSet>
+      <!-- CCSDS COMMAND ABSTRACT CONTAINER -->
+			<MetaCommand name="CCSDSPacket" abstract="true">
+				<ArgumentList>
+					<Argument argumentTypeRef="CCSDS_Version_Type" name="CCSDS_Version" />
+					<Argument argumentTypeRef="CCSDS_Type_Type" name="CCSDS_Type" />
+					<Argument argumentTypeRef="CCSDS_Sec_Hdr_Flag_Type" name="CCSDS_Sec_Hdr_Flag" />
+					<Argument argumentTypeRef="CCSDS_APID_Type" name="CCSDS_APID" />
+					<Argument argumentTypeRef="CCSDS_Group_Flags_Type" name="CCSDS_Group_Flags" />
+				</ArgumentList>
+				<CommandContainer name="CCSDSPacket">
+					<EntryList>
+						<ArgumentRefEntry argumentRef="CCSDS_Version" />
+						<ArgumentRefEntry argumentRef="CCSDS_Type" />
+						<ArgumentRefEntry argumentRef="CCSDS_Sec_Hdr_Flag" />
+						<ArgumentRefEntry argumentRef="CCSDS_APID" />
+						<ArgumentRefEntry argumentRef="CCSDS_Group_Flags" />
+						<!-- Final value is set by post-processor after the command is submitted. -->
+						<FixedValueEntry name="CCSDS_Source_Sequence_Count" binaryValue="0000" sizeInBits="14" />
+						<!-- Final value is set by post-processor after the command is submitted. -->
+						<FixedValueEntry name="CCSDS_Packet_Length" binaryValue="0000" sizeInBits="16" />
+					</EntryList>
+				</CommandContainer>
+			</MetaCommand>
+
+      <!-- SENDABLE COMMAND ABSTRACT CONTAINERS -->
+      <MetaCommand name="PayloadCommand" abstract="true">
+				<BaseMetaCommand metaCommandRef="CCSDSPacket">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="CCSDS_Version" argumentValue="0" />
+						<ArgumentAssignment argumentName="CCSDS_Type" argumentValue="TC" />
+						<ArgumentAssignment argumentName="CCSDS_Sec_Hdr_Flag" argumentValue="NotPresent" />
+						<ArgumentAssignment argumentName="CCSDS_APID" argumentValue="10" />
+						<ArgumentAssignment argumentName="CCSDS_Group_Flags" argumentValue="Standalone" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>
+				<ArgumentList>
+					<Argument argumentTypeRef="Packet_ID_Type" name="Packet_ID" />
+				</ArgumentList>
+				<CommandContainer name="PayloadCommandContainer">
+					<EntryList>
+						<ArgumentRefEntry argumentRef="Packet_ID" />
+					</EntryList>
+					<BaseContainer containerRef="CCSDSPacket" />
+				</CommandContainer>
+			</MetaCommand>
+
+      <MetaCommand name="BalloonCommand" abstract="true">
+				<BaseMetaCommand metaCommandRef="CCSDSPacket">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="CCSDS_Version" argumentValue="0" />
+						<ArgumentAssignment argumentName="CCSDS_Type" argumentValue="TC" />
+						<ArgumentAssignment argumentName="CCSDS_Sec_Hdr_Flag" argumentValue="NotPresent" />
+						<ArgumentAssignment argumentName="CCSDS_APID" argumentValue="20" />
+						<ArgumentAssignment argumentName="CCSDS_Group_Flags" argumentValue="Standalone" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>
+				<ArgumentList>
+					<Argument argumentTypeRef="Packet_ID_Type" name="Packet_ID" />
+				</ArgumentList>
+				<CommandContainer name="BalloonCommandContainer">
+					<EntryList>
+						<ArgumentRefEntry argumentRef="Packet_ID" />
+					</EntryList>
+					<BaseContainer containerRef="CCSDSPacket" />
+				</CommandContainer>
+			</MetaCommand>
+
+      <MetaCommand name="RotatorCommand" abstract="true">
+				<BaseMetaCommand metaCommandRef="CCSDSPacket">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="CCSDS_Version" argumentValue="0" />
+						<ArgumentAssignment argumentName="CCSDS_Type" argumentValue="TC" />
+						<ArgumentAssignment argumentName="CCSDS_Sec_Hdr_Flag" argumentValue="NotPresent" />
+						<ArgumentAssignment argumentName="CCSDS_APID" argumentValue="30" />
+						<ArgumentAssignment argumentName="CCSDS_Group_Flags" argumentValue="Standalone" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>
+				<ArgumentList>
+					<Argument argumentTypeRef="Packet_ID_Type" name="Packet_ID" />
+				</ArgumentList>
+				<CommandContainer name="RotatorCommandContainer">
+					<EntryList>
+						<ArgumentRefEntry argumentRef="Packet_ID" />
+					</EntryList>
+					<BaseContainer containerRef="CCSDSPacket" />
+				</CommandContainer>
+			</MetaCommand>
+
+      <!-- SENDABLE COMMANDS -->
+      <!-- PFC -->
+			<MetaCommand name="Payload Complete Data Request">
+				<BaseMetaCommand metaCommandRef="PayloadCommand">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Packet_ID" argumentValue="1000" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>
+				<CommandContainer name="Payload Complete Data Request">
+					<EntryList />
+					<BaseContainer containerRef="PayloadCommandContainer" />
+				</CommandContainer>
+				<DefaultSignificance consequenceLevel="normal" />
+			</MetaCommand>
+
+      <MetaCommand name="Payload Info Error Request">
+				<BaseMetaCommand metaCommandRef="PayloadCommand">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Packet_ID" argumentValue="1001" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>
+				<CommandContainer name="Payload Info Error Request">
+					<EntryList />
+					<BaseContainer containerRef="PayloadCommandContainer" />
+				</CommandContainer>
+				<DefaultSignificance consequenceLevel="normal" />
+			</MetaCommand>
+
+      <MetaCommand name="Payload Format Storage Request">
+				<BaseMetaCommand metaCommandRef="PayloadCommand">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Packet_ID" argumentValue="1002" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>
+				<CommandContainer name="Payload Format Storage Request">
+					<EntryList />
+					<BaseContainer containerRef="PayloadCommandContainer" />
+				</CommandContainer>
+				<DefaultSignificance consequenceLevel="normal" />
+			</MetaCommand>
+
+      <!-- <MetaCommand name="PayloadHeaterSetRequest">
+        <ArgumentList>
+          <Argument argumentTypeRef="Heater_Mode_Type" name="Heater_Mode" />
+        </ArgumentList>
+				<BaseMetaCommand metaCommandRef="PayloadCommand">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Packet_ID" argumentValue="1003" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>
+				<CommandContainer name="PayloadHeaterSetRequest">
+          <EntryList>
+            <ArgumentRefEntry argumentRef="Heater_Mode" />
+					</EntryList>
+					<BaseContainer containerRef="PayloadCommandContainer" />
+				</CommandContainer>
+				<DefaultSignificance consequenceLevel="normal" />
+			</MetaCommand> -->
+
+      <MetaCommand name="Payload Ejection Request">
+        <ArgumentList>
+          <Argument argumentTypeRef="Ejection_Charge_Channel_Type" name="Channel" />
+        </ArgumentList>
+				<BaseMetaCommand metaCommandRef="PayloadCommand">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Packet_ID" argumentValue="1003" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>
+				<CommandContainer name="Payload Ejection Request">
+					<EntryList>
+            <ArgumentRefEntry argumentRef="Channel" />
+					</EntryList>
+					<BaseContainer containerRef="PayloadCommandContainer" />
+				</CommandContainer>
+				<DefaultSignificance consequenceLevel="normal" />
+			</MetaCommand>
+
+      <!-- BFC -->
+      <MetaCommand name="Balloon Complete Data Request">
+				<BaseMetaCommand metaCommandRef="BalloonCommand">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Packet_ID" argumentValue="2000" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>
+				<CommandContainer name="Balloon Complete Data Request">
+					<EntryList />
+					<BaseContainer containerRef="BalloonCommandContainer" />
+				</CommandContainer>
+				<DefaultSignificance consequenceLevel="normal" />
+			</MetaCommand>
+
+      <MetaCommand name="Balloon Info Error Request">
+				<BaseMetaCommand metaCommandRef="BalloonCommand">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Packet_ID" argumentValue="2001" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>
+				<CommandContainer name="Balloon Info Error Request">
+					<EntryList />
+					<BaseContainer containerRef="BalloonCommandContainer" />
+				</CommandContainer>
+				<DefaultSignificance consequenceLevel="normal" />
+			</MetaCommand>
+
+      <MetaCommand name="Balloon Format Storage Request">
+				<BaseMetaCommand metaCommandRef="BalloonCommand">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Packet_ID" argumentValue="2002" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>
+				<CommandContainer name="Balloon Format Storage Request">
+					<EntryList />
+					<BaseContainer containerRef="BalloonCommandContainer" />
+				</CommandContainer>
+				<DefaultSignificance consequenceLevel="normal" />
+			</MetaCommand>
+
+      <MetaCommand name="Balloon Rwc Mode Set Request">
+      <ArgumentList>
+          <Argument argumentTypeRef="Rwc_Mode_Type" name="RWC_Mode" />
+          <Argument argumentTypeRef="float_t" name="RWC_Direction" />
+        </ArgumentList>
+				<BaseMetaCommand metaCommandRef="BalloonCommand">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Packet_ID" argumentValue="2003" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>
+				<CommandContainer name="Balloon Rwc Mode Set Request">
+					<EntryList>
+            <ArgumentRefEntry argumentRef="RWC_Mode" />
+            <ArgumentRefEntry argumentRef="RWC_Direction" />
+					</EntryList>
+					<BaseContainer containerRef="BalloonCommandContainer" />
+				</CommandContainer>
+				<DefaultSignificance consequenceLevel="normal" />
+			</MetaCommand>
+
+      <MetaCommand name="Balloon Ejection Request">
+        <ArgumentList>
+          <Argument argumentTypeRef="Ejection_Charge_Channel_Type" name="Channel" />
+        </ArgumentList>
+				<BaseMetaCommand metaCommandRef="BalloonCommand">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Packet_ID" argumentValue="2004" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>
+				<CommandContainer name="Balloon Ejection Request">
+					<EntryList>
+            <ArgumentRefEntry argumentRef="Channel" />
+					</EntryList>
+					<BaseContainer containerRef="BalloonCommandContainer" />
+				</CommandContainer>
+				<DefaultSignificance consequenceLevel="normal" />
+			</MetaCommand>
+
+      <!-- ROTATOR -->
+      <MetaCommand name="Rotator Target Request">
+        <ArgumentList>
+          <Argument argumentTypeRef="Rotator_Target_Type" name="Rotator_Target" />
+        </ArgumentList>
+				<BaseMetaCommand metaCommandRef="RotatorCommand">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Packet_ID" argumentValue="3000" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>
+				<CommandContainer name="Rotator Target Request">
+					<EntryList>
+            <ArgumentRefEntry argumentRef="Rotator_Target" />
+					</EntryList>
+					<BaseContainer containerRef="RotatorCommandContainer" />
+				</CommandContainer>
+				<DefaultSignificance consequenceLevel="normal" />
+			</MetaCommand>
+
+      <MetaCommand name="Rotator Automatic Tracking Request">
+				<BaseMetaCommand metaCommandRef="RotatorCommand">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Packet_ID" argumentValue="3001" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>
+				<CommandContainer name="Rotator Automatic Tracking Request">
+					<EntryList />
+					<BaseContainer containerRef="RotatorCommandContainer" />
+				</CommandContainer>
+				<DefaultSignificance consequenceLevel="normal" />
+			</MetaCommand>
+
+      <MetaCommand name="Rotator Automatic Position Request">
+				<BaseMetaCommand metaCommandRef="RotatorCommand">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Packet_ID" argumentValue="3002" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>
+				<CommandContainer name="Rotator Automatic Position Request">
+					<EntryList />
+					<BaseContainer containerRef="RotatorCommandContainer" />
+				</CommandContainer>
+				<DefaultSignificance consequenceLevel="normal" />
+			</MetaCommand>
+
+      <MetaCommand name="Rotator Manual Position Request">
+        <ArgumentList>
+          <Argument argumentTypeRef="float_t" name="Rotator_Latitude" />
+          <Argument argumentTypeRef="float_t" name="Rotator_Longitude" />
+          <Argument argumentTypeRef="float_t" name="Rotator_Altitude" />
+        </ArgumentList>
+				<BaseMetaCommand metaCommandRef="RotatorCommand">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Packet_ID" argumentValue="3003" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>
+				<CommandContainer name="Rotator Manual Position Request">
+					<EntryList>
+            <ArgumentRefEntry argumentRef="Rotator_Latitude" />
+            <ArgumentRefEntry argumentRef="Rotator_Longitude" />
+            <ArgumentRefEntry argumentRef="Rotator_Altitude" />
+					</EntryList>
+					<BaseContainer containerRef="RotatorCommandContainer" />
+				</CommandContainer>
+				<DefaultSignificance consequenceLevel="normal" />
+			</MetaCommand>
+
+      <MetaCommand name="Rotator Manual Angles Request">
+      <ArgumentList>
+          <Argument argumentTypeRef="float_t" name="Rotator_Azimuth" />
+          <Argument argumentTypeRef="float_t" name="Rotator_Elevation" />
+        </ArgumentList>
+				<BaseMetaCommand metaCommandRef="RotatorCommand">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Packet_ID" argumentValue="3004" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>
+				<CommandContainer name="Rotator Manual Angles Request">
+					<EntryList>
+            <ArgumentRefEntry argumentRef="Rotator_Azimuth" />
+            <ArgumentRefEntry argumentRef="Rotator_Elevation" />
+					</EntryList>
+					<BaseContainer containerRef="RotatorCommandContainer" />
+				</CommandContainer>
+				<DefaultSignificance consequenceLevel="normal" />
+			</MetaCommand>
+
+      <MetaCommand name="Rotator Manual Target Coordinates Request">
+        <ArgumentList>
+          <Argument argumentTypeRef="float_t" name="Target_Latitude" />
+          <Argument argumentTypeRef="float_t" name="Target_Longitude" />
+          <Argument argumentTypeRef="float_t" name="Target_Altitude" />
+        </ArgumentList>
+				<BaseMetaCommand metaCommandRef="RotatorCommand">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Packet_ID" argumentValue="3005" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>
+				<CommandContainer name="Rotator Manual Target Coordinates Request">
+					<EntryList>
+            <ArgumentRefEntry argumentRef="Target_Latitude" />
+            <ArgumentRefEntry argumentRef="Target_Longitude" />
+            <ArgumentRefEntry argumentRef="Target_Altitude" />
+					</EntryList>
+					<BaseContainer containerRef="RotatorCommandContainer" />
+				</CommandContainer>
+				<DefaultSignificance consequenceLevel="normal" />
+			</MetaCommand>
+
+		</MetaCommandSet>
+	</CommandMetaData>
+</SpaceSystem>
