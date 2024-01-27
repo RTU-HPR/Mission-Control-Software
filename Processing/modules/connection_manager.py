@@ -2,13 +2,17 @@ import socket
 import queue
 import time
 from config import CYCLE_TIME
+from modules.logging import Logger
 
 class ConnectionManager:
-  def __init__(self, yamcs_tm_address: tuple, yamcs_tc_address: tuple, transceiver_tm_address: tuple, transceiver_tc_address: tuple) -> None:    
+  def __init__(self, yamcs_tm_address: tuple, yamcs_tc_address: tuple, transceiver_tm_address: tuple, transceiver_tc_address: tuple, logger: Logger) -> None:    
     self.yamcs_tm_address = yamcs_tm_address
     self.yamcs_tc_address = yamcs_tc_address
     self.transceiver_tm_address = transceiver_tm_address
     self.transceiver_tc_address = transceiver_tc_address
+    
+    # Logging
+    self.logger = logger
     
     # Queues
     self.sendable_to_transceiver_messages = queue.Queue()
@@ -33,6 +37,7 @@ class ConnectionManager:
 
   def send_to_transceiver(self) -> None:
     packet = self.sendable_to_transceiver_messages.get()
+    self.logger.log_telecommand_data(packet[2])
     try:
       # Check if we should wait until the next cycle time to send the packet
       if packet[0] == True:
@@ -77,6 +82,7 @@ class ConnectionManager:
     packet = self.sendable_to_yamcs_messages.get()
     try:
       self.yamcs_tm_socket.sendto(packet[2], self.yamcs_tm_address)
+      self.logger.log_telemetry_data(packet[2])
       self.sendable_to_yamcs_messages.task_done()
       print("Packet sent to YAMCS")
     except Exception as e:

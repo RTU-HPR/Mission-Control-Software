@@ -8,14 +8,17 @@ from modules.router import Router
 from modules.map import Map
 from modules.thread_manager import ThreadManager
 from modules.rotator import Rotator
+from modules.logging import Logger
 
 if __name__ == '__main__':
   print("RTU High Power Rocketry Team - Ground Station Data Processing Software")
   print()
   
+  logger = Logger()
+  
   # Create objects
   try:
-    connection_manager = ConnectionManager(YAMCS_TM_ADDRESS, YAMCS_TC_ADDRESS, TRANSCEIVER_TM_ADDRESS, TRANSCEIVER_TC_ADDRESS)
+    connection_manager = ConnectionManager(YAMCS_TM_ADDRESS, YAMCS_TC_ADDRESS, TRANSCEIVER_TM_ADDRESS, TRANSCEIVER_TC_ADDRESS, logger)
   except OSError as e:
     print(f"The following error occurred while creating the connection manager: {e}")
     print("Most likely the IP address is not valid. Please check the config.py file and try again.")
