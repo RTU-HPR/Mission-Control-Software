@@ -1,8 +1,10 @@
 import socket
 import queue
 import time
+
 from config import *
 from modules.logging import Logger
+
 class ConnectionManager:
   def __init__(self, logger: Logger) -> None:    
     # Logging
@@ -17,6 +19,7 @@ class ConnectionManager:
     # YAMCS sockets
     self.yamcs_tm_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     self.yamcs_tc_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    self.yamcs_tc_socket.settimeout(1)
     self.yamcs_tc_socket.bind(YAMCS_TC_ADDRESS)
 
     # Transceiver sockets
@@ -24,11 +27,13 @@ class ConnectionManager:
     self.transceiver_tc_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     self.transceiver_tm_socket.settimeout(3)
     self.transceiver_tm_socket.bind(TRANSCEIVER_TM_ADDRESS)
+    self.transceiver_socket_connected = False
     
     self.secondary_transceiver_tm_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     self.secondary_transceiver_tc_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     self.secondary_transceiver_tm_socket.settimeout(3)
     self.secondary_transceiver_tm_socket.bind(SECONDARY_TRANSCEIVER_TM_ADDRESS)
+    self.secondary_transceiver_socket_connected = True # By default, should be False, set to True for testing
   
   def send_heartbeat_to_transceiver(self) -> None:
     # ~ Used as sacrificial character
@@ -36,9 +41,22 @@ class ConnectionManager:
     self.secondary_transceiver_tc_socket.sendto("UDP Heartbeat Secondary~".encode(), SECONDARY_TRANSCEIVER_TC_ADDRESS)
     time.sleep(1)
 
-  def send_to_transceiver(self) -> None:
-    packet = self.sendable_to_transceiver_messages.get()
+  def send_to_transceiver(self) -> None:    
+    try:
+      packet = self.sendable_to_transceiver_messages.get(timeout=1)
+    except queue.Empty:
+      return
+    print("running")
+    # If there is no WiFi connection, put the packet back in the queue
+    if packet[1] == "primary" and self.transceiver_socket_connected == False:
+      self.sendable_to_transceiver_messages.put(packet)
+      return
+    elif packet[1] == "secondary" and self.secondary_transceiver_socket_connected == False:
+      self.sendable_to_transceiver_messages.put(packet)
+      return
+    
     self.logger.log_telecommand_data(packet[2])
+    
     try:
       # Check if we should wait until the next cycle time to send the packet
       if packet[0] == True:
@@ -72,11 +90,17 @@ class ConnectionManager:
         message = message.decode()
         if "Heartbeat" in message:
           if "Primary" in message:
-            print(f"Primary | WiFi RSSI: {message.split(",")[1]} dBm | Cycle start in {CYCLE_TIME - int(time.mktime(time.localtime())) % CYCLE_TIME} seconds")
+            self.transceiver_socket_connected = True
+            print("Primary", end=" | ")
           elif "Secondary" in message:
-            print(f"Secondary | WiFi RSSI: {message.split(",")[1]} dBm | Cycle start in {CYCLE_TIME - int(time.mktime(time.localtime())) % CYCLE_TIME} seconds")
+            self.secondary_transceiver_socket_connected = True
+            print("Secondary", end=" | ")
           else:
-            print(f"Not known | WiFi RSSI: {message.split(",")[1]} dBm | Cycle start in {CYCLE_TIME - int(time.mktime(time.localtime())) % CYCLE_TIME} seconds")
+            # For testing purposes
+            self.transceiver_socket_connected = True
+            self.secondary_transceiver_socket_connected = True
+            print(f"Not known", end=" | ")
+          print(f"WiFi RSSI: {message.split(",")[1]} dBm | Cycle start in {CYCLE_TIME - int(time.mktime(time.localtime())) % CYCLE_TIME} seconds")
         else:
           raise Exception()
       # If the message is not a heartbeat, put it in the queue
@@ -89,7 +113,10 @@ class ConnectionManager:
       print(f"An error occurred while receiving from transceiver: {e}")    
       
   def send_to_yamcs(self) -> None:
-    packet = self.sendable_to_yamcs_messages.get()
+    try:
+      packet = self.sendable_to_yamcs_messages.get(timeout=1)
+    except:
+      return
     try:
       self.yamcs_tm_socket.sendto(packet[2], YAMCS_TM_ADDRESS)
       self.logger.log_telemetry_data(packet[2])
@@ -104,21 +131,8 @@ class ConnectionManager:
       packet, addr = self.yamcs_tc_socket.recvfrom(1024)
       self.received_messages.put((False, "transceiver", packet))
       print("Message received from YAMCS")
-      
+    except socket.timeout:
+      pass
     except Exception as e:
       print(f"An error occurred while receiving from YAMCS: {e}")
-  
-  def send_to_recovery_server(self):
-    """
-    Send JSON data to the recovery server.
-    """
-    # TODO: Implement
-    pass
-    
-  def receive_from_recovery_server(self):
-    """
-    receive JSON data from the recovery server.
-    """
-    # TODO: Implement
-    pass
   

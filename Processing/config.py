@@ -1,14 +1,9 @@
-# DONT CHANGE ANY APID OR PACKETID VALUES
-# DONT CHANGE ANY APID OR PACKETID VALUES
-# DONT CHANGE ANY APID OR PACKETID VALUES
-# DONT CHANGE ANY APID OR PACKETID VALUES
-# DONT CHANGE ANY APID OR PACKETID VALUES
+# ONLY EDIT THIS FILE IF YOU KNOW WHAT YOU ARE DOING
 
 # Get local IP address
-from re import T
 from socket import gethostname, gethostbyname
-hostname = gethostname()
-local_ip_address = gethostbyname(hostname)
+HOSTNAME = gethostname()
+LOCAL_IP_ADDRESS = gethostbyname(HOSTNAME)
 
 # Sondehub
 DEVELOPER_MODE = True
@@ -25,14 +20,15 @@ CYCLE_TIME = 12
 # CONNECTIONS
 YAMCS_TM_ADDRESS = ('localhost', 10015)
 YAMCS_TC_ADDRESS = ('localhost', 10025)
-TRANSCEIVER_TM_ADDRESS = (str(local_ip_address), 10035)
+TRANSCEIVER_TM_ADDRESS = (str(LOCAL_IP_ADDRESS), 10035)
 TRANSCEIVER_TC_ADDRESS = ('192.168.236.143', 10045)
-SECONDARY_TRANSCEIVER_TM_ADDRESS = (str(local_ip_address), 10055)
+SECONDARY_TRANSCEIVER_TM_ADDRESS = (str(LOCAL_IP_ADDRESS), 10055)
 SECONDARY_TRANSCEIVER_TC_ADDRESS = ('192.168.236.140', 10065) # IP not correct
 
+# Port on which the map server is running
 MAP_SERVER_PORT = 9500
 
-# APID can be from 0 to 255
+# APID can be from 0 to 2047
 # Telemetry package apids
 APID_TO_TYPE = {
   # Rotator

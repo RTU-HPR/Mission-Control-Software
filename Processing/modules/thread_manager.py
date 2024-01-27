@@ -21,144 +21,142 @@ class ThreadManager:
     
   # THREAD STARTERS
   def start_receive_from_transceiver_thread(self):
-    thread = Thread(target=self.receive_from_transceiver_thread, name="Transceiver Receiver")
+    def receive_from_transceiver_thread():
+      while not self.stop_event.is_set():
+        self.connection_manager.receive_from_transceiver()
+      
+    thread = Thread(target=receive_from_transceiver_thread, name="Transceiver Receiver")
     thread.daemon = True
     thread.start()
     self.active_threads.append(thread)
     
   def start_receive_from_yamcs_thread(self):
-    thread = Thread(target=self.receive_from_yamcs_thread, name="YAMCS Receiver")
+    def receive_from_yamcs_thread():
+      while not self.stop_event.is_set():
+        self.connection_manager.receive_from_yamcs()
+        
+    thread = Thread(target=receive_from_yamcs_thread, name="YAMCS Receiver")
     thread.daemon = True
     thread.start()
     self.active_threads.append(thread)
     
   def start_send_to_transceiver_thread(self):
-    thread = Thread(target=self.send_to_transceiver_thread, name="Transceiver Sender")
+    def send_to_transceiver_thread():
+      while not self.stop_event.is_set():
+        self.connection_manager.send_to_transceiver()
+      
+    thread = Thread(target=send_to_transceiver_thread, name="Transceiver Sender")
     thread.daemon = True
     thread.start()
     self.active_threads.append(thread)
   
   def start_send_to_yamcs_thread(self):
-    thread = Thread(target=self.send_to_yamcs_thread, name="YAMCS Sender")
+    def send_to_yamcs_thread():
+      while not self.stop_event.is_set():
+        self.connection_manager.send_to_yamcs()
+      
+    thread = Thread(target=send_to_yamcs_thread, name="YAMCS Sender")
     thread.daemon = True
     thread.start()
     self.active_threads.append(thread)
   
   def start_packet_processing_thread(self):
-    thread = Thread(target=self.packet_processing_thread, name="Packet Processor")
+    def packet_processing_thread():
+      while not self.stop_event.is_set():
+        self.packet_processor.process_packet()
+      
+    thread = Thread(target=packet_processing_thread, name="Packet Processor")
     thread.daemon = True
     thread.start()
     self.active_threads.append(thread)
     
   def start_send_processed_data_thread(self):
-    thread = Thread(target=self.send_processed_data_thread, name="Processed Data Sender")
+    def send_processed_data_thread():
+      while not self.stop_event.is_set():
+        self.router.send_processed_data()
+    
+    thread = Thread(target=send_processed_data_thread, name="Processed Data Sender")
     thread.daemon = True
     thread.start()
     self.active_threads.append(thread)
     
   def start_map_server_thread(self):
-    thread = Thread(target=self.map_server_thread, name="Map Server")
+    def map_server_thread():
+      while not self.stop_event.is_set():
+        self.map.run_server()  
+      
+    thread = Thread(target=map_server_thread, name="Map Server")
     thread.daemon = True
     thread.start()
     self.active_threads.append(thread)
     
   def start_map_update_thread(self):
-    thread = Thread(target=self.map_update_thread, name="Map Updater")
+    def map_update_thread():
+      while not self.stop_event.is_set():
+        self.map.update_map()  
+    
+    thread = Thread(target=map_update_thread, name="Map Updater")
     thread.daemon = True
     thread.start()
     self.active_threads.append(thread)
     
   def start_send_data_to_map_thread(self):
-    thread = Thread(target=self.send_data_to_map_thread, name="Map Data Sender")
+    def send_data_to_map_thread():
+      while not self.stop_event.is_set():
+        self.router.send_data_to_map()
+      
+    thread = Thread(target=send_data_to_map_thread, name="Map Data Sender")
     thread.daemon = True
     thread.start()
     self.active_threads.append(thread)
     
   def start_rotator_command_to_transceiver_thread(self):
-    thread = Thread(target=self.rotator_command_to_transceiver_thread, name="Rotator Command Sender")
+    def rotator_command_to_transceiver_thread():
+      while not self.stop_event.is_set():
+        self.router.send_rotator_command_to_transceiver()
+      
+    thread = Thread(target=rotator_command_to_transceiver_thread, name="Rotator Command Sender")
     thread.daemon = True
     thread.start()
     self.active_threads.append(thread)
     
   def start_rotator_data_update_thread(self):
-    thread = Thread(target=self.rotator_data_update_thread, name="Rotator Data Updater")
+    def rotator_data_update_thread():
+      while not self.stop_event.is_set():
+        self.router.update_rotator_data()
+      
+    thread = Thread(target=rotator_data_update_thread, name="Rotator Data Updater")
     thread.daemon = True
     thread.start()
     self.active_threads.append(thread)
     
   def start_send_heartbeat_to_transceiver_thread(self):
-    thread = Thread(target=self.send_heartbeat_to_transceiver_thread, name="Heartbeat Sender")
+    def send_heartbeat_to_transceiver_thread():
+      while not self.stop_event.is_set():
+        self.connection_manager.send_heartbeat_to_transceiver()
+      
+    thread = Thread(target=send_heartbeat_to_transceiver_thread, name="Heartbeat Sender")
     thread.daemon = True
     thread.start()
     self.active_threads.append(thread)
     
   def start_control_rotator_thread(self):
-    thread = Thread(target=self.control_rotator_thread, name="Rotator Controller")
+    def control_rotator_thread():
+      while not self.stop_event.is_set():
+        self.rotator.control_rotator()
+      
+    thread = Thread(target=control_rotator_thread, name="Rotator Controller")
     thread.daemon = True
     thread.start()
     self.active_threads.append(thread)
     
   def start_sondehub_uploader_thread(self):
-    thread = Thread(target=self.sondehub_uploader_thread, name="SondeHub Uploader")
+    def sondehub_uploader_thread():
+      while not self.stop_event.is_set():
+        self.router.send_data_to_sondehub()
+      self.sondehub.close_uploader()
+    
+    thread = Thread(target=sondehub_uploader_thread, name="SondeHub Uploader")
     thread.daemon = True
     thread.start()
     self.active_threads.append(thread)
-  
-  # THREAD FUNCTIONS
-  def receive_from_transceiver_thread(self):
-    while not self.stop_event.is_set():
-      self.connection_manager.receive_from_transceiver()
-      
-  def receive_from_yamcs_thread(self):
-    while not self.stop_event.is_set():
-      self.connection_manager.receive_from_yamcs()
-  
-  def map_server_thread(self):
-    while not self.stop_event.is_set():
-      self.map.run_server()  
-      
-  def map_update_thread(self):
-    while not self.stop_event.is_set():
-      self.map.update_map()  
-  
-  def send_data_to_map_thread(self):
-    while not self.stop_event.is_set():
-      self.router.send_data_to_map()
-  
-  def packet_processing_thread(self):
-    while not self.stop_event.is_set():
-      self.packet_processor.process_packet()
-      
-  def send_processed_data_thread(self):
-    while not self.stop_event.is_set():
-      self.router.send_processed_data()
-  
-  def send_to_transceiver_thread(self):
-    while not self.stop_event.is_set():
-      self.connection_manager.send_to_transceiver()
-      
-  def send_to_yamcs_thread(self):
-    while not self.stop_event.is_set():
-      self.connection_manager.send_to_yamcs()
-      
-  def rotator_command_to_transceiver_thread(self):
-    while not self.stop_event.is_set():
-      self.router.send_rotator_command_to_transceiver()
-      
-  def control_rotator_thread(self):
-    while not self.stop_event.is_set():
-      self.rotator.control_rotator()
-  
-  def rotator_data_update_thread(self):
-    while not self.stop_event.is_set():
-      self.router.update_rotator_data()
-  
-  def send_heartbeat_to_transceiver_thread(self):
-    while not self.stop_event.is_set():
-      self.connection_manager.send_heartbeat_to_transceiver()
-      
-  def sondehub_uploader_thread(self):
-    while not self.stop_event.is_set():
-      self.router.send_data_to_sondehub()
-    self.sondehub.close_uploader()
-  

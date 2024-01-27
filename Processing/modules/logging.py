@@ -2,6 +2,7 @@ import csv
 from datetime import datetime
 import os
 import binascii
+
 class Logger:
   def __init__(self) -> None:
     # Get the directory of the current script

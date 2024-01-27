@@ -24,5 +24,6 @@ var/
 pip-log.txt
 pip-delete-this-directory.txt
 
-# Log files
+# Log/Map files
 *.csv
+*.html
