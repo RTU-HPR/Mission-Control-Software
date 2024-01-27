@@ -17,34 +17,28 @@ class Logger:
     # os.makedirs creates all intermediate-level directories needed to create the leaf directory
     os.makedirs(current_date_dir, exist_ok=True)
     
-    # Create log files with date and time as name and type
-    telemetry_log_file = os.path.join(current_date_dir, f"telemetry.csv")
-    telecommand_log_file = os.path.join(current_date_dir, f"telecommand.csv")
-    rotator_log_file = os.path.join(current_date_dir, f"rotator.csv")
-    
-    self.telemetry_log_file = open(telemetry_log_file, "a")
-    self.telecommand_log_file = open(telecommand_log_file, "a")
-    self.rotator_log_file = open(rotator_log_file, "a")
-    
-    self.telemetry_log_writer = csv.writer(self.telemetry_log_file)
-    self.telecommand_log_writer = csv.writer(self.telecommand_log_file)
-    self.rotator_log_writer = csv.writer(self.rotator_log_file)
-    
-    # Write headers
+    # Create log files
+    self.telemetry_log_file = os.path.join(current_date_dir, f"telemetry.csv")
+    self.telecommand_log_file = os.path.join(current_date_dir, f"telecommand.csv")
+
     header = ["Time", "Packet data"]
-    self.telemetry_log_writer.writerow(header)
-    self.telecommand_log_writer.writerow(header)
-    self.rotator_log_writer.writerow(header)
-  
+    with open(self.telemetry_log_file, "w", newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(header)
+    with open(self.telecommand_log_file, "w", newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(header)
+
+
   def log_telecommand_data(self, packet_data):
     hex_data = binascii.hexlify(packet_data).decode("utf-8")
-    self.telecommand_log_writer.writerow([datetime.now().strftime("%H:%M:%S"), hex_data])
-  
-  def log_rotator_data(self, packet_data):
-    hex_data = binascii.hexlify(packet_data).decode("utf-8")
-    self.rotator_log_writer.writerow([datetime.now().strftime("%H:%M:%S"), hex_data])
+    with open(self.telecommand_log_file, "a", newline='') as file:
+      writer = csv.writer(file)
+      writer.writerow([datetime.now().strftime("%H:%M:%S.%f")[:-3], hex_data])
   
   def log_telemetry_data(self, packet_data):
     hex_data = binascii.hexlify(packet_data).decode("utf-8")
-    self.telemetry_log_writer.writerow([datetime.now().strftime("%H:%M:%S"), hex_data])
+    with open(self.telemetry_log_file, "a", newline='') as file:
+      writer = csv.writer(file)
+      writer.writerow([datetime.now().strftime("%H:%M:%S.%f")[:-3], hex_data])
     
