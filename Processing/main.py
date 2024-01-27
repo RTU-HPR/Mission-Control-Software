@@ -18,7 +18,7 @@ if __name__ == '__main__':
   
   # Create objects
   try:
-    connection_manager = ConnectionManager(YAMCS_TM_ADDRESS, YAMCS_TC_ADDRESS, TRANSCEIVER_TM_ADDRESS, TRANSCEIVER_TC_ADDRESS, logger)
+    connection_manager = ConnectionManager(logger)
   except OSError as e:
     print(f"The following error occurred while creating the connection manager: {e}")
     print("Most likely the IP address is not valid. Please check the config.py file and try again.")

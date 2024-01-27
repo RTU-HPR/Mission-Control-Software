@@ -56,7 +56,10 @@ class PacketProcessor:
         
         # If the packet is meant for the rotator, process it, else put it in the processed packets queue
         if not self.__process_rotator_command(packet_id, packet_data):
-          self.processed_packets.put((True, "transceiver", packet[2]))
+          if apid == TELECOMMAND_APID["pfc"]:
+            self.processed_packets.put((True, "primary", packet[2]))
+          elif apid == TELECOMMAND_APID["bfc"]:
+            self.processed_packets.put((True, "secondary", packet[2]))
           # Complete the task
           self.connection_manager.received_messages.task_done()
           return

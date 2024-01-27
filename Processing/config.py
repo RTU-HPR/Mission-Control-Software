@@ -5,6 +5,7 @@
 # DONT CHANGE ANY APID OR PACKETID VALUES
 
 # Get local IP address
+from re import T
 from socket import gethostname, gethostbyname
 hostname = gethostname()
 local_ip_address = gethostbyname(hostname)
@@ -18,7 +19,6 @@ BALLOON_CALLSIGN = "RTU HPR RACKOON"
 PAYLOAD_CALLSIGN = "RTU HPR MEV"
 CHASE_CAR_CALLSIGN = "RTU HPR CHASE CAR"
 
-
 # Communication cycle time in seconds
 CYCLE_TIME = 12
 
@@ -26,9 +26,10 @@ CYCLE_TIME = 12
 YAMCS_TM_ADDRESS = ('localhost', 10015)
 YAMCS_TC_ADDRESS = ('localhost', 10025)
 TRANSCEIVER_TM_ADDRESS = (str(local_ip_address), 10035)
-TRANSCEIVER_TC_ADDRESS = ('192.168.236.143', 10045) # New heltec in rotator box
-#TRANSCEIVER_TC_ADDRESS = ('192.168.236.61', 10045) # Some random heltec
-#TRANSCEIVER_TC_ADDRESS = ('192.168.236.159', 10045) # Heltec inside rotator box
+TRANSCEIVER_TC_ADDRESS = ('192.168.236.143', 10045)
+SECONDARY_TRANSCEIVER_TM_ADDRESS = (str(local_ip_address), 10055)
+SECONDARY_TRANSCEIVER_TC_ADDRESS = ('192.168.236.140', 10065) # IP not correct
+
 MAP_SERVER_PORT = 9500
 
 # APID can be from 0 to 255

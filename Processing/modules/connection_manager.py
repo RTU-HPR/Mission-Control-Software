@@ -1,16 +1,10 @@
 import socket
 import queue
 import time
-from config import CYCLE_TIME
+from config import *
 from modules.logging import Logger
-
 class ConnectionManager:
-  def __init__(self, yamcs_tm_address: tuple, yamcs_tc_address: tuple, transceiver_tm_address: tuple, transceiver_tc_address: tuple, logger: Logger) -> None:    
-    self.yamcs_tm_address = yamcs_tm_address
-    self.yamcs_tc_address = yamcs_tc_address
-    self.transceiver_tm_address = transceiver_tm_address
-    self.transceiver_tc_address = transceiver_tc_address
-    
+  def __init__(self, logger: Logger) -> None:    
     # Logging
     self.logger = logger
     
@@ -23,16 +17,23 @@ class ConnectionManager:
     # YAMCS sockets
     self.yamcs_tm_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     self.yamcs_tc_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    self.yamcs_tc_socket.bind(self.yamcs_tc_address)
+    self.yamcs_tc_socket.bind(YAMCS_TC_ADDRESS)
 
     # Transceiver sockets
     self.transceiver_tm_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     self.transceiver_tc_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     self.transceiver_tm_socket.settimeout(3)
-    self.transceiver_tm_socket.bind(self.transceiver_tm_address)
+    self.transceiver_tm_socket.bind(TRANSCEIVER_TM_ADDRESS)
+    
+    self.secondary_transceiver_tm_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    self.secondary_transceiver_tc_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    self.secondary_transceiver_tm_socket.settimeout(3)
+    self.secondary_transceiver_tm_socket.bind(SECONDARY_TRANSCEIVER_TM_ADDRESS)
   
   def send_heartbeat_to_transceiver(self) -> None:
-    self.transceiver_tc_socket.sendto("UDP Heartbeat~".encode(), self.transceiver_tc_address) # ~ Used as sacrificial character
+    # ~ Used as sacrificial character
+    self.transceiver_tc_socket.sendto("UDP Heartbeat Primary~".encode(), TRANSCEIVER_TC_ADDRESS)
+    self.secondary_transceiver_tc_socket.sendto("UDP Heartbeat Secondary~".encode(), SECONDARY_TRANSCEIVER_TC_ADDRESS)
     time.sleep(1)
 
   def send_to_transceiver(self) -> None:
@@ -49,8 +50,12 @@ class ConnectionManager:
           time.sleep(0.1)
         # Send the packet 1 seconds after the cycle time start
         time.sleep(1)
+      
+      if packet[1] == "primary":
+        self.transceiver_tc_socket.sendto(packet[2], TRANSCEIVER_TC_ADDRESS)
+      elif packet[1] == "secondary":
+        self.secondary_transceiver_tc_socket.sendto(packet[2], SECONDARY_TRANSCEIVER_TC_ADDRESS)
         
-      self.transceiver_tc_socket.sendto(packet[2], self.transceiver_tc_address)
       self.sendable_to_transceiver_messages.task_done()
       print("Packet sent to transceiver")
     except Exception as e:
@@ -66,7 +71,12 @@ class ConnectionManager:
       try:
         message = message.decode()
         if "Heartbeat" in message:
-          print(f"WiFi RSSI: {message.split(",")[1]} dBm | Cycle start in {CYCLE_TIME - int(time.mktime(time.localtime())) % CYCLE_TIME} seconds")
+          if "Primary" in message:
+            print(f"Primary | WiFi RSSI: {message.split(",")[1]} dBm | Cycle start in {CYCLE_TIME - int(time.mktime(time.localtime())) % CYCLE_TIME} seconds")
+          elif "Secondary" in message:
+            print(f"Secondary | WiFi RSSI: {message.split(",")[1]} dBm | Cycle start in {CYCLE_TIME - int(time.mktime(time.localtime())) % CYCLE_TIME} seconds")
+          else:
+            print(f"Not known | WiFi RSSI: {message.split(",")[1]} dBm | Cycle start in {CYCLE_TIME - int(time.mktime(time.localtime())) % CYCLE_TIME} seconds")
         else:
           raise Exception()
       # If the message is not a heartbeat, put it in the queue
@@ -81,7 +91,7 @@ class ConnectionManager:
   def send_to_yamcs(self) -> None:
     packet = self.sendable_to_yamcs_messages.get()
     try:
-      self.yamcs_tm_socket.sendto(packet[2], self.yamcs_tm_address)
+      self.yamcs_tm_socket.sendto(packet[2], YAMCS_TM_ADDRESS)
       self.logger.log_telemetry_data(packet[2])
       self.sendable_to_yamcs_messages.task_done()
       print("Packet sent to YAMCS")
