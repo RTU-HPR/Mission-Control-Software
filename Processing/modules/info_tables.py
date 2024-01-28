@@ -30,15 +30,16 @@ class InfoTables:
     print() 
   
     # Connection Manager
-    headers = ["Rotator Connected", "Wi-Fi RSSI (dBm)", "Second Transceiver Connected", "Wi-Fi RSSI (dBm)", "Next Communication Cycle Start (s)"]
+    headers = ["Rotator Connected", "Wi-Fi RSSI (dBm)", "Second Transceiver Connected", "Wi-Fi RSSI (dBm)", "Next Communication Cycle Start (s)", "Command To Send"]
     
     rotator_connected = self.connection_manager.transceiver_socket_connected
     rotator_wifi_rssi = self.connection_manager.transceiver_wifi_rssi
     secondary_transceiver_connected = self.connection_manager.secondary_transceiver_socket_connected
     secondary_transceiver_wifi_rssi = self.connection_manager.secondary_transceiver_wifi_rssi
     cycle_start = round(CYCLE_TIME - (time.time() % CYCLE_TIME), 1)
+    command_to_send = self.connection_manager.sending_to_transceiver
     
-    table = [[rotator_connected, rotator_wifi_rssi, secondary_transceiver_connected, secondary_transceiver_wifi_rssi, cycle_start]]
+    table = [[rotator_connected, rotator_wifi_rssi, secondary_transceiver_connected, secondary_transceiver_wifi_rssi, cycle_start, command_to_send]]
     print("Connections")
     print(tabulate(table, headers=headers, tablefmt="grid", stralign="center", disable_numparse=True))
     print()

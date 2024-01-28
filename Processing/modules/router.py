@@ -34,7 +34,7 @@ class Router:
   def send_processed_data(self):
     try:
       packet = self.processor.processed_packets.get(timeout=1)
-      if packet[1] == "transceiver":
+      if packet[1] == "primary" or packet[1] == "secondary":
         self.connection.sendable_to_transceiver_messages.put(packet)
       elif packet[1] == "yamcs":
         self.connection.sendable_to_yamcs_messages.put(packet)

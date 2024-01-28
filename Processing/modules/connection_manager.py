@@ -15,6 +15,8 @@ class ConnectionManager:
     self.sendable_to_yamcs_messages = queue.Queue()
     self.received_messages = queue.Queue()
     
+    self.sending_to_transceiver = False
+    
     # UDP sockets (TM - Telemetry, TC - Telecommand)
     # YAMCS sockets
     self.yamcs_tm_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -58,6 +60,7 @@ class ConnectionManager:
     
     self.logger.log_telecommand_data(packet[2])
     
+    self.sending_to_transceiver = True
     try:
       # Check if we should wait until the next cycle time to send the packet
       if packet[0] == True:
@@ -73,6 +76,7 @@ class ConnectionManager:
       elif packet[1] == "secondary":
         self.secondary_transceiver_tc_socket.sendto(packet[2], SECONDARY_TRANSCEIVER_TC_ADDRESS)
         
+      self.sending_to_transceiver = False
       self.sendable_to_transceiver_messages.task_done()
     except Exception as e:
       self.sendable_to_transceiver_messages.task_done()
