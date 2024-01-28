@@ -6,15 +6,17 @@ from modules.router import Router
 from modules.sondehub import SondeHubUploader
 from modules.map import Map
 from modules.rotator import Rotator
+from modules.info_tables import InfoTables
 
 class ThreadManager:
-  def __init__(self, connection_manager: ConnectionManager, packet_processor: PacketProcessor, router: Router, sondehub_uploader: SondeHubUploader, map: Map, rotator: Rotator) -> None:
+  def __init__(self, connection_manager: ConnectionManager, packet_processor: PacketProcessor, router: Router, sondehub_uploader: SondeHubUploader, map: Map, rotator: Rotator, info_tables: InfoTables) -> None:
     self.connection_manager = connection_manager
     self.packet_processor = packet_processor
     self.router = router
     self.sondehub = sondehub_uploader
     self.map = map
     self.rotator = rotator
+    self.info_tables = info_tables
     
     self.active_threads = []
     self.stop_event = Event()
@@ -157,6 +159,16 @@ class ThreadManager:
       self.sondehub.close_uploader()
     
     thread = Thread(target=sondehub_uploader_thread, name="SondeHub Uploader")
+    thread.daemon = True
+    thread.start()
+    self.active_threads.append(thread)
+    
+  def start_info_tables_thread(self):
+    def info_tables_thread():
+      while not self.stop_event.is_set():
+        self.info_tables.print_info_tables()
+        
+    thread = Thread(target=info_tables_thread, name="Info Tables")
     thread.daemon = True
     thread.start()
     self.active_threads.append(thread)

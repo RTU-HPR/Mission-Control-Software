@@ -25,10 +25,14 @@ class PacketProcessor:
     self.last_pfc_telemetry_epoch_subseconds = 0
     self.last_bfc_telemetry_epoch_subseconds = 0
     
+    self.pfc_packet_received_time = 0
+    self.bfc_packet_received_time = 0
+    self.rotator_packet_received_time = 0
+    
     # Calculations
-    self.pfc_calculations = dict.fromkeys(TELEMETRY_MESSAGE_STRUCTURE["pfc"], 0.0)
-    self.bfc_calculations = dict.fromkeys(TELEMETRY_MESSAGE_STRUCTURE["bfc"], 0.0)
-    self.rotator_calculations = dict.fromkeys(TELEMETRY_MESSAGE_STRUCTURE["rotator"], 0.0)
+    self.pfc_calculations = dict.fromkeys(CALCULATION_MESSAGE_STRUCTURE["pfc"], 0.0)
+    self.bfc_calculations = dict.fromkeys(CALCULATION_MESSAGE_STRUCTURE["bfc"], 0.0)
+    self.rotator_calculations = dict.fromkeys(CALCULATION_MESSAGE_STRUCTURE["rotator"], 0.0)
     self.pfc_calculations_index = 0
     self.bfc_calculations_index = 0
     self.rotator_calculations_index = 0
@@ -67,10 +71,13 @@ class PacketProcessor:
 
       # Update telemetry from essential packets
       elif apid in [key for key, value in APID_TO_TYPE.items() if value == "pfc_essential"]:
+        self.pfc_packet_received_time = time.time()
         self.__update_pfc_telemetry(packet_data, epoch_seconds, epoch_subseconds)
       elif apid in [key for key, value in APID_TO_TYPE.items() if value == "bfc_essential"]:
+        self.bfc_packet_received_time = time.time()
         self.__update_bfc_telemetry(packet_data, epoch_seconds, epoch_subseconds)
       elif apid in [key for key, value in APID_TO_TYPE.items() if value == "rotator_position"]:
+        self.rotator_packet_received_time = time.time()
         self.__update_rotator_telemetry(packet_data)
         
       self.processed_packets.put((False, "yamcs", packet[2]))
@@ -169,7 +176,7 @@ class PacketProcessor:
 
         # Calculate extra telemetry if position is valid
         if self.pfc_telemetry["gps_latitude"] != 0 and self.pfc_telemetry["gps_latitude"] != 0:
-            self.pfc_calculations = calculate_flight_computer_extra_telemetry(self.pfc_telemetry, new_telemetry, self.rotator_telemetry, time_delta, CALCULATION_MESSAGE_STRUCTURE["pfc"])
+            self.pfc_calculations = calculate_flight_computer_extra_telemetry(self.pfc_telemetry, new_telemetry, self.rotator.rotator_position, time_delta, CALCULATION_MESSAGE_STRUCTURE["pfc"])
         
         # Create a ccsds packet from the calculations
         apid = [key for key, value in APID_TO_TYPE.items() if value == "pfc_calculations"][0]
@@ -201,7 +208,7 @@ class PacketProcessor:
 
       # Calculate extra telemetry if position is valid
       if self.bfc_telemetry["gps_latitude"] != 0 and self.bfc_telemetry["gps_latitude"] != 0:
-        self.bfc_calculations = calculate_flight_computer_extra_telemetry(self.bfc_telemetry, new_telemetry, self.rotator_telemetry, time_delta, CALCULATION_MESSAGE_STRUCTURE["bfc"])
+        self.bfc_calculations = calculate_flight_computer_extra_telemetry(self.bfc_telemetry, new_telemetry, self.rotator.rotator_position, time_delta, CALCULATION_MESSAGE_STRUCTURE["bfc"])
         
         # Create a ccsds packet from the calculations
         apid = [key for key, value in APID_TO_TYPE.items() if value == "bfc_calculations"][0]

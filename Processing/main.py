@@ -10,6 +10,7 @@ from modules.rotator import Rotator
 from modules.router import Router
 from modules.sondehub import SondeHubUploader
 from modules.thread_manager import ThreadManager
+from modules.info_tables import InfoTables
 
 def main():
   print("RTU High Power Rocketry Team - Ground Station Data Processing Software")
@@ -31,7 +32,8 @@ def main():
   map = Map(map_server_port=MAP_SERVER_PORT)
   processor = PacketProcessor(connection_manager, rotator)
   router = Router(processor, connection_manager, rotator, map, sondehub_uploader)
-  thread_manager = ThreadManager(connection_manager, processor, router, sondehub_uploader, map, rotator)
+  info_tables = InfoTables(connection_manager, processor, rotator)
+  thread_manager = ThreadManager(connection_manager, processor, router, sondehub_uploader, map, rotator, info_tables)
   
   print("Setup successful!")
   print()
@@ -64,10 +66,14 @@ def main():
   print()
   print("TO STOP THE PROGRAM, PRESS CTRL+C OR CLOSE THE CONSOLE!")
   print()
+  sleep(1)
+  
+  # Start the data table thread only after all the other threads have started
+  thread_manager.start_info_tables_thread()
 
   while True:
     try:
-      sleep(1)
+      sleep(0.1)
     except KeyboardInterrupt:
       print("Keyboard interrupt detected. Stopping threads... Please wait.")
       thread_manager.stop_event.set()
@@ -77,7 +83,7 @@ def main():
         else:
           while thread.is_alive():
             # Give the thread a chance to stop.
-            thread.join(timeout=0.1)
+            thread.join(timeout=0.01)
         print(f"Thread {thread.name} stopped.")
       print("All threads stopped. Exiting...")
       os.system('pause')

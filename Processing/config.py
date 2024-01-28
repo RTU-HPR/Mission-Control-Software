@@ -85,6 +85,7 @@ PACKETID_TO_TYPE = {
 
 # Message structures
 TELEMETRY_MESSAGE_STRUCTURE = {
+  # Info display code assumes that pfc and bfc have the same essential message structure
   "pfc": [("float", "gps_latitude"),
           ("float", "gps_longitude"),
           ("float", "gps_altitude"),
