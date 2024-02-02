@@ -5,5 +5,5 @@ Start-Process -FilePath "powershell" -ArgumentList "-Command cd OpenMct ; npm st
 
 # Open localhost:9000 and localhost:8090
 Start-Process -FilePath "http://localhost:8090"
-# Start-Process -FilePath "http://localhost:9000"
+Start-Process -FilePath "http://localhost:9000"
 

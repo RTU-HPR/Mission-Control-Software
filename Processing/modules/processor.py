@@ -19,6 +19,14 @@ class PacketProcessor:
     self.bfc_telemetry = {value: 0.0 for type, value in TELEMETRY_MESSAGE_STRUCTURE["bfc"]}
     self.rotator_telemetry = {value: 0.0 for type, value in TELEMETRY_MESSAGE_STRUCTURE["rotator"]}
     
+    self.bfc_telemetry["gps_latitude"] = 56.956805
+    self.bfc_telemetry["gps_longitude"] = 24.113865
+    self.bfc_telemetry["gps_altitude"] = 10000
+    
+    self.pfc_telemetry["gps_latitude"] = 56.956805
+    self.pfc_telemetry["gps_longitude"] = 24.113865
+    self.pfc_telemetry["gps_altitude"] = 10000
+    
     # Timing
     self.last_pfc_telemetry_epoch_seconds = 0
     self.last_bfc_telemetry_epoch_seconds = 0

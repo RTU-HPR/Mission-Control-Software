@@ -14,6 +14,11 @@ BALLOON_CALLSIGN = "RTU HPR RACKOON"
 PAYLOAD_CALLSIGN = "RTU HPR MEV"
 CHASE_CAR_CALLSIGN = "RTU HPR CHASE CAR"
 
+# Prediction settings
+ASCENT_RATE = 5
+DESCENT_RATE = 5
+
+
 # Communication cycle time in seconds
 CYCLE_TIME = 12
 

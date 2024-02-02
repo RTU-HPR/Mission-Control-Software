@@ -1,12 +1,19 @@
+import datetime
+from flask import jsonify
 from bs4 import BeautifulSoup
 import flask
 import folium
 import os
 import pandas as pd
 from time import sleep
+import requests
+from config import *
+from modules.processor import PacketProcessor
 
 class Map:
-  def __init__(self, map_server_port: int) -> None:
+  def __init__(self, processor: PacketProcessor, map_server_port: int) -> None:
+    self.processor = processor
+     
     # Map
     self.ballon_coordinates = []
     self.payload_coordinates = []
@@ -22,8 +29,38 @@ class Map:
     # Routes
     @self.app.route("/")
     def index():
-      return flask.render_template("map.html")
-  
+      return flask.render_template("base.html")
+    
+    @self.app.route("/prediction/<vehicle>", methods=["POST"])
+    def prediction(vehicle) -> flask.Response:
+      if vehicle == "balloon":
+        if self.processor.bfc_telemetry["gps_latitude"] != 0 and self.processor.bfc_telemetry["gps_longitude"] != 0:
+          if self.get_landing_prediction(ASCENT_RATE,
+                        self.processor.bfc_telemetry["gps_altitude"],
+                        DESCENT_RATE,
+                        self.processor.bfc_telemetry["gps_latitude"],
+                        self.processor.bfc_telemetry["gps_longitude"]) is not None:
+            return jsonify({"status": "error", "message": "API request failed."})
+          self.map_update_required = True
+          return jsonify({"status": "ok"})
+        else:
+          return jsonify({"status": "error", "message": "No GPS coordinates available."})
+      elif vehicle == "payload":
+        if self.processor.pfc_telemetry["gps_latitude"] != 0 and self.processor.pfc_telemetry["gps_longitude"] != 0:
+          if self.get_landing_prediction(ASCENT_RATE,
+                        self.processor.pfc_telemetry["gps_altitude"],
+                        DESCENT_RATE,
+                        self.processor.pfc_telemetry["gps_latitude"],
+                        self.processor.pfc_telemetry["gps_longitude"]) is not None:
+            return jsonify({"status": "error", "message": "API request failed."})
+          self.map_update_required = True
+          return jsonify({"status": "ok"})
+        else:
+          return jsonify({"status": "error", "message": "No GPS coordinates available."})
+      else:
+        return jsonify({"status": "error", "message": "Invalid vehicle."})
+    
+    
   def run_server(self) -> None:
     self.app.run(port=self.port, host="0.0.0.0", debug=False, use_reloader=False)
     
@@ -62,6 +99,37 @@ class Map:
       except Exception as e:
         print(f"Error adding {tooltip} coordinates to map: {e}")
         coordinates = []
+  
+  def get_landing_prediction(self, ascent_rate, burst_altitude, descent_rate, launch_latitude, launch_longitude):
+    url = "https://api.v2.sondehub.org/tawhiri"
+    payload = {
+        "launch_latitude": launch_latitude,
+        "launch_longitude": launch_longitude,
+        "launch_datetime": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec='seconds'),
+        "launch_altitude": burst_altitude - 10,
+        "ascent_rate": ascent_rate,
+        "burst_altitude": burst_altitude,
+        "descent_rate": descent_rate,
+    }
+    
+    try:
+      response = requests.post(url, json=payload)
+      data = response.json()
+      if "prediction" not in data:
+        raise Exception("API request failed")
+      self.prediction_coordinates.clear()
+            
+      for stage in data["prediction"]:
+        if stage["stage"] == "descent":
+          trajectory = stage["trajectory"]
+          for point in trajectory:
+            latitude = point["latitude"]
+            longitude = point["longitude"]
+            print(latitude, longitude)
+            self.prediction_coordinates.append((latitude, longitude))
+            
+    except Exception as e:
+      return e
   
   def create_map(self) -> None:
     # Check if at least one list is given
@@ -118,12 +186,12 @@ class Map:
     path = os.path.join(os.path.dirname(__file__), "../templates/map.html")
     self.m.save(path)
     
-    soup = BeautifulSoup(open(path), 'html.parser')
-    head = soup.find('head')
-    if head:
-      head.append(BeautifulSoup("""<meta http-equiv="refresh" content="30">""", 'html.parser'))
-    with open(path, 'w') as html_file:
-      html_file.write(str(soup))
+    # soup = BeautifulSoup(open(path), 'html.parser')
+    # head = soup.find('head')
+    # if head:
+    #   head.append(BeautifulSoup("""<meta http-equiv="refresh" content="30">""", 'html.parser'))
+    # with open(path, 'w') as html_file:
+    #   html_file.write(str(soup))
     
     self.map_update_required = False  
     

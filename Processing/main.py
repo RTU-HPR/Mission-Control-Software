@@ -29,8 +29,8 @@ def main():
   
   rotator = Rotator()
   sondehub_uploader = SondeHubUploader()
-  map = Map(map_server_port=MAP_SERVER_PORT)
   processor = PacketProcessor(connection_manager, rotator)
+  map = Map(processor, map_server_port=MAP_SERVER_PORT)
   router = Router(processor, connection_manager, rotator, map, sondehub_uploader)
   info_tables = InfoTables(connection_manager, processor, rotator)
   thread_manager = ThreadManager(connection_manager, processor, router, sondehub_uploader, map, rotator, info_tables)
