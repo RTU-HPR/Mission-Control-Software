@@ -23,3 +23,7 @@ var/
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
+
+# Log/Map files
+*.csv
+*.html

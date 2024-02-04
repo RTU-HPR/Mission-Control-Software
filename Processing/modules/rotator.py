@@ -1,6 +1,6 @@
-from time import sleep
-from astropy.coordinates import EarthLocation
 import numpy as np
+from astropy.coordinates import EarthLocation
+from time import sleep
 
 class Rotator:
   def __init__(self):
@@ -105,25 +105,24 @@ class Rotator:
     self.rotator_position_mode = mode
   
   def set_auto_rotator_position(self, latitude, longitude, altitude) -> None:
-    # Check if in auto mode
-    if self.rotator_position_mode == "auto":
-      # Check if passed values are floats
-      if isinstance(latitude, float) and isinstance(longitude, float) and isinstance(altitude, float):
-        # Check if the rotator position is not already the same as the passed in values
-        if self.rotator_position["latitude"] != latitude and self.rotator_position["longitude"] != longitude and self.rotator_position["altitude"] != altitude:
-          self.rotator_position = {"latitude": latitude, "longitude": longitude, "altitude": altitude}
-          self.new_angles_required = True
+    if (self.rotator_position_mode == "auto" and
+        isinstance(latitude, float) and isinstance(longitude, float) and isinstance(altitude, float) and
+        (self.rotator_position["latitude"] != latitude or 
+         self.rotator_position["longitude"] != longitude or 
+         self.rotator_position["altitude"] != altitude)):
+      self.rotator_position = {"latitude": latitude, "longitude": longitude, "altitude": altitude}
+      self.new_angles_required = True
     sleep(0.1)
   
   def set_auto_target_position(self, latitude, longitude, altitude) -> None:
-    # Check if in auto mode
-    if self.rotator_control_mode == "auto":
-      # Check if passed values are floats
-      if isinstance(latitude, float) and isinstance(longitude, float) and isinstance(altitude, float):
-        # Check if the rotator target position is not already the same as the passed in values
-        if self.target_position["latitude"] != latitude and self.target_position["longitude"] != longitude and self.target_position["altitude"] != altitude:
-          self.target_position = {"latitude": latitude, "longitude": longitude, "altitude": altitude}
-          self.new_angles_required = True
+    # Check if in auto mode and passed values are floats and not already the same as the current target position
+    if (self.rotator_control_mode == "auto" and
+        isinstance(latitude, float) and isinstance(longitude, float) and isinstance(altitude, float) and
+        (self.target_position["latitude"] != latitude or 
+         self.target_position["longitude"] != longitude or
+         self.target_position["altitude"] != altitude)):
+      self.target_position = {"latitude": latitude, "longitude": longitude, "altitude": altitude}
+      self.new_angles_required = True
     
   def set_manual_rotator_position(self, latitude, longitude, altitude) -> None:
     if self.rotator_position_mode == "auto":

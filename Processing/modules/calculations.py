@@ -1,3 +1,4 @@
+import dis
 import math
 
 def calculate_flight_computer_extra_telemetry(old_data: dict, new_data: dict, rotator_data: dict, time_delta: int, structure: list):
@@ -22,7 +23,10 @@ def calculate_flight_computer_extra_telemetry(old_data: dict, new_data: dict, ro
       calculated_data["gps_total_speed"] = round((calculated_data["horizontal_speed"]**2 + calculated_data["gps_vertical_speed"]**2)**0.5, 2)
     except:
       pass
-      
+    
+    if rotator_data["latitude"] == 0 and rotator_data["longitude"] == 0:
+      return calculated_data
+    
     try:
       # Calculate ground distance from rotator to flight computer (haversine formula)
       # Convert degrees to radians
@@ -39,14 +43,17 @@ def calculate_flight_computer_extra_telemetry(old_data: dict, new_data: dict, ro
       a = math.sin(dlat / 2)**2 + math.cos(lat1_rad) * math.cos(lat2_rad) * math.sin(dlon / 2)**2
       c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))  
       distance = 6371.0 * c
-
       calculated_data["ground_distance_to_rotator"] = round(distance, 2)
     except:
       pass
     
     try:
+      # Calculate altitude difference in km
+      altitude_difference = abs(new_data["gps_altitude"] - rotator_data["altitude"]) / 1000
+
       # Calculate straight line distance from rotator to flight computer (Pythagorean theorem)
-      calculated_data["straight_line_distance_to_rotator"] = round((((new_data["gps_latitude"] - rotator_data["latitude"])**2 + (new_data["gps_longitude"] - rotator_data["longitude"])**2 + (new_data["gps_altitude"] - rotator_data["altitude"])**2)**0.5) / 1000, ndigits=2)
+      straight_line_distance = math.sqrt(calculated_data["ground_distance_to_rotator"]**2 + altitude_difference**2)
+      calculated_data["straight_line_distance_to_rotator"] = round(straight_line_distance, 2)  
     except:
       pass
     

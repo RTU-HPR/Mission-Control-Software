@@ -1,10 +1,10 @@
 import queue
 
-from modules.connection_manager import ConnectionManager 
-from modules.rotator import Rotator
+from config import *
 from modules.calculations import *
 from modules.ccsds import *
-from config import *
+from modules.connection_manager import ConnectionManager 
+from modules.rotator import Rotator
 
 class PacketProcessor:
   def __init__(self, 
@@ -19,16 +19,28 @@ class PacketProcessor:
     self.bfc_telemetry = {value: 0.0 for type, value in TELEMETRY_MESSAGE_STRUCTURE["bfc"]}
     self.rotator_telemetry = {value: 0.0 for type, value in TELEMETRY_MESSAGE_STRUCTURE["rotator"]}
     
+    self.bfc_telemetry["gps_latitude"] = 56.956805
+    self.bfc_telemetry["gps_longitude"] = 24.113865
+    self.bfc_telemetry["gps_altitude"] = 10000
+    
+    self.pfc_telemetry["gps_latitude"] = 56.956805
+    self.pfc_telemetry["gps_longitude"] = 24.113865
+    self.pfc_telemetry["gps_altitude"] = 10000
+    
     # Timing
     self.last_pfc_telemetry_epoch_seconds = 0
     self.last_bfc_telemetry_epoch_seconds = 0
     self.last_pfc_telemetry_epoch_subseconds = 0
     self.last_bfc_telemetry_epoch_subseconds = 0
     
+    self.pfc_packet_received_time = 0
+    self.bfc_packet_received_time = 0
+    self.rotator_packet_received_time = 0
+    
     # Calculations
-    self.pfc_calculations = dict.fromkeys(TELEMETRY_MESSAGE_STRUCTURE["pfc"], 0.0)
-    self.bfc_calculations = dict.fromkeys(TELEMETRY_MESSAGE_STRUCTURE["bfc"], 0.0)
-    self.rotator_calculations = dict.fromkeys(TELEMETRY_MESSAGE_STRUCTURE["rotator"], 0.0)
+    self.pfc_calculations = dict.fromkeys(CALCULATION_MESSAGE_STRUCTURE["pfc"], 0.0)
+    self.bfc_calculations = dict.fromkeys(CALCULATION_MESSAGE_STRUCTURE["bfc"], 0.0)
+    self.rotator_calculations = dict.fromkeys(CALCULATION_MESSAGE_STRUCTURE["rotator"], 0.0)
     self.pfc_calculations_index = 0
     self.bfc_calculations_index = 0
     self.rotator_calculations_index = 0
@@ -37,11 +49,12 @@ class PacketProcessor:
     self.processed_packets = queue.Queue()
   
   def process_packet(self) -> None:
-    # Get a packet from connection manager
-    packet = self.connection_manager.received_messages.get()
+    try:
+      packet = self.connection_manager.received_messages.get(timeout=1)
+    except queue.Empty:
+      return
     
     try:
-      # Parse the packet      
       parsed = parse_ccsds_packet(packet[2])
       if parsed is None:
         raise Exception("Invalid ccsds packet")
@@ -56,17 +69,23 @@ class PacketProcessor:
         
         # If the packet is meant for the rotator, process it, else put it in the processed packets queue
         if not self.__process_rotator_command(packet_id, packet_data):
-          self.processed_packets.put((True, "transceiver", packet[2]))
-          # Complete the task
+          if apid == TELECOMMAND_APID["pfc"]:
+            self.processed_packets.put((True, "primary", packet[2]))
+          elif apid == TELECOMMAND_APID["bfc"]:
+            self.processed_packets.put((True, "secondary", packet[2]))
+
           self.connection_manager.received_messages.task_done()
           return
 
       # Update telemetry from essential packets
       elif apid in [key for key, value in APID_TO_TYPE.items() if value == "pfc_essential"]:
+        self.pfc_packet_received_time = time.time()
         self.__update_pfc_telemetry(packet_data, epoch_seconds, epoch_subseconds)
       elif apid in [key for key, value in APID_TO_TYPE.items() if value == "bfc_essential"]:
+        self.bfc_packet_received_time = time.time()
         self.__update_bfc_telemetry(packet_data, epoch_seconds, epoch_subseconds)
       elif apid in [key for key, value in APID_TO_TYPE.items() if value == "rotator_position"]:
+        self.rotator_packet_received_time = time.time()
         self.__update_rotator_telemetry(packet_data)
         
       self.processed_packets.put((False, "yamcs", packet[2]))
@@ -128,69 +147,63 @@ class PacketProcessor:
       print(f"Error processing rotator command: {e}")
       return False  
   
-  def __update_pfc_telemetry(self, packet_data, epoch_seconds, epoch_subseconds) -> None:
-    try:
-      new_telemetry = {}
-      
-      # Convert packet data from binary to usable data values
-      start = 0
-      for type, value in TELEMETRY_MESSAGE_STRUCTURE["pfc"]:
-        if type == "float":
-          end = start + 32
-          new_telemetry[value] = binary_to_float(packet_data[start:end])
-          start = end
-        elif type == "int":
-          end = start + 32
-          new_telemetry[value] = binary_to_int(packet_data[start:end])
-          start = end
+  def __convert_binary_to_telemetry(self, packet_data, telemetry_type: str):
+    """
+    Converts binary packet data to telemetry data.
+    """
+    new_telemetry = {}
+    start = 0
+    for data_type, data_value in TELEMETRY_MESSAGE_STRUCTURE[telemetry_type]:
+        if data_type == "float":
+            end = start + 32
+            new_telemetry[data_value] = binary_to_float(packet_data[start:end])
+            start = end
+        elif data_type == "int":
+            end = start + 32
+            new_telemetry[data_value] = binary_to_int(packet_data[start:end])
+            start = end
         else:
-          raise Exception(f"Invalid data type: {type} and {value}")
+            raise Exception(f"Invalid data type: {data_type} and {data_value}")
+    return new_telemetry
+  
+  def __update_pfc_telemetry(self, packet_data, epoch_seconds, epoch_subseconds) -> None:
+    """
+    Updates the PFC telemetry data.
+    """
+    try:
+        new_telemetry = self.__convert_binary_to_telemetry(packet_data, "pfc")
         
-      # PFC essential telemetry
-      old_pfc_telemetry_epoch_seconds = self.last_pfc_telemetry_epoch_seconds
-      old_pfc_telemetry_epoch_subseconds = self.last_pfc_telemetry_epoch_subseconds
-      self.last_pfc_telemetry_epoch_seconds = epoch_seconds
-      self.last_pfc_telemetry_epoch_subseconds = epoch_subseconds
+        # PFC essential telemetry
+        old_pfc_telemetry_epoch_seconds = self.last_pfc_telemetry_epoch_seconds
+        old_pfc_telemetry_epoch_subseconds = self.last_pfc_telemetry_epoch_subseconds
+        self.last_pfc_telemetry_epoch_seconds = epoch_seconds
+        self.last_pfc_telemetry_epoch_subseconds = epoch_subseconds
 
-      # Calculate time delta from seconds and subseconds
-      time_delta = (self.last_pfc_telemetry_epoch_seconds - old_pfc_telemetry_epoch_seconds) + (self.last_pfc_telemetry_epoch_subseconds - old_pfc_telemetry_epoch_subseconds) / 65536
+        # Calculate time delta from seconds and subseconds
+        time_delta = (self.last_pfc_telemetry_epoch_seconds - old_pfc_telemetry_epoch_seconds) + (self.last_pfc_telemetry_epoch_subseconds - old_pfc_telemetry_epoch_subseconds) / 65536
 
-      # Calculate extra telemetry if position is valid
-      if self.pfc_telemetry["gps_latitude"] != 0 and self.pfc_telemetry["gps_latitude"] != 0:
-        self.pfc_calculations = calculate_flight_computer_extra_telemetry(self.pfc_telemetry, new_telemetry, self.rotator_telemetry, time_delta, CALCULATION_MESSAGE_STRUCTURE["pfc"])
+        # Calculate extra telemetry if position is valid
+        if self.pfc_telemetry["gps_latitude"] != 0 and self.pfc_telemetry["gps_latitude"] != 0:
+            self.pfc_calculations = calculate_flight_computer_extra_telemetry(self.pfc_telemetry, new_telemetry, self.rotator.rotator_position, time_delta, CALCULATION_MESSAGE_STRUCTURE["pfc"])
         
-      # Create a ccsds packet from the calculations
-      apid = [key for key, value in APID_TO_TYPE.items() if value == "pfc_calculations"][0]
-      message = ",".join([str(x) for x in self.pfc_calculations.values()]) 
-      ccsds = convert_message_to_ccsds(apid, self.pfc_calculations_index, message)
-          
-      if ccsds is None:
-        raise Exception("Invalid ccsds packet created")
-          
-      self.processed_packets.put((False, "yamcs", ccsds))
-      self.pfc_calculations_index += 1
-      self.pfc_telemetry = new_telemetry
+        # Create a ccsds packet from the calculations
+        apid = [key for key, value in APID_TO_TYPE.items() if value == "pfc_calculations"][0]
+        message = ",".join([str(x) for x in self.pfc_calculations.values()]) 
+        ccsds = convert_message_to_ccsds(apid, self.pfc_calculations_index, message)
         
+        if ccsds is None:
+            raise Exception("Invalid ccsds packet created")
+        
+        self.processed_packets.put((False, "yamcs", ccsds))
+        self.pfc_calculations_index += 1
+        self.pfc_telemetry = new_telemetry
+
     except Exception as e:
-      print(f"Error updating PFC telemetry: {e}")
+        print(f"Error updating PFC telemetry: {e}")
       
   def __update_bfc_telemetry(self, packet_data, epoch_seconds, epoch_subseconds) -> None:
     try:
-      new_telemetry = {}
-      
-      # Convert packet data from binary to usable data types
-      start = 0
-      for type, value in TELEMETRY_MESSAGE_STRUCTURE["bfc"]:
-        if type == "float":
-          end = start + 32
-          new_telemetry[value] = binary_to_float(packet_data[start:end])
-          start = end
-        elif type == "int":
-          end = start + 32
-          new_telemetry[value] = binary_to_int(packet_data[start:end])
-          start = end
-        else:
-          raise Exception(f"Invalid data type: {type} and {value}")
+      new_telemetry = self.__convert_binary_to_telemetry(packet_data, "bfc")
         
       # BFC essential telemetry
       old_bfc_telemetry_epoch_seconds = self.last_bfc_telemetry_epoch_seconds
@@ -203,7 +216,7 @@ class PacketProcessor:
 
       # Calculate extra telemetry if position is valid
       if self.bfc_telemetry["gps_latitude"] != 0 and self.bfc_telemetry["gps_latitude"] != 0:
-        self.bfc_calculations = calculate_flight_computer_extra_telemetry(self.bfc_telemetry, new_telemetry, self.rotator_telemetry, time_delta, CALCULATION_MESSAGE_STRUCTURE["bfc"])
+        self.bfc_calculations = calculate_flight_computer_extra_telemetry(self.bfc_telemetry, new_telemetry, self.rotator.rotator_position, time_delta, CALCULATION_MESSAGE_STRUCTURE["bfc"])
         
         # Create a ccsds packet from the calculations
         apid = [key for key, value in APID_TO_TYPE.items() if value == "bfc_calculations"][0]
@@ -220,24 +233,9 @@ class PacketProcessor:
     except Exception as e:
       print(f"Error updating BFC telemetry: {e}")
       
-
   def __update_rotator_telemetry(self, packet_data) -> None:
     try:
-      new_telemetry = {}
-      
-      # Convert packet data from binary to usable data types
-      start = 0
-      for type, value in TELEMETRY_MESSAGE_STRUCTURE["rotator"]:
-        if type == "float":
-          end = start + 32
-          new_telemetry[value] = binary_to_float(packet_data[start:end])
-          start = end
-        elif type == "int":
-          end = start + 32
-          new_telemetry[value] = binary_to_int(packet_data[start:end])
-          start = end
-        else:
-          raise Exception(f"Invalid data type: {type} and {value}")
+      new_telemetry = self.__convert_binary_to_telemetry(packet_data, "rotator")
         
       # Create a ccsds packet from the rotator position
       apid = [key for key, value in APID_TO_TYPE.items() if value == "rotator_position"][0]
