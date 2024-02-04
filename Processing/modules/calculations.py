@@ -1,4 +1,3 @@
-import dis
 import math
 
 def calculate_flight_computer_extra_telemetry(old_data: dict, new_data: dict, rotator_data: dict, time_delta: int, structure: list):

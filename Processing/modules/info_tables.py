@@ -1,5 +1,4 @@
-from re import T
-from tabulate import tabulate, SEPARATING_LINE
+from tabulate import tabulate
 import time
 import os
 
