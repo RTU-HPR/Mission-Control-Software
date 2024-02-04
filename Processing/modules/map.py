@@ -1,12 +1,11 @@
 import datetime
 from flask import jsonify
-from bs4 import BeautifulSoup
 import flask
 import folium
 import os
 import pandas as pd
 from time import sleep
-import requests
+from requests import Session, Request
 from config import *
 from modules.processor import PacketProcessor
 
@@ -113,10 +112,9 @@ class Map:
     }
     
     try:
-      response = requests.post(url, json=payload)
-      data = response.json()
-      if "prediction" not in data:
-        raise Exception("API request failed")
+      s = Session()
+      p = Request('GET', url, params=payload).prepare()
+      data = s.send(p).json()
       self.prediction_coordinates.clear()
             
       for stage in data["prediction"]:
@@ -125,7 +123,6 @@ class Map:
           for point in trajectory:
             latitude = point["latitude"]
             longitude = point["longitude"]
-            print(latitude, longitude)
             self.prediction_coordinates.append((latitude, longitude))
             
     except Exception as e:
@@ -185,13 +182,6 @@ class Map:
     # Save the map
     path = os.path.join(os.path.dirname(__file__), "../templates/map.html")
     self.m.save(path)
-    
-    # soup = BeautifulSoup(open(path), 'html.parser')
-    # head = soup.find('head')
-    # if head:
-    #   head.append(BeautifulSoup("""<meta http-equiv="refresh" content="30">""", 'html.parser'))
-    # with open(path, 'w') as html_file:
-    #   html_file.write(str(soup))
     
     self.map_update_required = False  
     

@@ -36,7 +36,7 @@ class ConnectionManager:
     self.secondary_transceiver_tc_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     self.secondary_transceiver_tm_socket.settimeout(3)
     self.secondary_transceiver_tm_socket.bind(SECONDARY_TRANSCEIVER_TM_ADDRESS)
-    self.secondary_transceiver_socket_connected = True # By default, should be False, set to True for testing
+    self.secondary_transceiver_socket_connected = False # By default, should be False, set to True for testing
     self.secondary_transceiver_wifi_rssi = 0
   
   def send_heartbeat_to_transceiver(self) -> None:
@@ -50,6 +50,7 @@ class ConnectionManager:
       packet = self.sendable_to_transceiver_messages.get(timeout=1)
     except queue.Empty:
       return
+    
     # If there is no WiFi connection, put the packet back in the queue
     if packet[1] == "primary" and self.transceiver_socket_connected == False:
       self.sendable_to_transceiver_messages.put(packet)
@@ -82,7 +83,7 @@ class ConnectionManager:
       self.sendable_to_transceiver_messages.task_done()
       print(f"An error occurred while sending to transceiver: {e}")
   
-  def receive_from_transceiver(self) -> None:
+  def receive_from_primary_transceiver(self) -> None:
     try:
       # Receive a message from the transceiver
       message, addr = self.transceiver_tm_socket.recvfrom(4096)
@@ -91,28 +92,39 @@ class ConnectionManager:
       try:
         message = message.decode()
         if "Heartbeat" in message:
-          if "Primary" in message:
-            self.transceiver_socket_connected = True
-            self.transceiver_wifi_rssi = int(message.split(",")[1])
-          elif "Secondary" in message:
-            self.secondary_transceiver_socket_connected = True
-            self.secondary_transceiver_wifi_rssi = message.split(",")[1]
-          else:
-            # For testing purposes
-            self.transceiver_socket_connected = True
-            self.secondary_transceiver_socket_connected = False
-            self.transceiver_wifi_rssi = int(message.split(",")[1])
+          self.transceiver_socket_connected = True
+          self.transceiver_wifi_rssi = int(message.split(",")[1])
         else:
           raise Exception()
       # If the message is not a heartbeat, put it in the queue
       except:
         self.received_messages.put((False, "yamcs", message))
-        
     except socket.timeout:
-      pass
+      self.transceiver_socket_connected = False
     except Exception as e:
-      print(f"An error occurred while receiving from transceiver: {e}")    
+      print(f"An error occurred while receiving from primary transceiver: {e}")    
       
+  def receive_from_secondary_transceiver(self) -> None:
+    try:
+      # Receive a message from the transceiver
+      message, addr = self.secondary_transceiver_tm_socket.recvfrom(4096)
+      
+      # Try to decode the message to see if it is a heartbeat
+      try:
+        message = message.decode()
+        if "Heartbeat" in message:
+          self.secondary_transceiver_socket_connected = True
+          self.secondary_transceiver_wifi_rssi = int(message.split(",")[1])
+        else:
+          raise Exception()
+      # If the message is not a heartbeat, put it in the queue
+      except:
+        self.received_messages.put((False, "yamcs", message))
+    except socket.timeout:
+      self.secondary_transceiver_socket_connected = False
+    except Exception as e:
+      print(f"An error occurred while receiving from secondary transceiver: {e}")   
+    
   def send_to_yamcs(self) -> None:
     try:
       packet = self.sendable_to_yamcs_messages.get(timeout=1)

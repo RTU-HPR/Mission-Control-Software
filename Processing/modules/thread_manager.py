@@ -22,12 +22,22 @@ class ThreadManager:
     self.stop_event = Event()
     
   # THREAD STARTERS
-  def start_receive_from_transceiver_thread(self):
-    def receive_from_transceiver_thread():
+  def start_receive_from_primary_transceiver_thread(self):
+    def receive_from_primary_transceiver_thread():
       while not self.stop_event.is_set():
-        self.connection_manager.receive_from_transceiver()
+        self.connection_manager.receive_from_primary_transceiver()
       
-    thread = Thread(target=receive_from_transceiver_thread, name="Transceiver Receiver")
+    thread = Thread(target=receive_from_primary_transceiver_thread, name="Primary Transceiver Receiver")
+    thread.daemon = True
+    thread.start()
+    self.active_threads.append(thread)
+    
+  def start_receive_from_secondary_transceiver_thread(self):
+    def receive_from_secondary_transceiver_thread():
+      while not self.stop_event.is_set():
+        self.connection_manager.receive_from_secondary_transceiver()
+      
+    thread = Thread(target=receive_from_secondary_transceiver_thread, name="Secondary Transceiver Receiver")
     thread.daemon = True
     thread.start()
     self.active_threads.append(thread)

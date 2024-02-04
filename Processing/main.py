@@ -41,7 +41,8 @@ def main():
   # Start threads
   print("Starting threads...", end="")
   # Receive threads
-  thread_manager.start_receive_from_transceiver_thread()
+  thread_manager.start_receive_from_primary_transceiver_thread()
+  thread_manager.start_receive_from_secondary_transceiver_thread()
   thread_manager.start_receive_from_yamcs_thread()
   # Send threads
   thread_manager.start_send_to_transceiver_thread()
