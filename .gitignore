@@ -1,0 +1,35 @@
+# Byte-compiled / optimized / DLL files
+Processing/__pycache__
+*.py[cod]
+
+# C extensions
+*.so
+
+# Distribution / packaging
+Processing/bin
+Processing/build
+Processing/develop-eggs
+Processing/dist
+Processing/eggs
+Processing/lib
+Processing/lib64
+Processing/parts
+Processing/sdist
+Processing/var
+*.egg-info/
+Processing/.installed.cfg
+*.egg
+Processing/pyvenv.cfg
+
+# Installer logs
+Processing/pip-log.txt
+Processing/pip-delete-this-directory.txt
+
+# Log/Map files
+*.csv
+*.html
+Processing/share
+
+# Python environment
+Processing/.env
+Processing/env

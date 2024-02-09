@@ -3,7 +3,7 @@ import queue
 import time
 
 from config import *
-from modules.logging import Logger
+from Processing.modules.mcs_logging import Logger
 
 class ConnectionManager:
   def __init__(self, logger: Logger) -> None:    
