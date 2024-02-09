@@ -3,10 +3,10 @@ import queue
 import time
 
 from config import *
-from Processing.modules.mcs_logging import Logger
+from modules.mcs_logging import Logger
 
 class ConnectionManager:
-  def __init__(self, logger: Logger) -> None:    
+  def __init__(self, logger: Logger, MQTTPacketTxCallback) -> None:    
     # Logging
     self.logger = logger
     
@@ -99,6 +99,7 @@ class ConnectionManager:
       # If the message is not a heartbeat, put it in the queue
       except:
         self.received_messages.put((False, "yamcs", message))
+        MQTTPacketTxCallback(message)
     except socket.timeout:
       self.transceiver_socket_connected = False
     except Exception as e:
@@ -124,6 +125,24 @@ class ConnectionManager:
       self.secondary_transceiver_socket_connected = False
     except Exception as e:
       print(f"An error occurred while receiving from secondary transceiver: {e}")   
+
+  def receive_sync(self, message) -> None:
+    try:
+      # Try to decode the message to see if it is a heartbeat
+      try:
+        message = message.decode()
+        if "Heartbeat" in message:
+          self.transceiver_socket_connected = True
+          self.transceiver_wifi_rssi = int(message.split(",")[1])
+        else:
+          raise Exception()
+      # If the message is not a heartbeat, put it in the queue
+      except:
+        self.received_messages.put((False, "yamcs", message))
+    except socket.timeout:
+      self.transceiver_socket_connected = False
+    except Exception as e:
+      print(f"An error occurred while receiving from primary transceiver: {e}") 
     
   def send_to_yamcs(self) -> None:
     try:
