@@ -7,7 +7,7 @@ from modules.processor import PacketProcessor
 from modules.rotator import Rotator
 from modules.sondehub import SondeHubUploader
 
-from config import PACKETID_TO_TYPE, TELECOMMAND_APID
+from config import BALLOON_UPLOAD, PACKETID_TO_TYPE, PAYLOAD_UPLOAD, TELECOMMAND_APID
 from modules.ccsds import convert_message_to_ccsds
 
 class Router:
@@ -83,14 +83,15 @@ class Router:
     sleep(0.1)
   
   def send_data_to_sondehub(self):
-    self.sondehub.upload_balloon_data(self.processor.last_bfc_telemetry_epoch_seconds,
-                                      self.processor.bfc_telemetry["gps_latitude"],
-                                      self.processor.bfc_telemetry["gps_longitude"],
-                                      self.processor.bfc_telemetry["gps_altitude"])
-    
-    self.sondehub.upload_payload_data(self.processor.last_pfc_telemetry_epoch_seconds,
-                                      self.processor.pfc_telemetry["gps_latitude"],
-                                      self.processor.pfc_telemetry["gps_longitude"],
-                                      self.processor.pfc_telemetry["gps_altitude"])
+    if BALLOON_UPLOAD:
+      self.sondehub.upload_balloon_data(self.processor.last_bfc_telemetry_epoch_seconds,
+                                        self.processor.bfc_telemetry["gps_latitude"],
+                                        self.processor.bfc_telemetry["gps_longitude"],
+                                        self.processor.bfc_telemetry["gps_altitude"])
+    if PAYLOAD_UPLOAD:
+      self.sondehub.upload_payload_data(self.processor.last_pfc_telemetry_epoch_seconds,
+                                        self.processor.pfc_telemetry["gps_latitude"],
+                                        self.processor.pfc_telemetry["gps_longitude"],
+                                        self.processor.pfc_telemetry["gps_altitude"])
     sleep(1)
                               

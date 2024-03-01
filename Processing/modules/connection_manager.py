@@ -1,3 +1,4 @@
+from binascii import hexlify
 import socket
 import queue
 import time
@@ -42,6 +43,7 @@ class ConnectionManager:
   def send_heartbeat_to_transceiver(self) -> None:
     # ~ Used as sacrificial character
     self.transceiver_tc_socket.sendto("UDP Heartbeat Primary~".encode(), TRANSCEIVER_TC_ADDRESS)
+    time.sleep(0.05)
     self.secondary_transceiver_tc_socket.sendto("UDP Heartbeat Secondary~".encode(), SECONDARY_TRANSCEIVER_TC_ADDRESS)
     time.sleep(1)
 
@@ -98,6 +100,7 @@ class ConnectionManager:
           raise Exception()
       # If the message is not a heartbeat, put it in the queue
       except:
+        print(f"Received from primary transceiver: {message}")
         self.received_messages.put((False, "yamcs", message))
     except socket.timeout:
       self.transceiver_socket_connected = False
