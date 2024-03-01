@@ -352,7 +352,6 @@
           <ParameterRefEntry parameterRef="BFC_GPS_Altitude" />
           <ParameterRefEntry parameterRef="BFC_Baro_Altitude" />
           <ParameterRefEntry parameterRef="BFC_GPS_Satellites" />
-          <ParameterRefEntry parameterRef="BFC_GPS_Time" />
           <ParameterRefEntry parameterRef="BFC_Error_Info_In_Queue" />
           <ParameterRefEntry parameterRef="BFC_Rssi" />
           <ParameterRefEntry parameterRef="BFC_Snr" />
@@ -371,7 +370,7 @@
       <SequenceContainer name="BalloonFullPakcet">
         <EntryList>
           <ParameterRefEntry parameterRef="BFC_Temperature_Internal" /> 
-          <ParameterRefEntry parameterRef="PFC_Temperature_External" />
+          <ParameterRefEntry parameterRef="BFC_Temperature_External" />
           <ParameterRefEntry parameterRef="BFC_Angular_Velocity_Z_Axis" />
           <ParameterRefEntry parameterRef="BFC_Pointing_Location_Z_Axis" />
           <ParameterRefEntry parameterRef="BFC_Motor_RPM" />
