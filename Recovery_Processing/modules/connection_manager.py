@@ -1,8 +1,9 @@
-from binascii import hexlify
 import socket
 import queue
 import time
 import serial
+import serial.tools.list_ports
+import os
 
 from config import *
 from modules.logging import Logger
@@ -31,8 +32,22 @@ class ConnectionManager:
     self.ser.port = SERIAL_PORT
     if self.ser.is_open:
       self.ser.close()
-    self.ser.open()
-
+    try:
+      self.ser.open()
+    except Exception as e:
+      print(f"An error occurred while opening the serial port: {e}")
+      print("")
+      print("CHECK IF THE MISSION CONTROL IS NOT ALREADY RUNNING AND THE CORRECT PORT IS SELECTED IN THE CONFIG FILE!")
+      os.system('pause')
+      os._exit(1)
+    
+    self.connected_to_transceiver = False
+    self.open_ports = [p for p in list(serial.tools.list_ports.comports())]
+    try:
+      self.basestation_port = [port.device for port in self.open_ports if SERIAL_PORT in port][0]
+    except IndexError:
+      self.basestation_port = None
+      
   def handle_serial_communication(self):    
     if not self.sendable_to_transceiver_messages.empty():
       if (int(time.mktime(time.localtime())) % CYCLE_TIME == 0):
@@ -48,6 +63,14 @@ class ConnectionManager:
       # If the message is not a heartbeat, put it in the queue
       # print(f"Received from transceiver: {read_data}")
       self.received_messages.put((False, "yamcs", read_data))
+    
+  def check_serial_connection(self) -> None:
+    open_ports = [p.device for p in list(serial.tools.list_ports.comports())]
+    if self.basestation_port in open_ports:
+      self.connected_to_transceiver = True
+    else:
+      self.connected_to_transceiver = False
+    time.sleep(0.1)
     
   def send_to_yamcs(self) -> None:
     try:

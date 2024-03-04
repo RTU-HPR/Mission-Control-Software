@@ -14,7 +14,7 @@ class InfoTables:
     self.packet_processor = packet_processor
     self.rotator = rotator
     
-    self.TABLE_UPDATE_INTERVAl = 0.1
+    self.TABLE_UPDATE_INTERVAl = 0.5
     self.last_print_time = 0
     
   def print_info_tables(self):

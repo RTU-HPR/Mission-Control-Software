@@ -27,12 +27,13 @@ class InfoTables:
     print() 
   
     # Connection Manager
-    headers = ["Next Communication Cycle Start (s)", "Command To Send"]
+    headers = ["Connected to transceiver", "Next Communication Cycle Start (s)", "Command To Send"]
     
+    connected = self.connection_manager.connected_to_transceiver
     cycle_start = round(CYCLE_TIME - (time.time() % CYCLE_TIME), 1)
     command_to_send = self.connection_manager.sending_to_transceiver
     
-    table = [[cycle_start, command_to_send]]
+    table = [[connected, cycle_start, command_to_send]]
     print("Connections")
     print(tabulate(table, headers=headers, tablefmt="grid", stralign="center", disable_numparse=True))
     print()
@@ -87,16 +88,18 @@ class InfoTables:
     print()
     
     # Calculations
-    headers = ["Vehicle", "GPS ↑↓ Speed (m/s)", "Baro ↑↓ Speed (m/s)", "GPS ←→ Speed (m/s)", "GPS Speed (m/s)", "Ground Distance (km)", "Straight Line Distance (km)"]
+    headers = ["Vehicle", "GPS ↑↓ Speed (m/s)", "Baro ↑↓ Speed (m/s)", "GPS ←→ Speed (m/s)", "GPS Speed (m/s)"]
     
     table = [[], []]
     table[0].append("Balloon")
     for key in self.packet_processor.bfc_calculations.keys():
-      table[0].append(round(self.packet_processor.bfc_calculations[key], 2))
+      if "speed" in key:
+        table[0].append(round(self.packet_processor.bfc_calculations[key], 2))
     
     table[1].append("Payload")
     for key in self.packet_processor.pfc_calculations.keys():
-      table[1].append(round(self.packet_processor.pfc_calculations[key], 2))
+      if "speed" in key:
+        table[1].append(round(self.packet_processor.pfc_calculations[key], 2))
     print("Calculations")
     print(tabulate(table, headers=headers, tablefmt="grid", stralign="center", disable_numparse=True))
     print()

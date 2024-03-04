@@ -19,7 +19,7 @@ ASCENT_RATE = 5
 DESCENT_RATE = 5
 
 # Communication cycle time in seconds
-CYCLE_TIME = 12
+CYCLE_TIME = 15
 
 # CONNECTIONS
 YAMCS_TM_ADDRESS = ('localhost', 10015)

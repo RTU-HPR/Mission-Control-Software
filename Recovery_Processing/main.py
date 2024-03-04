@@ -38,6 +38,7 @@ def main():
   print("Starting threads...", end="")
   # Serial threads
   thread_manager.start_serial_connection_handler_thread()
+  thread_manager.start_serial_connection_checker_thread()
   # Receive threads
   thread_manager.start_receive_from_yamcs_thread()
   # Send threads

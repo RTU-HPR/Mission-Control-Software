@@ -28,6 +28,16 @@ class ThreadManager:
     thread.start()
     self.active_threads.append(thread)
     
+  def start_serial_connection_checker_thread(self):
+    def serial_connection_checker_thread():
+      while not self.stop_event.is_set():
+        self.connection_manager.check_serial_connection()
+      
+    thread = Thread(target=serial_connection_checker_thread, name="Serial Connection Checker")
+    thread.daemon = True
+    thread.start()
+    self.active_threads.append(thread)
+    
   def start_receive_from_yamcs_thread(self):
     def receive_from_yamcs_thread():
       while not self.stop_event.is_set():
