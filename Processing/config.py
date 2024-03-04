@@ -32,6 +32,11 @@ SECONDARY_TRANSCEIVER_TC_ADDRESS = ('192.168.136.254', 10065)
 # Port on which the map server is running
 MAP_SERVER_PORT = 9500
 
+# MQTT
+SYNC_SERVER_URL = "018f941fa23b453dad60beccbca3cd89.s1.eu.hivemq.cloud"
+SYNC_SERVER_PORT = 8883
+SYNC_SERVER_TOPIC = "packets"
+
 # APID can be from 0 to 2047
 # Telemetry package apids
 APID_TO_TYPE = {

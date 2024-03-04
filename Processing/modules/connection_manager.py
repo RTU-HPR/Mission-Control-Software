@@ -4,10 +4,10 @@ import queue
 import time
 
 from config import *
-from modules.logging import Logger
+from modules.mcs_logging import Logger
 
 class ConnectionManager:
-  def __init__(self, logger: Logger) -> None:    
+  def __init__(self, logger: Logger, MQTTPacketTxCallback) -> None:    
     # Logging
     self.logger = logger
     
@@ -102,6 +102,7 @@ class ConnectionManager:
       except:
         print(f"Received from primary transceiver: {message}")
         self.received_messages.put((False, "yamcs", message))
+        MQTTPacketTxCallback(message)
     except socket.timeout:
       self.transceiver_socket_connected = False
     except Exception as e:
@@ -150,3 +151,9 @@ class ConnectionManager:
     except Exception as e:
       print(f"An error occurred while receiving from YAMCS: {e}")
   
+  def receive_sync(self, message) -> None:
+    try:
+      if "Heartbeat" not in message.decode():
+        self.received_messages.put((False, "yamcs", message))
+    except Exception as e:
+      print(f"An error occurred while receiving from sync: {e}") 

@@ -3,7 +3,7 @@ from time import sleep
 
 from config import *
 from modules.connection_manager import ConnectionManager
-from modules.logging import Logger
+from Recovery_Processing.modules.mcs_logging import Logger
 from modules.map import Map
 from modules.processor import PacketProcessor
 from modules.router import Router

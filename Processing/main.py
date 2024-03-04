@@ -3,7 +3,7 @@ from time import sleep
 
 from config import *
 from modules.connection_manager import ConnectionManager
-from modules.logging import Logger
+from modules.mcs_logging import Logger
 from modules.map import Map
 from modules.processor import PacketProcessor
 from modules.rotator import Rotator
@@ -11,6 +11,7 @@ from modules.router import Router
 from modules.sondehub import SondeHubUploader
 from modules.thread_manager import ThreadManager
 from modules.info_tables import InfoTables
+from modules.sync import MQTTSync
 
 def main():
   print("RTU High Power Rocketry Team - Ground Station Data Processing Software")
@@ -19,7 +20,8 @@ def main():
   # Create objects
   try:
     logger = Logger()
-    connection_manager = ConnectionManager(logger)
+    mqtt_sync = MQTTSync(SYNC_SERVER_URL, SYNC_SERVER_PORT, SYNC_SERVER_TOPIC)
+    connection_manager = ConnectionManager(logger, mqtt_sync.publishPacket)
   except OSError as e:
     print(f"The following error occurred while creating the connection manager: {e}")
     print("Most likely, one of the ports are already in use. Check if no other Python programs are running and try again.")
@@ -34,6 +36,8 @@ def main():
   router = Router(processor, connection_manager, rotator, map, sondehub_uploader)
   info_tables = InfoTables(connection_manager, processor, rotator)
   thread_manager = ThreadManager(connection_manager, processor, router, sondehub_uploader, map, rotator, info_tables)
+  
+  mqtt_sync.MQTTPacketRxCallback = connection_manager.receive_sync
   
   print("Setup successful!")
   print()

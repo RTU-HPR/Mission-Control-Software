@@ -6,7 +6,7 @@ import serial.tools.list_ports
 import os
 
 from config import *
-from modules.logging import Logger
+from Recovery_Processing.modules.mcs_logging import Logger
 
 class ConnectionManager:
   def __init__(self, logger: Logger) -> None:    
