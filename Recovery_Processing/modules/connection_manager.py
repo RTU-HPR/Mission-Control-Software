@@ -67,6 +67,15 @@ class ConnectionManager:
   def check_serial_connection(self) -> None:
     open_ports = [p.device for p in list(serial.tools.list_ports.comports())]
     if self.basestation_port in open_ports:
+      # If port was disconnected, then reconnect
+      if self.connected_to_transceiver == False:
+        if self.ser.is_open:
+          self.ser.close()
+        try:
+          self.ser.open()
+        except Exception as e:
+          print(f"An error occurred while reopening the serial port: {e}")
+      
       self.connected_to_transceiver = True
     else:
       self.connected_to_transceiver = False
