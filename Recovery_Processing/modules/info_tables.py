@@ -12,19 +12,27 @@ class InfoTables:
     self.connection_manager = connection_manager
     self.packet_processor = packet_processor
     
-    self.TABLE_UPDATE_INTERVAl = 0.1
+    self.TABLE_UPDATE_INTERVAl = 0.01
     self.last_print_time = 0
+    
+    self.TABLE_HARD_REFRESH_INTERVAL = 10
+    self.last_hard_refresh_time = 0
     
   def print_info_tables(self):
     # If a second has passed since the last print, print the tables
     if time.time() - self.last_print_time < self.TABLE_UPDATE_INTERVAl:
       time.sleep(self.TABLE_UPDATE_INTERVAl - (time.time() - self.last_print_time))
       return
+    
+    # Clear the console needed when rescales cmd
+    if time.time() - self.last_hard_refresh_time > self.TABLE_HARD_REFRESH_INTERVAL:
+        os.system("cls")
+        self.last_hard_refresh_time = time.time()
+        
       
-    # Clear the console
-    os.system("cls")
+    print("\033[1;1H", end="")
     print("RTU High Power Rocketry Team - Ground Station Data Processing Software")
-    print() 
+    print("\033[K")  # Clear the line
   
     # Connection Manager
     headers = ["Connected to transceiver", "Next Communication Cycle Start (s)", "Command To Send"]
@@ -36,7 +44,7 @@ class InfoTables:
     table = [[connected, cycle_start, command_to_send]]
     print("Connections")
     print(tabulate(table, headers=headers, tablefmt="grid", stralign="center", disable_numparse=True))
-    print()
+    print("\033[K")  # Clear the line
         
     # Packet Processor
     headers = ["Vehicle", "Time", "Latitude", "Longitude", "GPS Alt (m)", "Baro Alt (m)", "Satellites", "Info/Error", "RSSI (dBm)", "SNR", "Since last packet (s)"]
@@ -85,7 +93,7 @@ class InfoTables:
         
     print("Essential Telemetry")
     print(tabulate(table, headers=headers, tablefmt="grid", stralign="center", disable_numparse=True))
-    print()
+    print("\033[K")  # Clear the line
     
     # Calculations
     headers = ["Vehicle", "GPS ↑↓ Speed (m/s)", "Baro ↑↓ Speed (m/s)", "GPS ←→ Speed (m/s)", "GPS Speed (m/s)"]
@@ -102,6 +110,6 @@ class InfoTables:
         table[1].append(round(self.packet_processor.pfc_calculations[key], 2))
     print("Calculations")
     print(tabulate(table, headers=headers, tablefmt="grid", stralign="center", disable_numparse=True))
-    print()
+    print("\033[K")  # Clear the line
 
     self.last_print_time = time.time()
