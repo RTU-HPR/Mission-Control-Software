@@ -5,14 +5,14 @@ from socket import gethostname, gethostbyname
 HOSTNAME = gethostname()
 LOCAL_IP_ADDRESS = gethostbyname(HOSTNAME)
 # Communication cycle time in seconds
-CYCLE_TIME = 12
+CYCLE_TIME = 15
 
 # CONNECTIONS
 YAMCS_TM_ADDRESS = ('localhost', 10015)
 YAMCS_TC_ADDRESS = ('localhost', 10025)
 
 # SERIAL
-SERIAL_PORT = "COM4"
+SERIAL_PORT = "COM10"
 
 # Port on which the map server is running
 MAP_SERVER_PORT = 9500
