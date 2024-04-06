@@ -2,6 +2,7 @@ from sondehub.amateur import Uploader
 from datetime import datetime
 
 from config import *
+from datetime import timedelta
 
 class SondeHubUploader:
   # Refrence: https://github.com/projecthorus/pysondehub/wiki/SondeHub-Amateur-Uploader-Class-Usage
@@ -21,11 +22,11 @@ class SondeHubUploader:
     self.last_balloon_data["latitude"] = latitude
     self.last_balloon_data["longitude"] = longitude
     self.last_balloon_data["altitude"] = altitude
-    
+
     # Upload data to SondeHub
     self.uploader.add_telemetry(
       BALLOON_CALLSIGN, # Your payload callsign
-      datetime.fromtimestamp(epoch_time).isoformat(), # Convert time from epoch to ISO 8601 format
+      (datetime.fromtimestamp(epoch_time) - timedelta(hours=3)).isoformat(), # Convert time from epoch to ISO 8601 format
       latitude, # Latitude
       longitude, # Longitude
       altitude # Altitude
@@ -46,7 +47,7 @@ class SondeHubUploader:
     # Upload data to SondeHub
     self.uploader.add_telemetry(
       PAYLOAD_CALLSIGN, # Your balloon callsign
-      datetime.fromtimestamp(epoch_time).isoformat(), # Convert time from epoch to ISO 8601 format
+      (datetime.fromtimestamp(epoch_time) - timedelta(hours=3)).isoformat(), # Convert time from epoch to ISO 8601 format
       latitude, # Latitude
       longitude, # Longitude
       altitude # Altitude

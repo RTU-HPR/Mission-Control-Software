@@ -784,6 +784,19 @@
 				<DefaultSignificance consequenceLevel="normal" />
 			</MetaCommand>
 
+      <MetaCommand name="Payload Servo Reset Request">
+				<BaseMetaCommand metaCommandRef="PayloadCommand">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Packet_ID" argumentValue="1005" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>
+				<CommandContainer name="Payload Servo Reset Request">
+          <EntryList />
+					<BaseContainer containerRef="PayloadCommandContainer" />
+				</CommandContainer>
+				<DefaultSignificance consequenceLevel="normal" />
+			</MetaCommand>
+
       <!-- BFC -->
       <MetaCommand name="Balloon Complete Data Request">
 				<BaseMetaCommand metaCommandRef="BalloonCommand">

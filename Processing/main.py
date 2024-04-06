@@ -53,7 +53,7 @@ def main():
   # Processing thread
   thread_manager.start_packet_processing_thread()
   # SondeHub thread
-  # thread_manager.start_sondehub_uploader_thread()
+  thread_manager.start_sondehub_uploader_thread()
   # Rotator threads
   thread_manager.start_rotator_command_to_transceiver_thread()
   thread_manager.start_rotator_data_update_thread()

@@ -1,6 +1,7 @@
 import numpy as np
 from astropy.coordinates import EarthLocation
 from time import sleep
+import math
 
 class Rotator:
   def __init__(self):
@@ -75,8 +76,6 @@ class Rotator:
     
     # Convert angles to degrees
     elevation = 90 - np.rad2deg(elevation)
-    if elevation < 0:
-      elevation = 0
     azimuth = np.rad2deg(azimuth)
     if azimuth < 0:
       azimuth += 360
@@ -117,10 +116,7 @@ class Rotator:
   def set_auto_target_position(self, latitude, longitude, altitude) -> None:
     # Check if in auto mode and passed values are floats and not already the same as the current target position
     if (self.rotator_control_mode == "auto" and
-        isinstance(latitude, float) and isinstance(longitude, float) and isinstance(altitude, float) and
-        (self.target_position["latitude"] != latitude or 
-         self.target_position["longitude"] != longitude or
-         self.target_position["altitude"] != altitude)):
+        isinstance(latitude, float) and isinstance(longitude, float) and isinstance(altitude, float)):
       self.target_position = {"latitude": latitude, "longitude": longitude, "altitude": altitude}
       self.new_angles_required = True
     

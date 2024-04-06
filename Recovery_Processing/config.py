@@ -12,7 +12,7 @@ YAMCS_TM_ADDRESS = ('localhost', 10015)
 YAMCS_TC_ADDRESS = ('localhost', 10025)
 
 # SERIAL
-SERIAL_PORT = "COM10"
+SERIAL_PORT = "COM4"
 
 # Port on which the map server is running
 MAP_SERVER_PORT = 9500

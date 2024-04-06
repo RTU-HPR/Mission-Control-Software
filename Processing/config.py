@@ -25,9 +25,9 @@ CYCLE_TIME = 15
 YAMCS_TM_ADDRESS = ('localhost', 10015)
 YAMCS_TC_ADDRESS = ('localhost', 10025)
 TRANSCEIVER_TM_ADDRESS = (str(LOCAL_IP_ADDRESS), 10035)
-TRANSCEIVER_TC_ADDRESS = ('192.168.136.143', 10045)
+TRANSCEIVER_TC_ADDRESS = ('192.168.8.254', 10045)
 SECONDARY_TRANSCEIVER_TM_ADDRESS = (str(LOCAL_IP_ADDRESS), 10055)
-SECONDARY_TRANSCEIVER_TC_ADDRESS = ('192.168.136.254', 10065)
+SECONDARY_TRANSCEIVER_TC_ADDRESS = ('192.168.8.253', 10065)
 
 # Port on which the map server is running
 MAP_SERVER_PORT = 9500
@@ -70,6 +70,7 @@ PACKETID_TO_TYPE = {
   1001: "pfc_info_error_request",
   1002: "pfc_format_storage_request", 
   1003: "pfc_ejection_request",
+  1005: "pfc_servo_reset_request",
   # BFC
   2000: "bfc_complete_data_request",
   2001: "bfc_info_error_request",
