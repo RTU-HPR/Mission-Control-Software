@@ -11,11 +11,12 @@ from modules.router import Router
 from modules.sondehub import SondeHubUploader
 from modules.thread_manager import ThreadManager
 from modules.info_tables import InfoTables
+from modules.user_interface import UserInterface
 
 def main():
   print("RTU High Power Rocketry Team - Ground Station Data Processing Software")
   print()
-  
+
   # Create objects
   try:
     logger = Logger()
@@ -26,18 +27,19 @@ def main():
     os.system('pause')
     print("Exiting...")
     exit(1)
-  
+
   rotator = Rotator()
   sondehub_uploader = SondeHubUploader()
   processor = PacketProcessor(connection_manager, rotator)
   map = Map(processor, map_server_port=MAP_SERVER_PORT)
   router = Router(processor, connection_manager, rotator, map, sondehub_uploader)
   info_tables = InfoTables(connection_manager, processor, rotator)
-  thread_manager = ThreadManager(connection_manager, processor, router, sondehub_uploader, map, rotator, info_tables)
-  
+  user_interface = UserInterface(connection_manager, processor, rotator)
+  thread_manager = ThreadManager(connection_manager, processor, router, sondehub_uploader, map, rotator, info_tables, )
+
   print("Setup successful!")
   print()
-  
+
   # Start threads
   print("Starting threads...", end="")
   # Receive threads
@@ -62,15 +64,16 @@ def main():
   thread_manager.start_map_update_thread()
   # Control rotator thread
   thread_manager.start_control_rotator_thread()
-  
+
   print("All threads started!")
   print()
   print("TO STOP THE PROGRAM, PRESS CTRL+C OR CLOSE THE CONSOLE!")
   print()
   sleep(1)
-  
+
   # Start the data table thread only after all the other threads have started
   thread_manager.start_info_tables_thread()
+  thread_manager.start_user_interface_thread()
 
   while True:
     try:
@@ -89,6 +92,6 @@ def main():
       print("All threads stopped. Exiting...")
       os.system('pause')
       os._exit(0)
-      
+
 if __name__ == "__main__":
   main()
