@@ -156,7 +156,7 @@
 
       <!-- System status  -->
       <Parameter name="BFC_Uptime" parameterTypeRef="int16_t" shortDescription="The system uptime in seconds (uint16 gives around 18 hour max uptime)" />
-      <Parameter name="BFC_Battery_voltage" parameterTypeRef="float_t" shortDescription="The battery voltage in volts" />
+      <Parameter name="BFC_Battery_Voltage" parameterTypeRef="float_t" shortDescription="The battery voltage in volts" />
       <Parameter name="BFC_Uplink_RSSI" parameterTypeRef="uint8_t" shortDescription="The RSSI of the last packet received from telecommand issuing base station (assume RSSI is positive valued)" />
       <Parameter name="BFC_Error_binary_string" parameterTypeRef="uint16_t" shortDescription="Predefined errors in binary string" />
       <Parameter name="BFC_Flight_Mode" parameterTypeRef="Flight_Mode_Type" shortDescription="Current flight mode" />
@@ -394,7 +394,7 @@
       <SequenceContainer name="Balloon_System_Status">
         <EntryList>
           <ParameterRefEntry parameterRef="BFC_Uptime" />
-          <ParameterRefEntry parameterRef="PFC_Battery_Voltage" />
+          <ParameterRefEntry parameterRef="BFC_Battery_Voltage" />
           <ParameterRefEntry parameterRef="BFC_Uplink_RSSI" />
           <ParameterRefEntry parameterRef="BFC_Error_binary_string" />
           <ParameterRefEntry parameterRef="BFC_Flight_Mode" />
@@ -420,7 +420,6 @@
           <ParameterRefEntry parameterRef="BFC_LoRa_signal_bandwidth" />
           <ParameterRefEntry parameterRef="BFC_LoRa_coding_rate" />
           <ParameterRefEntry parameterRef="BFC_Barometer_reference_pressure" />
-          <ParameterRefEntry parameterRef="BFC_Other_config_data" />
         </EntryList>
         <BaseContainer containerRef="TelemetryPacket">
           <RestrictionCriteria>
@@ -498,7 +497,6 @@
           <ParameterRefEntry parameterRef="PFC_Flight_Mode" />
           <ParameterRefEntry parameterRef="PFC_GPS_lock" />
           <ParameterRefEntry parameterRef="PFC_Uplink_status" />
-          <ParameterRefEntry parameterRef="PFC_Free_space" />
         </EntryList>
         <BaseContainer containerRef="TelemetryPacket">
           <RestrictionCriteria>
@@ -519,7 +517,6 @@
           <ParameterRefEntry parameterRef="PFC_LoRa_signal_bandwidth" />
           <ParameterRefEntry parameterRef="PFC_LoRa_coding_rate" />
           <ParameterRefEntry parameterRef="PFC_Barometer_reference_pressure" />
-          <ParameterRefEntry parameterRef="PFC_Other_config_data" />
         </EntryList>
         <BaseContainer containerRef="TelemetryPacket">
           <RestrictionCriteria>
@@ -594,7 +591,6 @@
           <ParameterRefEntry parameterRef="BASE_1_WiFi_RSSI" />
           <ParameterRefEntry parameterRef="BASE_1_Error_binary_string" />
           <ParameterRefEntry parameterRef="BASE_1_Transmitting_allowed" />
-          <ParameterRefEntry parameterRef="BASE_1_Free_space" />
         </EntryList>
         <BaseContainer containerRef="TelemetryPacket">
           <RestrictionCriteria>
@@ -613,7 +609,6 @@
           <ParameterRefEntry parameterRef="BASE_1_LoRa_spreading_factor" />
           <ParameterRefEntry parameterRef="BASE_1_LoRa_signal_bandwidth" />
           <ParameterRefEntry parameterRef="BASE_1_LoRa_coding_rate" />
-          <ParameterRefEntry parameterRef="BASE_1_Other_config_data" />
         </EntryList>
         <BaseContainer containerRef="TelemetryPacket">
           <RestrictionCriteria>
@@ -695,7 +690,6 @@
           <ParameterRefEntry parameterRef="BASE_2_WiFi_RSSI" />
           <ParameterRefEntry parameterRef="BASE_2_Error_binary_string" />
           <ParameterRefEntry parameterRef="BASE_2_Transmitting_allowed" />
-          <ParameterRefEntry parameterRef="BASE_2_Free_space" />
         </EntryList>
         <BaseContainer containerRef="TelemetryPacket">
           <RestrictionCriteria>
@@ -714,7 +708,6 @@
           <ParameterRefEntry parameterRef="BASE_2_LoRa_spreading_factor" />
           <ParameterRefEntry parameterRef="BASE_2_LoRa_signal_bandwidth" />
           <ParameterRefEntry parameterRef="BASE_2_LoRa_coding_rate" />
-          <ParameterRefEntry parameterRef="BASE_2_Other_config_data" />
         </EntryList>
         <BaseContainer containerRef="TelemetryPacket">
           <RestrictionCriteria>
@@ -796,7 +789,6 @@
           <ParameterRefEntry parameterRef="BASE_3_WiFi_RSSI" />
           <ParameterRefEntry parameterRef="BASE_3_Error_binary_string" />
           <ParameterRefEntry parameterRef="BASE_3_Transmitting_allowed" />
-          <ParameterRefEntry parameterRef="BASE_3_Free_space" />
         </EntryList>
         <BaseContainer containerRef="TelemetryPacket">
           <RestrictionCriteria>
@@ -815,7 +807,6 @@
           <ParameterRefEntry parameterRef="BASE_3_LoRa_spreading_factor" />
           <ParameterRefEntry parameterRef="BASE_3_LoRa_signal_bandwidth" />
           <ParameterRefEntry parameterRef="BASE_3_LoRa_coding_rate" />
-          <ParameterRefEntry parameterRef="BASE_3_Other_config_data" />
         </EntryList>
         <BaseContainer containerRef="TelemetryPacket">
           <RestrictionCriteria>
@@ -881,7 +872,7 @@
         <EntryList>
           <ParameterRefEntry parameterRef="BFC_GPS_Vertical_Speed" />
           <ParameterRefEntry parameterRef="BFC_GPS_Horizontal_Speed" />
-          <ParameterRefEntry parameterRef="BFP_GPS_Course_Over_Ground" />
+          <ParameterRefEntry parameterRef="BFC_GPS_Course_Over_Ground" />
           <ParameterRefEntry parameterRef="BFC_GPS_Total_Speed" />
           <ParameterRefEntry parameterRef="BFC_GPS_Ground_Distance_To_Rotator" />
           <ParameterRefEntry parameterRef="BFC_GPS_Straight_Distance_To_Rotator" />
@@ -902,7 +893,7 @@
         <EntryList>
           <ParameterRefEntry parameterRef="PFC_GPS_Vertical_Speed" />
           <ParameterRefEntry parameterRef="PFC_GPS_Horizontal_Speed" />
-          <ParameterRefEntry parameterRef="PFP_GPS_Course_Over_Ground" />
+          <ParameterRefEntry parameterRef="PFC_GPS_Course_Over_Ground" />
           <ParameterRefEntry parameterRef="PFC_GPS_Total_Speed" />
           <ParameterRefEntry parameterRef="PFC_GPS_Ground_Distance_To_Rotator" />
           <ParameterRefEntry parameterRef="PFC_GPS_Straight_Distance_To_Rotator" />
@@ -1011,17 +1002,6 @@
         <UnitSet />
         <IntegerDataEncoding sizeInBits="1" />
       </BooleanArgumentType>
-
-      <EnumeratedArgumentType name="CCSDS_Group_Flags_Type">
-				<UnitSet />
-				<IntegerDataEncoding sizeInBits="2" />
-				<EnumerationList>
-					<Enumeration value="0" label="Continuation" />
-					<Enumeration value="1" label="First" />
-					<Enumeration value="2" label="Last" />
-					<Enumeration value="3" label="Standalone" />
-				</EnumerationList>
-			</EnumeratedArgumentType>
 
       <EnumeratedArgumentType name="LoRa_TX_Power">
 				<UnitSet />
