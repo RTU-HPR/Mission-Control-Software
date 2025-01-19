@@ -139,6 +139,86 @@
         </EnumerationList>
       </EnumeratedParameterType>
 
+      <EnumeratedParameterType name="LoRa_TX_Power">
+				<UnitSet />
+				<IntegerDataEncoding sizeInBits="8" />
+				<EnumerationList>
+					<Enumeration value="0" label="Do not change" />
+					<Enumeration value="1" label="1 dBm" />
+					<Enumeration value="2" label="2 dBm" />
+					<Enumeration value="3" label="3 dBm" />
+					<Enumeration value="4" label="4 dBm" />
+					<Enumeration value="5" label="5 dBm" />
+					<Enumeration value="6" label="6 dBm" />
+					<Enumeration value="7" label="7 dBm" />
+					<Enumeration value="8" label="8 dBm" />
+					<Enumeration value="9" label="9 dBm" />
+					<Enumeration value="10" label="10 dBm" />
+					<Enumeration value="11" label="11 dBm" />
+					<Enumeration value="12" label="12 dBm" />
+					<Enumeration value="13" label="13 dBm" />
+					<Enumeration value="14" label="14 dBm" />
+					<Enumeration value="15" label="15 dBm" />
+					<Enumeration value="16" label="16 dBm" />
+					<Enumeration value="17" label="17 dBm" />
+					<Enumeration value="18" label="18 dBm" />
+					<Enumeration value="19" label="19 dBm" />
+					<Enumeration value="20" label="20 dBm" />
+					<Enumeration value="21" label="21 dBm" />
+					<Enumeration value="22" label="22 dBm" />
+					<Enumeration value="23" label="23 dBm" />
+					<Enumeration value="24" label="24 dBm" />
+					<Enumeration value="25" label="25 dBm" />
+          <Enumeration value="255" label="Max power" />
+				</EnumerationList>
+			</EnumeratedParameterType>
+
+      <EnumeratedParameterType name="LoRa_Spreading_Factor">
+				<UnitSet />
+				<IntegerDataEncoding sizeInBits="8" />
+				<EnumerationList>
+					<Enumeration value="0" label="Do not change" />
+					<Enumeration value="5" label="SP 5" />
+					<Enumeration value="6" label="SP 6" />
+					<Enumeration value="7" label="SP 7" />
+					<Enumeration value="8" label="SP 8" />
+					<Enumeration value="9" label="SP 9" />
+					<Enumeration value="10" label="SP 10" />
+					<Enumeration value="11" label="SP 11" />
+					<Enumeration value="12" label="SP 12" />
+				</EnumerationList>
+			</EnumeratedParameterType>
+
+      <EnumeratedParameterType name="LoRa_Bandwidth">
+				<UnitSet />
+				<IntegerDataEncoding sizeInBits="8" />
+				<EnumerationList>
+					<Enumeration value="0" label="Do not change" />
+					<Enumeration value="1" label="7.81 kHz" />
+					<Enumeration value="2" label="10.42 kHz" />
+					<Enumeration value="3" label="15.63 kHz" />
+					<Enumeration value="4" label="20.83 kHz" />
+					<Enumeration value="5" label="31.25 kHz" />
+					<Enumeration value="6" label="41.67 kHz" />
+					<Enumeration value="7" label="62.5 kHz" />
+					<Enumeration value="8" label="125 kHz" />
+					<Enumeration value="9" label="250 kHz" />
+					<Enumeration value="10" label="500 kHz" />
+				</EnumerationList>
+			</EnumeratedParameterType>
+
+      <EnumeratedParameterType name="LoRa_Coding_Rate">
+				<UnitSet />
+				<IntegerDataEncoding sizeInBits="8" />
+				<EnumerationList>
+					<Enumeration value="0" label="Do not change" />
+					<Enumeration value="1" label="CR 4/5" />
+					<Enumeration value="2" label="CR 4/6" />
+					<Enumeration value="3" label="CR 4/7" />
+					<Enumeration value="4" label="CR 4/8" />
+				</EnumerationList>
+			</EnumeratedParameterType>
+
 		</ParameterTypeSet>
 
 
@@ -158,18 +238,18 @@
       <Parameter name="BFC_Uptime" parameterTypeRef="int16_t" shortDescription="The system uptime in seconds (uint16 gives around 18 hour max uptime)" />
       <Parameter name="BFC_Battery_Voltage" parameterTypeRef="float_t" shortDescription="The battery voltage in volts" />
       <Parameter name="BFC_Uplink_RSSI" parameterTypeRef="uint8_t" shortDescription="The RSSI of the last packet received from telecommand issuing base station (assume RSSI is positive valued)" />
-      <Parameter name="BFC_Error_binary_string" parameterTypeRef="uint16_t" shortDescription="Predefined errors in binary string" />
+      <Parameter name="BFC_Error_Binary_String" parameterTypeRef="uint16_t" shortDescription="Predefined errors in binary string" />
       <Parameter name="BFC_Flight_Mode" parameterTypeRef="Flight_Mode_Type" shortDescription="Current flight mode" />
-      <Parameter name="BFC_GPS_lock" parameterTypeRef="bool_t" shortDescription="Is GPS lock acquired?" />
-      <Parameter name="BFC_Uplink_status" parameterTypeRef="bool_t" shortDescription="Do we have a connection with a telecommand issuing base station?" />
+      <Parameter name="BFC_GPS_Lock" parameterTypeRef="bool_t" shortDescription="Is GPS lock acquired?" />
+      <Parameter name="BFC_Uplink_Status" parameterTypeRef="bool_t" shortDescription="Do we have a connection with a telecommand issuing base station?" />
 
       <!-- Configuration -->
-      <Parameter name="BFC_LoRa_frequency" parameterTypeRef="float_t" shortDescription="The configured LoRa frequency" />
-      <Parameter name="BFC_LoRa_Tx_power" parameterTypeRef="uint8_t" shortDescription="The configured LoRa tx power" />
-      <Parameter name="BFC_LoRa_spreading_factor" parameterTypeRef="uint8_t" shortDescription="The configured LoRa spreading factor" />
-      <Parameter name="BFC_LoRa_signal_bandwidth" parameterTypeRef="float_t" shortDescription="The configured LoRa signal bandwidth" />
-      <Parameter name="BFC_LoRa_coding_rate" parameterTypeRef="uint8_t" shortDescription="The configured LoRa coding rate" />
-      <Parameter name="BFC_Barometer_reference_pressure" parameterTypeRef="float_t" shortDescription="Sea level pressure that barometer uses to determine altitude" />
+      <Parameter name="BFC_LoRa_Frequency" parameterTypeRef="float_t" shortDescription="The configured LoRa frequency" />
+      <Parameter name="BFC_LoRa_TX_Power" parameterTypeRef="LoRa_TX_Power" shortDescription="The configured LoRa tx power" />
+      <Parameter name="BFC_LoRa_Spreading_Factor" parameterTypeRef="LoRa_Spreading_Factor" shortDescription="The configured LoRa spreading factor" />
+      <Parameter name="BFC_LoRa_Signal_Bandwidth" parameterTypeRef="LoRa_Bandwidth" shortDescription="The configured LoRa signal bandwidth" />
+      <Parameter name="BFC_LoRa_Coding_Rate" parameterTypeRef="LoRa_Coding_Rate" shortDescription="The configured LoRa coding rate" />
+      <Parameter name="BFC_Barometer_Reference_Pressure" parameterTypeRef="float_t" shortDescription="Sea level pressure that barometer uses to determine altitude" />
 
       <!-- Location -->
       <Parameter name="BFC_GPS_Latitude" parameterTypeRef="float_t" />
@@ -180,12 +260,12 @@
 
       <!-- Subsystem 1 status (RWC) -->
       <Parameter name="BFC_Heading" parameterTypeRef="float_t" shortDescription="Heading relative to true north [0;360)" />
-      <Parameter name="BFC_Platform_angular_speed_X" parameterTypeRef="int16_t" shortDescription="Platform rotation in milirad/s (X-axis)" />
-      <Parameter name="BFC_Platform_angular_speed_Y" parameterTypeRef="int16_t" shortDescription="Platform rotation in milirad/s (Y-axis)" />
-      <Parameter name="BFC_Platform_angular_speed_Z" parameterTypeRef="int16_t" shortDescription="Platform rotation in milirad/s (Z-axis)" />
-      <Parameter name="BFC_Motor_angular_speed" parameterTypeRef="float_t" shortDescription="Self-explanatory motor angular speed" />
-      <Parameter name="BFC_RWC_Battery_voltage" parameterTypeRef="float_t" shortDescription="Self-explanatory RWC battery voltage" />
-      <Parameter name="BFC_Motor_temperature" parameterTypeRef="int8_t" shortDescription="Self-explanatory motor temperature" />
+      <Parameter name="BFC_Platform_Angular_Speed_X" parameterTypeRef="int16_t" shortDescription="Platform rotation in milirad/s (X-axis)" />
+      <Parameter name="BFC_Platform_Angular_Speed_Y" parameterTypeRef="int16_t" shortDescription="Platform rotation in milirad/s (Y-axis)" />
+      <Parameter name="BFC_Platform_Angular_Speed_Z" parameterTypeRef="int16_t" shortDescription="Platform rotation in milirad/s (Z-axis)" />
+      <Parameter name="BFC_Motor_Angular_Speed" parameterTypeRef="float_t" shortDescription="Self-explanatory motor angular speed" />
+      <Parameter name="BFC_RWC_Battery_Voltage" parameterTypeRef="float_t" shortDescription="Self-explanatory RWC battery voltage" />
+      <Parameter name="BFC_Motor_Temperature" parameterTypeRef="int8_t" shortDescription="Self-explanatory motor temperature" />
 
       <!-- PARAMETERS THAT CAN BE RECEIVED FROM PAYLOAD -->
       <!-- Telecommand acknowledgment -->
@@ -193,20 +273,20 @@
 
       <!-- System status  -->
       <Parameter name="PFC_Uptime" parameterTypeRef="int16_t" shortDescription="The system uptime in seconds (uint16 gives around 18 hour max uptime)" />
-      <Parameter name="PFC_Battery_voltage" parameterTypeRef="float_t" shortDescription="The battery voltage in volts" />
+      <Parameter name="PFC_Battery_Voltage" parameterTypeRef="float_t" shortDescription="The battery voltage in volts" />
       <Parameter name="PFC_Uplink_RSSI" parameterTypeRef="uint8_t" shortDescription="The RSSI of the last packet received from telecommand issuing base station (assume RSSI is positive valued)" />
-      <Parameter name="PFC_Error_binary_string" parameterTypeRef="uint16_t" shortDescription="Predefined errors in binary string" />
+      <Parameter name="PFC_Error_Binary_String" parameterTypeRef="uint16_t" shortDescription="Predefined errors in binary string" />
       <Parameter name="PFC_Flight_Mode" parameterTypeRef="Flight_Mode_Type" shortDescription="Current flight mode" />
-      <Parameter name="PFC_GPS_lock" parameterTypeRef="bool_t" shortDescription="Is GPS lock acquired?" />
-      <Parameter name="PFC_Uplink_status" parameterTypeRef="bool_t" shortDescription="Do we have a connection with a telecommand issuing base station?" />
+      <Parameter name="PFC_GPS_Lock" parameterTypeRef="bool_t" shortDescription="Is GPS lock acquired?" />
+      <Parameter name="PFC_Uplink_Status" parameterTypeRef="bool_t" shortDescription="Do we have a connection with a telecommand issuing base station?" />
 
       <!-- Configuration -->
-      <Parameter name="PFC_LoRa_frequency" parameterTypeRef="float_t" shortDescription="The configured LoRa frequency" />
-      <Parameter name="PFC_LoRa_Tx_power" parameterTypeRef="uint8_t" shortDescription="The configured LoRa tx power" />
-      <Parameter name="PFC_LoRa_spreading_factor" parameterTypeRef="uint8_t" shortDescription="The configured LoRa spreading factor" />
-      <Parameter name="PFC_LoRa_signal_bandwidth" parameterTypeRef="float_t" shortDescription="The configured LoRa signal bandwidth" />
-      <Parameter name="PFC_LoRa_coding_rate" parameterTypeRef="uint8_t" shortDescription="The configured LoRa coding rate" />
-      <Parameter name="PFC_Barometer_reference_pressure" parameterTypeRef="float_t" shortDescription="Sea level pressure that barometer uses to determine altitude" />
+      <Parameter name="PFC_LoRa_Frequency" parameterTypeRef="float_t" shortDescription="The configured LoRa frequency" />
+      <Parameter name="PFC_LoRa_TX_Power" parameterTypeRef="LoRa_TX_Power" shortDescription="The configured LoRa tx power" />
+      <Parameter name="PFC_LoRa_Spreading_Factor" parameterTypeRef="LoRa_Spreading_Factor" shortDescription="The configured LoRa spreading factor" />
+      <Parameter name="PFC_LoRa_Signal_Bandwidth" parameterTypeRef="LoRa_Bandwidth" shortDescription="The configured LoRa signal bandwidth" />
+      <Parameter name="PFC_LoRa_Coding_Rate" parameterTypeRef="LoRa_Coding_Rate" shortDescription="The configured LoRa coding rate" />
+      <Parameter name="PFC_Barometer_Reference_Pressure" parameterTypeRef="float_t" shortDescription="Sea level pressure that barometer uses to determine altitude" />
 
       <!-- Location -->
       <Parameter name="PFC_GPS_Latitude" parameterTypeRef="float_t" />
@@ -216,13 +296,13 @@
       <Parameter name="PFC_GPS_Satellites" parameterTypeRef="uint32_t" />
 
       <!-- Subsystem 1 status (Heated Container) -->
-      <Parameter name="PFC_Air_temperature" parameterTypeRef="float_t" shortDescription="The temperature near the experiment" />
-      <Parameter name="PFC_Baro_Air_temperature" parameterTypeRef="int8_t" shortDescription="The baro temperature near the experiment" />
-      <Parameter name="PFC_Heatsink_temperature" parameterTypeRef="int8_t" shortDescription="The temperature near the heatsink" />
+      <Parameter name="PFC_Air_Temperature" parameterTypeRef="float_t" shortDescription="The temperature near the experiment" />
+      <Parameter name="PFC_Baro_Air_Temperature" parameterTypeRef="int8_t" shortDescription="The baro temperature near the experiment" />
+      <Parameter name="PFC_Heatsink_Temperature" parameterTypeRef="int8_t" shortDescription="The temperature near the heatsink" />
       <Parameter name="PFC_Pressure" parameterTypeRef="uint32_t" shortDescription="The air pressure inside" />
-      <Parameter name="PFC_Proportional_value" parameterTypeRef="uint16_t" shortDescription="PID loop P term" />
-      <Parameter name="PFC_Integral_value" parameterTypeRef="uint16_t" shortDescription="PID loop I term" />
-      <Parameter name="PFC_Duty_cycle" parameterTypeRef="uint8_t" shortDescription="PWM duty cycle" />
+      <Parameter name="PFC_Proportional_Value" parameterTypeRef="uint16_t" shortDescription="PID loop P term" />
+      <Parameter name="PFC_Integral_Value" parameterTypeRef="uint16_t" shortDescription="PID loop I term" />
+      <Parameter name="PFC_Duty_Cycle" parameterTypeRef="uint8_t" shortDescription="PWM duty cycle" />
 
       <!-- BASE STATIONS -->
       <!-- STATION 1 -->
@@ -231,17 +311,17 @@
 
       <!-- System status  -->
       <Parameter name="BASE_1_Uptime" parameterTypeRef="int16_t" shortDescription="The system uptime in seconds (uint16 gives around 18 hour max uptime)" />
-      <Parameter name="BASE_1_Battery_voltage" parameterTypeRef="float_t" shortDescription="The battery voltage in volts" />
+      <Parameter name="BASE_1_Battery_Voltage" parameterTypeRef="float_t" shortDescription="The battery voltage in volts" />
       <Parameter name="BASE_1_WiFi_RSSI" parameterTypeRef="uint8_t" shortDescription="The RSSI of the last packet received from telecommand issuing base station (assume RSSI is positive valued)" />
-      <Parameter name="BASE_1_Error_binary_string" parameterTypeRef="uint16_t" shortDescription="Predefined errors in binary string" />
-      <Parameter name="BASE_1_Transmitting_allowed" parameterTypeRef="bool_t" shortDescription="0-no, 1-yes" />
+      <Parameter name="BASE_1_Error_Binary_String" parameterTypeRef="uint16_t" shortDescription="Predefined errors in binary string" />
+      <Parameter name="BASE_1_Transmitting_Allowed" parameterTypeRef="bool_t" shortDescription="0-no, 1-yes" />
 
       <!-- Configuration -->
-      <Parameter name="BASE_1_LoRa_frequency" parameterTypeRef="float_t" shortDescription="The configured LoRa frequency" />
-      <Parameter name="BASE_1_LoRa_Tx_power" parameterTypeRef="uint8_t" shortDescription="The configured LoRa tx power" />
-      <Parameter name="BASE_1_LoRa_spreading_factor" parameterTypeRef="uint8_t" shortDescription="The configured LoRa spreading factor" />
-      <Parameter name="BASE_1_LoRa_signal_bandwidth" parameterTypeRef="float_t" shortDescription="The configured LoRa signal bandwidth" />
-      <Parameter name="BASE_1_LoRa_coding_rate" parameterTypeRef="uint8_t" shortDescription="The configured LoRa coding rate" />
+      <Parameter name="BASE_1_LoRa_Frequency" parameterTypeRef="float_t" shortDescription="The configured LoRa frequency" />
+      <Parameter name="BASE_1_LoRa_TX_Power" parameterTypeRef="LoRa_TX_Power" shortDescription="The configured LoRa tx power" />
+      <Parameter name="BASE_1_LoRa_Spreading_Factor" parameterTypeRef="LoRa_Spreading_Factor" shortDescription="The configured LoRa spreading factor" />
+      <Parameter name="BASE_1_LoRa_Signal_Bandwidth" parameterTypeRef="LoRa_Bandwidth" shortDescription="The configured LoRa signal bandwidth" />
+      <Parameter name="BASE_1_LoRa_Coding_Rate" parameterTypeRef="LoRa_Coding_Rate" shortDescription="The configured LoRa coding rate" />
       
       <!-- Location -->
       <Parameter name="BASE_1_Latitude" parameterTypeRef="float_t" shortDescription="Self explanatory" />
@@ -256,7 +336,7 @@
       <Parameter name="BASE_1_Current_Elevation" parameterTypeRef="float_t" shortDescription="Self explanatory" />
 
       <!-- Subsystem 2 status (Ranging) -->
-      <Parameter name="BASE_1_Time_since_last_ranging_signal" parameterTypeRef="uint16_t" shortDescription="Time in seconds" />
+      <Parameter name="BASE_1_Time_Since_Last_Ranging_Signal" parameterTypeRef="uint16_t" shortDescription="Time in seconds" />
 
       <!-- STATION 2 -->
       <!-- Telecommand acknowledgment -->
@@ -264,17 +344,17 @@
 
       <!-- System status  -->
       <Parameter name="BASE_2_Uptime" parameterTypeRef="int16_t" shortDescription="The system uptime in seconds (uint16 gives around 18 hour max uptime)" />
-      <Parameter name="BASE_2_Battery_voltage" parameterTypeRef="float_t" shortDescription="The battery voltage in volts" />
+      <Parameter name="BASE_2_Battery_Voltage" parameterTypeRef="float_t" shortDescription="The battery voltage in volts" />
       <Parameter name="BASE_2_WiFi_RSSI" parameterTypeRef="uint8_t" shortDescription="The RSSI of the last packet received from telecommand issuing base station (assume RSSI is positive valued)" />
-      <Parameter name="BASE_2_Error_binary_string" parameterTypeRef="uint16_t" shortDescription="Predefined errors in binary string" />
-      <Parameter name="BASE_2_Transmitting_allowed" parameterTypeRef="bool_t" shortDescription="0-no, 1-yes" />
+      <Parameter name="BASE_2_Error_Binary_String" parameterTypeRef="uint16_t" shortDescription="Predefined errors in binary string" />
+      <Parameter name="BASE_2_Transmitting_Allowed" parameterTypeRef="bool_t" shortDescription="0-no, 1-yes" />
 
       <!-- Configuration -->
-      <Parameter name="BASE_2_LoRa_frequency" parameterTypeRef="float_t" shortDescription="The configured LoRa frequency" />
-      <Parameter name="BASE_2_LoRa_Tx_power" parameterTypeRef="uint8_t" shortDescription="The configured LoRa tx power" />
-      <Parameter name="BASE_2_LoRa_spreading_factor" parameterTypeRef="uint8_t" shortDescription="The configured LoRa spreading factor" />
-      <Parameter name="BASE_2_LoRa_signal_bandwidth" parameterTypeRef="float_t" shortDescription="The configured LoRa signal bandwidth" />
-      <Parameter name="BASE_2_LoRa_coding_rate" parameterTypeRef="uint8_t" shortDescription="The configured LoRa coding rate" />
+      <Parameter name="BASE_2_LoRa_Frequency" parameterTypeRef="float_t" shortDescription="The configured LoRa frequency" />
+      <Parameter name="BASE_2_LoRa_TX_Power" parameterTypeRef="LoRa_TX_Power" shortDescription="The configured LoRa tx power" />
+      <Parameter name="BASE_2_LoRa_Spreading_Factor" parameterTypeRef="LoRa_Spreading_Factor" shortDescription="The configured LoRa spreading factor" />
+      <Parameter name="BASE_2_LoRa_Signal_Bandwidth" parameterTypeRef="LoRa_Bandwidth" shortDescription="The configured LoRa signal bandwidth" />
+      <Parameter name="BASE_2_LoRa_Coding_Rate" parameterTypeRef="LoRa_Coding_Rate" shortDescription="The configured LoRa coding rate" />
       
       <!-- Location -->
       <Parameter name="BASE_2_Latitude" parameterTypeRef="float_t" shortDescription="Self explanatory" />
@@ -289,7 +369,7 @@
       <Parameter name="BASE_2_Current_Elevation" parameterTypeRef="float_t" shortDescription="Self explanatory" />
 
       <!-- Subsystem 2 status (Ranging) -->
-      <Parameter name="BASE_2_Time_since_last_ranging_signal" parameterTypeRef="uint16_t" shortDescription="Time in seconds" />
+      <Parameter name="BASE_2_Time_Since_Last_Ranging_Signal" parameterTypeRef="uint16_t" shortDescription="Time in seconds" />
 
       <!-- STATION 3 -->
       <!-- Telecommand acknowledgment -->
@@ -297,17 +377,17 @@
 
       <!-- System status  -->
       <Parameter name="BASE_3_Uptime" parameterTypeRef="int16_t" shortDescription="The system uptime in seconds (uint16 gives around 18 hour max uptime)" />
-      <Parameter name="BASE_3_Battery_voltage" parameterTypeRef="float_t" shortDescription="The battery voltage in volts" />
+      <Parameter name="BASE_3_Battery_Voltage" parameterTypeRef="float_t" shortDescription="The battery voltage in volts" />
       <Parameter name="BASE_3_WiFi_RSSI" parameterTypeRef="uint8_t" shortDescription="The RSSI of the last packet received from telecommand issuing base station (assume RSSI is positive valued)" />
-      <Parameter name="BASE_3_Error_binary_string" parameterTypeRef="uint16_t" shortDescription="Predefined errors in binary string" />
-      <Parameter name="BASE_3_Transmitting_allowed" parameterTypeRef="bool_t" shortDescription="0-no, 1-yes" />
+      <Parameter name="BASE_3_Error_Binary_String" parameterTypeRef="uint16_t" shortDescription="Predefined errors in binary string" />
+      <Parameter name="BASE_3_Transmitting_Allowed" parameterTypeRef="bool_t" shortDescription="0-no, 1-yes" />
 
       <!-- Configuration -->
-      <Parameter name="BASE_3_LoRa_frequency" parameterTypeRef="float_t" shortDescription="The configured LoRa frequency" />
-      <Parameter name="BASE_3_LoRa_Tx_power" parameterTypeRef="uint8_t" shortDescription="The configured LoRa tx power" />
-      <Parameter name="BASE_3_LoRa_spreading_factor" parameterTypeRef="uint8_t" shortDescription="The configured LoRa spreading factor" />
-      <Parameter name="BASE_3_LoRa_signal_bandwidth" parameterTypeRef="float_t" shortDescription="The configured LoRa signal bandwidth" />
-      <Parameter name="BASE_3_LoRa_coding_rate" parameterTypeRef="uint8_t" shortDescription="The configured LoRa coding rate" />
+      <Parameter name="BASE_3_LoRa_Frequency" parameterTypeRef="float_t" shortDescription="The configured LoRa frequency" />
+      <Parameter name="BASE_3_LoRa_TX_Power" parameterTypeRef="LoRa_TX_Power" shortDescription="The configured LoRa tx power" />
+      <Parameter name="BASE_3_LoRa_Spreading_Factor" parameterTypeRef="LoRa_Spreading_Factor" shortDescription="The configured LoRa spreading factor" />
+      <Parameter name="BASE_3_LoRa_Signal_Bandwidth" parameterTypeRef="LoRa_Bandwidth" shortDescription="The configured LoRa signal bandwidth" />
+      <Parameter name="BASE_3_LoRa_Coding_Rate" parameterTypeRef="LoRa_Coding_Rate" shortDescription="The configured LoRa coding rate" />
       
       <!-- Location -->
       <Parameter name="BASE_3_Latitude" parameterTypeRef="float_t" shortDescription="Self explanatory" />
@@ -322,7 +402,7 @@
       <Parameter name="BASE_3_Current_Elevation" parameterTypeRef="float_t" shortDescription="Self explanatory" />
 
       <!-- Subsystem 2 status (Ranging) -->
-      <Parameter name="BASE_3_Time_since_last_ranging_signal" parameterTypeRef="uint16_t" shortDescription="Time in seconds" />
+      <Parameter name="BASE_3_Time_Since_Last_Ranging_Signal" parameterTypeRef="uint16_t" shortDescription="Time in seconds" />
 
       <!-- CALCULATIONS -->
       <!-- PFC -->
@@ -396,10 +476,10 @@
           <ParameterRefEntry parameterRef="BFC_Uptime" />
           <ParameterRefEntry parameterRef="BFC_Battery_Voltage" />
           <ParameterRefEntry parameterRef="BFC_Uplink_RSSI" />
-          <ParameterRefEntry parameterRef="BFC_Error_binary_string" />
+          <ParameterRefEntry parameterRef="BFC_Error_Binary_String" />
           <ParameterRefEntry parameterRef="BFC_Flight_Mode" />
-          <ParameterRefEntry parameterRef="BFC_GPS_lock" />
-          <ParameterRefEntry parameterRef="BFC_Uplink_status" />
+          <ParameterRefEntry parameterRef="BFC_GPS_Lock" />
+          <ParameterRefEntry parameterRef="BFC_Uplink_Status" />
         </EntryList>
 				<BaseContainer containerRef="TelemetryPacket">
 					<RestrictionCriteria>
@@ -414,12 +494,12 @@
       <!-- Configuration Telemetry Packet -->
       <SequenceContainer name="Balloon_Configuration_Telemetry">
         <EntryList>
-          <ParameterRefEntry parameterRef="BFC_LoRa_frequency" />
-          <ParameterRefEntry parameterRef="BFC_LoRa_Tx_power" />
-          <ParameterRefEntry parameterRef="BFC_LoRa_spreading_factor" />
-          <ParameterRefEntry parameterRef="BFC_LoRa_signal_bandwidth" />
-          <ParameterRefEntry parameterRef="BFC_LoRa_coding_rate" />
-          <ParameterRefEntry parameterRef="BFC_Barometer_reference_pressure" />
+          <ParameterRefEntry parameterRef="BFC_LoRa_Frequency" />
+          <ParameterRefEntry parameterRef="BFC_LoRa_TX_Power" />
+          <ParameterRefEntry parameterRef="BFC_LoRa_Spreading_Factor" />
+          <ParameterRefEntry parameterRef="BFC_LoRa_Signal_Bandwidth" />
+          <ParameterRefEntry parameterRef="BFC_LoRa_Coding_Rate" />
+          <ParameterRefEntry parameterRef="BFC_Barometer_Reference_Pressure" />
         </EntryList>
         <BaseContainer containerRef="TelemetryPacket">
           <RestrictionCriteria>
@@ -454,12 +534,12 @@
       <SequenceContainer name="Balloon_RWC_Telemetry">
         <EntryList>
           <ParameterRefEntry parameterRef="BFC_Heading" />
-          <ParameterRefEntry parameterRef="BFC_Platform_angular_speed_X" />
-          <ParameterRefEntry parameterRef="BFC_Platform_angular_speed_Y" />
-          <ParameterRefEntry parameterRef="BFC_Platform_angular_speed_Z" />
-          <ParameterRefEntry parameterRef="BFC_Motor_angular_speed" />
-          <ParameterRefEntry parameterRef="BFC_RWC_Battery_voltage" />
-          <ParameterRefEntry parameterRef="BFC_Motor_temperature" />
+          <ParameterRefEntry parameterRef="BFC_Platform_Angular_Speed_X" />
+          <ParameterRefEntry parameterRef="BFC_Platform_Angular_Speed_Y" />
+          <ParameterRefEntry parameterRef="BFC_Platform_Angular_Speed_Z" />
+          <ParameterRefEntry parameterRef="BFC_Motor_Angular_Speed" />
+          <ParameterRefEntry parameterRef="BFC_RWC_Battery_Voltage" />
+          <ParameterRefEntry parameterRef="BFC_Motor_Temperature" />
         </EntryList>
         <BaseContainer containerRef="TelemetryPacket">
           <RestrictionCriteria>
@@ -491,12 +571,12 @@
       <SequenceContainer name="Payload_System_Status">
         <EntryList>
           <ParameterRefEntry parameterRef="PFC_Uptime" />
-          <ParameterRefEntry parameterRef="PFC_Battery_voltage" />
+          <ParameterRefEntry parameterRef="PFC_Battery_Voltage" />
           <ParameterRefEntry parameterRef="PFC_Uplink_RSSI" />
-          <ParameterRefEntry parameterRef="PFC_Error_binary_string" />
+          <ParameterRefEntry parameterRef="PFC_Error_Binary_String" />
           <ParameterRefEntry parameterRef="PFC_Flight_Mode" />
-          <ParameterRefEntry parameterRef="PFC_GPS_lock" />
-          <ParameterRefEntry parameterRef="PFC_Uplink_status" />
+          <ParameterRefEntry parameterRef="PFC_GPS_Lock" />
+          <ParameterRefEntry parameterRef="PFC_Uplink_Status" />
         </EntryList>
         <BaseContainer containerRef="TelemetryPacket">
           <RestrictionCriteria>
@@ -511,12 +591,12 @@
       <!-- Configuration -->
       <SequenceContainer name="Payload_Configuration">
         <EntryList>
-          <ParameterRefEntry parameterRef="PFC_LoRa_frequency" />
-          <ParameterRefEntry parameterRef="PFC_LoRa_Tx_power" />
-          <ParameterRefEntry parameterRef="PFC_LoRa_spreading_factor" />
-          <ParameterRefEntry parameterRef="PFC_LoRa_signal_bandwidth" />
-          <ParameterRefEntry parameterRef="PFC_LoRa_coding_rate" />
-          <ParameterRefEntry parameterRef="PFC_Barometer_reference_pressure" />
+          <ParameterRefEntry parameterRef="PFC_LoRa_Frequency" />
+          <ParameterRefEntry parameterRef="PFC_LoRa_TX_Power" />
+          <ParameterRefEntry parameterRef="PFC_LoRa_Spreading_Factor" />
+          <ParameterRefEntry parameterRef="PFC_LoRa_Signal_Bandwidth" />
+          <ParameterRefEntry parameterRef="PFC_LoRa_Coding_Rate" />
+          <ParameterRefEntry parameterRef="PFC_Barometer_Reference_Pressure" />
         </EntryList>
         <BaseContainer containerRef="TelemetryPacket">
           <RestrictionCriteria>
@@ -550,13 +630,13 @@
       <!-- Heated Container Status -->
       <SequenceContainer name="Payload_Heated_Container_Status">
         <EntryList>
-          <ParameterRefEntry parameterRef="PFC_Air_temperature" />
-          <ParameterRefEntry parameterRef="PFC_Baro_Air_temperature" />
-          <ParameterRefEntry parameterRef="PFC_Heatsink_temperature" />
+          <ParameterRefEntry parameterRef="PFC_Air_Temperature" />
+          <ParameterRefEntry parameterRef="PFC_Baro_Air_Temperature" />
+          <ParameterRefEntry parameterRef="PFC_Heatsink_Temperature" />
           <ParameterRefEntry parameterRef="PFC_Pressure" />
-          <ParameterRefEntry parameterRef="PFC_Proportional_value" />
-          <ParameterRefEntry parameterRef="PFC_Integral_value" />
-          <ParameterRefEntry parameterRef="PFC_Duty_cycle" />
+          <ParameterRefEntry parameterRef="PFC_Proportional_Value" />
+          <ParameterRefEntry parameterRef="PFC_Integral_Value" />
+          <ParameterRefEntry parameterRef="PFC_Duty_Cycle" />
         </EntryList>
         <BaseContainer containerRef="TelemetryPacket">
           <RestrictionCriteria>
@@ -587,10 +667,10 @@
       <SequenceContainer name="BASE_1_System_Status">
         <EntryList>
           <ParameterRefEntry parameterRef="BASE_1_Uptime" />
-          <ParameterRefEntry parameterRef="BASE_1_Battery_voltage" />
+          <ParameterRefEntry parameterRef="BASE_1_Battery_Voltage" />
           <ParameterRefEntry parameterRef="BASE_1_WiFi_RSSI" />
-          <ParameterRefEntry parameterRef="BASE_1_Error_binary_string" />
-          <ParameterRefEntry parameterRef="BASE_1_Transmitting_allowed" />
+          <ParameterRefEntry parameterRef="BASE_1_Error_Binary_String" />
+          <ParameterRefEntry parameterRef="BASE_1_Transmitting_Allowed" />
         </EntryList>
         <BaseContainer containerRef="TelemetryPacket">
           <RestrictionCriteria>
@@ -604,11 +684,11 @@
 
       <SequenceContainer name="BASE_1_Configuration">
         <EntryList>
-          <ParameterRefEntry parameterRef="BASE_1_LoRa_frequency" />
-          <ParameterRefEntry parameterRef="BASE_1_LoRa_Tx_power" />
-          <ParameterRefEntry parameterRef="BASE_1_LoRa_spreading_factor" />
-          <ParameterRefEntry parameterRef="BASE_1_LoRa_signal_bandwidth" />
-          <ParameterRefEntry parameterRef="BASE_1_LoRa_coding_rate" />
+          <ParameterRefEntry parameterRef="BASE_1_LoRa_Frequency" />
+          <ParameterRefEntry parameterRef="BASE_1_LoRa_TX_Power" />
+          <ParameterRefEntry parameterRef="BASE_1_LoRa_Spreading_Factor" />
+          <ParameterRefEntry parameterRef="BASE_1_LoRa_Signal_Bandwidth" />
+          <ParameterRefEntry parameterRef="BASE_1_LoRa_Coding_Rate" />
         </EntryList>
         <BaseContainer containerRef="TelemetryPacket">
           <RestrictionCriteria>
@@ -656,7 +736,7 @@
 
       <SequenceContainer name="BASE_1_Ranging_Status">
         <EntryList>
-          <ParameterRefEntry parameterRef="BASE_1_Time_since_last_ranging_signal" />
+          <ParameterRefEntry parameterRef="BASE_1_Time_Since_Last_Ranging_Signal" />
         </EntryList>
         <BaseContainer containerRef="TelemetryPacket">
           <RestrictionCriteria>
@@ -686,10 +766,10 @@
       <SequenceContainer name="BASE_2_System_Status">
         <EntryList>
           <ParameterRefEntry parameterRef="BASE_2_Uptime" />
-          <ParameterRefEntry parameterRef="BASE_2_Battery_voltage" />
+          <ParameterRefEntry parameterRef="BASE_2_Battery_Voltage" />
           <ParameterRefEntry parameterRef="BASE_2_WiFi_RSSI" />
-          <ParameterRefEntry parameterRef="BASE_2_Error_binary_string" />
-          <ParameterRefEntry parameterRef="BASE_2_Transmitting_allowed" />
+          <ParameterRefEntry parameterRef="BASE_2_Error_Binary_String" />
+          <ParameterRefEntry parameterRef="BASE_2_Transmitting_Allowed" />
         </EntryList>
         <BaseContainer containerRef="TelemetryPacket">
           <RestrictionCriteria>
@@ -703,11 +783,11 @@
 
       <SequenceContainer name="BASE_2_Configuration">
         <EntryList>
-          <ParameterRefEntry parameterRef="BASE_2_LoRa_frequency" />
-          <ParameterRefEntry parameterRef="BASE_2_LoRa_Tx_power" />
-          <ParameterRefEntry parameterRef="BASE_2_LoRa_spreading_factor" />
-          <ParameterRefEntry parameterRef="BASE_2_LoRa_signal_bandwidth" />
-          <ParameterRefEntry parameterRef="BASE_2_LoRa_coding_rate" />
+          <ParameterRefEntry parameterRef="BASE_2_LoRa_Frequency" />
+          <ParameterRefEntry parameterRef="BASE_2_LoRa_TX_Power" />
+          <ParameterRefEntry parameterRef="BASE_2_LoRa_Spreading_Factor" />
+          <ParameterRefEntry parameterRef="BASE_2_LoRa_Signal_Bandwidth" />
+          <ParameterRefEntry parameterRef="BASE_2_LoRa_Coding_Rate" />
         </EntryList>
         <BaseContainer containerRef="TelemetryPacket">
           <RestrictionCriteria>
@@ -755,7 +835,7 @@
 
       <SequenceContainer name="BASE_2_Ranging_Status">
         <EntryList>
-          <ParameterRefEntry parameterRef="BASE_2_Time_since_last_ranging_signal" />
+          <ParameterRefEntry parameterRef="BASE_2_Time_Since_Last_Ranging_Signal" />
         </EntryList>
         <BaseContainer containerRef="TelemetryPacket">
           <RestrictionCriteria>
@@ -785,10 +865,10 @@
       <SequenceContainer name="BASE_3_System_Status">
         <EntryList>
           <ParameterRefEntry parameterRef="BASE_3_Uptime" />
-          <ParameterRefEntry parameterRef="BASE_3_Battery_voltage" />
+          <ParameterRefEntry parameterRef="BASE_3_Battery_Voltage" />
           <ParameterRefEntry parameterRef="BASE_3_WiFi_RSSI" />
-          <ParameterRefEntry parameterRef="BASE_3_Error_binary_string" />
-          <ParameterRefEntry parameterRef="BASE_3_Transmitting_allowed" />
+          <ParameterRefEntry parameterRef="BASE_3_Error_Binary_String" />
+          <ParameterRefEntry parameterRef="BASE_3_Transmitting_Allowed" />
         </EntryList>
         <BaseContainer containerRef="TelemetryPacket">
           <RestrictionCriteria>
@@ -802,11 +882,11 @@
 
       <SequenceContainer name="BASE_3_Configuration">
         <EntryList>
-          <ParameterRefEntry parameterRef="BASE_3_LoRa_frequency" />
-          <ParameterRefEntry parameterRef="BASE_3_LoRa_Tx_power" />
-          <ParameterRefEntry parameterRef="BASE_3_LoRa_spreading_factor" />
-          <ParameterRefEntry parameterRef="BASE_3_LoRa_signal_bandwidth" />
-          <ParameterRefEntry parameterRef="BASE_3_LoRa_coding_rate" />
+          <ParameterRefEntry parameterRef="BASE_3_LoRa_Frequency" />
+          <ParameterRefEntry parameterRef="BASE_3_LoRa_TX_Power" />
+          <ParameterRefEntry parameterRef="BASE_3_LoRa_Spreading_Factor" />
+          <ParameterRefEntry parameterRef="BASE_3_LoRa_Signal_Bandwidth" />
+          <ParameterRefEntry parameterRef="BASE_3_LoRa_Coding_Rate" />
         </EntryList>
         <BaseContainer containerRef="TelemetryPacket">
           <RestrictionCriteria>
@@ -854,7 +934,7 @@
 
       <SequenceContainer name="BASE_3_Ranging_Status">
         <EntryList>
-          <ParameterRefEntry parameterRef="BASE_3_Time_since_last_ranging_signal" />
+          <ParameterRefEntry parameterRef="BASE_3_Time_Since_Last_Ranging_Signal" />
         </EntryList>
         <BaseContainer containerRef="TelemetryPacket">
           <RestrictionCriteria>
