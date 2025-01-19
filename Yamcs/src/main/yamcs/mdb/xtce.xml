@@ -254,9 +254,9 @@
       <!-- Location -->
       <Parameter name="BFC_GPS_Latitude" parameterTypeRef="float_t" />
 			<Parameter name="BFC_GPS_Longitude" parameterTypeRef="float_t" />
-			<Parameter name="BFC_GPS_Altitude" parameterTypeRef="float_t" />
-      <Parameter name="BFC_Baro_Altitude" parameterTypeRef="float_t" />
-      <Parameter name="BFC_GPS_Satellites" parameterTypeRef="uint32_t" />
+			<Parameter name="BFC_GPS_Altitude" parameterTypeRef="uint16_t" />
+      <Parameter name="BFC_Baro_Altitude" parameterTypeRef="uint16_t" />
+      <Parameter name="BFC_GPS_Satellites" parameterTypeRef="uint8_t" />
 
       <!-- Subsystem 1 status (RWC) -->
       <Parameter name="BFC_Heading" parameterTypeRef="float_t" shortDescription="Heading relative to true north [0;360)" />
@@ -291,9 +291,9 @@
       <!-- Location -->
       <Parameter name="PFC_GPS_Latitude" parameterTypeRef="float_t" />
 			<Parameter name="PFC_GPS_Longitude" parameterTypeRef="float_t" />
-			<Parameter name="PFC_GPS_Altitude" parameterTypeRef="float_t" />
-      <Parameter name="PFC_Baro_Altitude" parameterTypeRef="float_t" />
-      <Parameter name="PFC_GPS_Satellites" parameterTypeRef="uint32_t" />
+			<Parameter name="PFC_GPS_Altitude" parameterTypeRef="uint16_t" />
+      <Parameter name="PFC_Baro_Altitude" parameterTypeRef="uint16_t" />
+      <Parameter name="PFC_GPS_Satellites" parameterTypeRef="uint8_t" />
 
       <!-- Subsystem 1 status (Heated Container) -->
       <Parameter name="PFC_Air_Temperature" parameterTypeRef="float_t" shortDescription="The temperature near the experiment" />
