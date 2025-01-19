@@ -254,8 +254,8 @@
       <!-- Location -->
       <Parameter name="BFC_GPS_Latitude" parameterTypeRef="float_t" />
 			<Parameter name="BFC_GPS_Longitude" parameterTypeRef="float_t" />
-			<Parameter name="BFC_GPS_Altitude" parameterTypeRef="uint16_t" />
-      <Parameter name="BFC_Baro_Altitude" parameterTypeRef="uint16_t" />
+			<Parameter name="BFC_GPS_Altitude" parameterTypeRef="float_t" />
+      <Parameter name="BFC_Baro_Altitude" parameterTypeRef="float_t" />
       <Parameter name="BFC_GPS_Satellites" parameterTypeRef="uint8_t" />
 
       <!-- Subsystem 1 status (RWC) -->
@@ -291,8 +291,8 @@
       <!-- Location -->
       <Parameter name="PFC_GPS_Latitude" parameterTypeRef="float_t" />
 			<Parameter name="PFC_GPS_Longitude" parameterTypeRef="float_t" />
-			<Parameter name="PFC_GPS_Altitude" parameterTypeRef="uint16_t" />
-      <Parameter name="PFC_Baro_Altitude" parameterTypeRef="uint16_t" />
+			<Parameter name="PFC_GPS_Altitude" parameterTypeRef="float_t" />
+      <Parameter name="PFC_Baro_Altitude" parameterTypeRef="float_t" />
       <Parameter name="PFC_GPS_Satellites" parameterTypeRef="uint8_t" />
 
       <!-- Subsystem 1 status (Heated Container) -->
@@ -326,7 +326,7 @@
       <!-- Location -->
       <Parameter name="BASE_1_Latitude" parameterTypeRef="float_t" shortDescription="Self explanatory" />
       <Parameter name="BASE_1_Longitude" parameterTypeRef="float_t" shortDescription="Self explanatory" />
-      <Parameter name="BASE_1_GPS_Altitude" parameterTypeRef="uint16_t" shortDescription="Self explanatory" />
+      <Parameter name="BASE_1_GPS_Altitude" parameterTypeRef="float_t" shortDescription="Self explanatory" />
       <Parameter name="BASE_1_GPS_Satellites" parameterTypeRef="uint8_t" shortDescription="Self explanatory" />
 
       <!-- Subsystem 1 status (Rotator) -->
@@ -359,7 +359,7 @@
       <!-- Location -->
       <Parameter name="BASE_2_Latitude" parameterTypeRef="float_t" shortDescription="Self explanatory" />
       <Parameter name="BASE_2_Longitude" parameterTypeRef="float_t" shortDescription="Self explanatory" />
-      <Parameter name="BASE_2_GPS_Altitude" parameterTypeRef="uint16_t" shortDescription="Self explanatory" />
+      <Parameter name="BASE_2_GPS_Altitude" parameterTypeRef="float_t" shortDescription="Self explanatory" />
       <Parameter name="BASE_2_GPS_Satellites" parameterTypeRef="uint8_t" shortDescription="Self explanatory" />
 
       <!-- Subsystem 1 status (Rotator) -->
@@ -392,7 +392,7 @@
       <!-- Location -->
       <Parameter name="BASE_3_Latitude" parameterTypeRef="float_t" shortDescription="Self explanatory" />
       <Parameter name="BASE_3_Longitude" parameterTypeRef="float_t" shortDescription="Self explanatory" />
-      <Parameter name="BASE_3_GPS_Altitude" parameterTypeRef="uint16_t" shortDescription="Self explanatory" />
+      <Parameter name="BASE_3_GPS_Altitude" parameterTypeRef="float_t" shortDescription="Self explanatory" />
       <Parameter name="BASE_3_GPS_Satellites" parameterTypeRef="uint8_t" shortDescription="Self explanatory" />
 
       <!-- Subsystem 1 status (Rotator) -->
