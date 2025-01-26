@@ -286,6 +286,28 @@
       <Parameter name="PFC_LoRa_Spreading_Factor" parameterTypeRef="LoRa_Spreading_Factor" shortDescription="The configured LoRa spreading factor" />
       <Parameter name="PFC_LoRa_Signal_Bandwidth" parameterTypeRef="LoRa_Bandwidth" shortDescription="The configured LoRa signal bandwidth" />
       <Parameter name="PFC_LoRa_Coding_Rate" parameterTypeRef="LoRa_Coding_Rate" shortDescription="The configured LoRa coding rate" />
+
+      <Parameter name="PFC_Ranging_LoRa_Frequency" parameterTypeRef="float_t" shortDescription="The configured LoRa frequency" />
+      <Parameter name="PFC_Ranging_LoRa_TX_Power" parameterTypeRef="LoRa_TX_Power" shortDescription="The configured LoRa tx power" />
+      <Parameter name="PFC_Ranging_LoRa_Spreading_Factor" parameterTypeRef="LoRa_Spreading_Factor" shortDescription="The configured LoRa spreading factor" />
+      <Parameter name="PFC_Ranging_LoRa_Signal_Bandwidth" parameterTypeRef="LoRa_Bandwidth" shortDescription="The configured LoRa signal bandwidth" />
+      <Parameter name="PFC_Ranging_LoRa_Coding_Rate" parameterTypeRef="LoRa_Coding_Rate" shortDescription="The configured LoRa coding rate" />
+
+      <Parameter name="PFC_BASE_1_Address" parameterTypeRef="int8_t" />
+      <Parameter name="PFC_BASE_1_Latitude" parameterTypeRef="float_t" />
+      <Parameter name="PFC_BASE_1_Longitude" parameterTypeRef="float_t" />
+      <Parameter name="PFC_BASE_1_Altitude" parameterTypeRef="float_t" />
+
+      <Parameter name="PFC_BASE_2_Address" parameterTypeRef="int8_t" />
+      <Parameter name="PFC_BASE_2_Latitude" parameterTypeRef="float_t" />
+      <Parameter name="PFC_BASE_2_Longitude" parameterTypeRef="float_t" />
+      <Parameter name="PFC_BASE_2_Altitude" parameterTypeRef="float_t" />
+
+      <Parameter name="PFC_BASE_3_Address" parameterTypeRef="int8_t" />
+      <Parameter name="PFC_BASE_3_Latitude" parameterTypeRef="float_t" />
+      <Parameter name="PFC_BASE_3_Longitude" parameterTypeRef="float_t" />
+      <Parameter name="PFC_BASE_3_Altitude" parameterTypeRef="float_t" />
+
       <Parameter name="PFC_Barometer_Reference_Pressure" parameterTypeRef="float_t" shortDescription="Sea level pressure that barometer uses to determine altitude" />
 
       <!-- Location -->
@@ -300,9 +322,20 @@
       <Parameter name="PFC_Baro_Air_Temperature" parameterTypeRef="int8_t" shortDescription="The baro temperature near the experiment" />
       <Parameter name="PFC_Heatsink_Temperature" parameterTypeRef="int8_t" shortDescription="The temperature near the heatsink" />
       <Parameter name="PFC_Pressure" parameterTypeRef="uint32_t" shortDescription="The air pressure inside" />
-      <Parameter name="PFC_Proportional_Value" parameterTypeRef="uint16_t" shortDescription="PID loop P term" />
-      <Parameter name="PFC_Integral_Value" parameterTypeRef="uint16_t" shortDescription="PID loop I term" />
+      <Parameter name="PFC_Proportional_Value" parameterTypeRef="int16_t" shortDescription="PID loop P term" />
+      <Parameter name="PFC_Integral_Value" parameterTypeRef="int16_t" shortDescription="PID loop I term" />
       <Parameter name="PFC_Duty_Cycle" parameterTypeRef="uint8_t" shortDescription="PWM duty cycle" />
+
+      <!-- Subsystem 2 status (Ranging) -->
+      <Parameter name="PFC_Estimated_Latitude" parameterTypeRef="float_t" />
+      <Parameter name="PFC_Estimated_Longitude" parameterTypeRef="float_t" />
+      <Parameter name="PFC_Estimated_Altitude" parameterTypeRef="float_t" />
+      <Parameter name="PFC_Distance_From_BASE_1" parameterTypeRef="float_t" />
+      <Parameter name="PFC_Distance_From_BASE_2" parameterTypeRef="float_t" />
+      <Parameter name="PFC_Distance_From_BASE_3" parameterTypeRef="float_t" />
+      <Parameter name="PFC_Time_Since_Last_Ranging_BASE_1" parameterTypeRef="float_t" />
+      <Parameter name="PFC_Time_Since_Last_Ranging_BASE_2" parameterTypeRef="float_t" />
+      <Parameter name="PFC_Time_Since_Last_Ranging_BASE_3" parameterTypeRef="float_t" />
 
       <!-- BASE STATIONS -->
       <!-- STATION 1 -->
@@ -322,6 +355,12 @@
       <Parameter name="BASE_1_LoRa_Spreading_Factor" parameterTypeRef="LoRa_Spreading_Factor" shortDescription="The configured LoRa spreading factor" />
       <Parameter name="BASE_1_LoRa_Signal_Bandwidth" parameterTypeRef="LoRa_Bandwidth" shortDescription="The configured LoRa signal bandwidth" />
       <Parameter name="BASE_1_LoRa_Coding_Rate" parameterTypeRef="LoRa_Coding_Rate" shortDescription="The configured LoRa coding rate" />
+
+      <Parameter name="BASE_1_Ranging_LoRa_Frequency" parameterTypeRef="float_t" shortDescription="The configured LoRa frequency" />
+      <Parameter name="BASE_1_Ranging_LoRa_TX_Power" parameterTypeRef="LoRa_TX_Power" shortDescription="The configured LoRa tx power" />
+      <Parameter name="BASE_1_Ranging_LoRa_Spreading_Factor" parameterTypeRef="LoRa_Spreading_Factor" shortDescription="The configured LoRa spreading factor" />
+      <Parameter name="BASE_1_Ranging_LoRa_Signal_Bandwidth" parameterTypeRef="LoRa_Bandwidth" shortDescription="The configured LoRa signal bandwidth" />
+      <Parameter name="BASE_1_Ranging_LoRa_Coding_Rate" parameterTypeRef="LoRa_Coding_Rate" shortDescription="The configured LoRa coding rate" />
       
       <!-- Location -->
       <Parameter name="BASE_1_Latitude" parameterTypeRef="float_t" shortDescription="Self explanatory" />
@@ -355,6 +394,12 @@
       <Parameter name="BASE_2_LoRa_Spreading_Factor" parameterTypeRef="LoRa_Spreading_Factor" shortDescription="The configured LoRa spreading factor" />
       <Parameter name="BASE_2_LoRa_Signal_Bandwidth" parameterTypeRef="LoRa_Bandwidth" shortDescription="The configured LoRa signal bandwidth" />
       <Parameter name="BASE_2_LoRa_Coding_Rate" parameterTypeRef="LoRa_Coding_Rate" shortDescription="The configured LoRa coding rate" />
+
+      <Parameter name="BASE_2_Ranging_LoRa_Frequency" parameterTypeRef="float_t" shortDescription="The configured LoRa frequency" />
+      <Parameter name="BASE_2_Ranging_LoRa_TX_Power" parameterTypeRef="LoRa_TX_Power" shortDescription="The configured LoRa tx power" />
+      <Parameter name="BASE_2_Ranging_LoRa_Spreading_Factor" parameterTypeRef="LoRa_Spreading_Factor" shortDescription="The configured LoRa spreading factor" />
+      <Parameter name="BASE_2_Ranging_LoRa_Signal_Bandwidth" parameterTypeRef="LoRa_Bandwidth" shortDescription="The configured LoRa signal bandwidth" />
+      <Parameter name="BASE_2_Ranging_LoRa_Coding_Rate" parameterTypeRef="LoRa_Coding_Rate" shortDescription="The configured LoRa coding rate" />
       
       <!-- Location -->
       <Parameter name="BASE_2_Latitude" parameterTypeRef="float_t" shortDescription="Self explanatory" />
@@ -388,6 +433,12 @@
       <Parameter name="BASE_3_LoRa_Spreading_Factor" parameterTypeRef="LoRa_Spreading_Factor" shortDescription="The configured LoRa spreading factor" />
       <Parameter name="BASE_3_LoRa_Signal_Bandwidth" parameterTypeRef="LoRa_Bandwidth" shortDescription="The configured LoRa signal bandwidth" />
       <Parameter name="BASE_3_LoRa_Coding_Rate" parameterTypeRef="LoRa_Coding_Rate" shortDescription="The configured LoRa coding rate" />
+
+      <Parameter name="BASE_3_Ranging_LoRa_Frequency" parameterTypeRef="float_t" shortDescription="The configured LoRa frequency" />
+      <Parameter name="BASE_3_Ranging_LoRa_TX_Power" parameterTypeRef="LoRa_TX_Power" shortDescription="The configured LoRa tx power" />
+      <Parameter name="BASE_3_Ranging_LoRa_Spreading_Factor" parameterTypeRef="LoRa_Spreading_Factor" shortDescription="The configured LoRa spreading factor" />
+      <Parameter name="BASE_3_Ranging_LoRa_Signal_Bandwidth" parameterTypeRef="LoRa_Bandwidth" shortDescription="The configured LoRa signal bandwidth" />
+      <Parameter name="BASE_3_Ranging_LoRa_Coding_Rate" parameterTypeRef="LoRa_Coding_Rate" shortDescription="The configured LoRa coding rate" />
       
       <!-- Location -->
       <Parameter name="BASE_3_Latitude" parameterTypeRef="float_t" shortDescription="Self explanatory" />
@@ -596,6 +647,28 @@
           <ParameterRefEntry parameterRef="PFC_LoRa_Spreading_Factor" />
           <ParameterRefEntry parameterRef="PFC_LoRa_Signal_Bandwidth" />
           <ParameterRefEntry parameterRef="PFC_LoRa_Coding_Rate" />
+
+          <ParameterRefEntry parameterRef="PFC_Ranging_LoRa_Frequency" />
+          <ParameterRefEntry parameterRef="PFC_Ranging_LoRa_TX_Power" />
+          <ParameterRefEntry parameterRef="PFC_Ranging_LoRa_Spreading_Factor" />
+          <ParameterRefEntry parameterRef="PFC_Ranging_LoRa_Signal_Bandwidth" />
+          <ParameterRefEntry parameterRef="PFC_Ranging_LoRa_Coding_Rate" />
+          
+          <ParameterRefEntry parameterRef="PFC_BASE_1_Address" />
+          <ParameterRefEntry parameterRef="PFC_BASE_1_Latitude" />
+          <ParameterRefEntry parameterRef="PFC_BASE_1_Longitude" />
+          <ParameterRefEntry parameterRef="PFC_BASE_1_Altitude" />
+
+          <ParameterRefEntry parameterRef="PFC_BASE_2_Address" />
+          <ParameterRefEntry parameterRef="PFC_BASE_2_Latitude" />
+          <ParameterRefEntry parameterRef="PFC_BASE_2_Longitude" />
+          <ParameterRefEntry parameterRef="PFC_BASE_2_Altitude" />
+
+          <ParameterRefEntry parameterRef="PFC_BASE_3_Address" />
+          <ParameterRefEntry parameterRef="PFC_BASE_3_Latitude" />
+          <ParameterRefEntry parameterRef="PFC_BASE_3_Longitude" />
+          <ParameterRefEntry parameterRef="PFC_BASE_3_Altitude" />
+
           <ParameterRefEntry parameterRef="PFC_Barometer_Reference_Pressure" />
         </EntryList>
         <BaseContainer containerRef="TelemetryPacket">
@@ -689,6 +762,12 @@
           <ParameterRefEntry parameterRef="BASE_1_LoRa_Spreading_Factor" />
           <ParameterRefEntry parameterRef="BASE_1_LoRa_Signal_Bandwidth" />
           <ParameterRefEntry parameterRef="BASE_1_LoRa_Coding_Rate" />
+
+          <ParameterRefEntry parameterRef="BASE_1_Ranging_LoRa_Frequency" />
+          <ParameterRefEntry parameterRef="BASE_1_Ranging_LoRa_TX_Power" />
+          <ParameterRefEntry parameterRef="BASE_1_Ranging_LoRa_Spreading_Factor" />
+          <ParameterRefEntry parameterRef="BASE_1_Ranging_LoRa_Signal_Bandwidth" />
+          <ParameterRefEntry parameterRef="BASE_1_Ranging_LoRa_Coding_Rate" />
         </EntryList>
         <BaseContainer containerRef="TelemetryPacket">
           <RestrictionCriteria>
@@ -788,6 +867,12 @@
           <ParameterRefEntry parameterRef="BASE_2_LoRa_Spreading_Factor" />
           <ParameterRefEntry parameterRef="BASE_2_LoRa_Signal_Bandwidth" />
           <ParameterRefEntry parameterRef="BASE_2_LoRa_Coding_Rate" />
+
+          <ParameterRefEntry parameterRef="BASE_2_Ranging_LoRa_Frequency" />
+          <ParameterRefEntry parameterRef="BASE_2_Ranging_LoRa_TX_Power" />
+          <ParameterRefEntry parameterRef="BASE_2_Ranging_LoRa_Spreading_Factor" />
+          <ParameterRefEntry parameterRef="BASE_2_Ranging_LoRa_Signal_Bandwidth" />
+          <ParameterRefEntry parameterRef="BASE_2_Ranging_LoRa_Coding_Rate" />
         </EntryList>
         <BaseContainer containerRef="TelemetryPacket">
           <RestrictionCriteria>
@@ -887,6 +972,12 @@
           <ParameterRefEntry parameterRef="BASE_3_LoRa_Spreading_Factor" />
           <ParameterRefEntry parameterRef="BASE_3_LoRa_Signal_Bandwidth" />
           <ParameterRefEntry parameterRef="BASE_3_LoRa_Coding_Rate" />
+
+          <ParameterRefEntry parameterRef="BASE_3_Ranging_LoRa_Frequency" />
+          <ParameterRefEntry parameterRef="BASE_3_Ranging_LoRa_TX_Power" />
+          <ParameterRefEntry parameterRef="BASE_3_Ranging_LoRa_Spreading_Factor" />
+          <ParameterRefEntry parameterRef="BASE_3_Ranging_LoRa_Signal_Bandwidth" />
+          <ParameterRefEntry parameterRef="BASE_3_Ranging_LoRa_Coding_Rate" />
         </EntryList>
         <BaseContainer containerRef="TelemetryPacket">
           <RestrictionCriteria>
@@ -1368,11 +1459,33 @@
       <MetaCommand name="PFC_Set_Configuration">
         <!-- Define arguments required for command -->
         <ArgumentList>
-          <Argument argumentTypeRef="float_t" name="LoRa_Frequency" />
-          <Argument argumentTypeRef="LoRa_TX_Power" name="LoRa_TX_Power" />
-          <Argument argumentTypeRef="LoRa_Spreading_Factor" name="LoRa_Spreading_Factor" />
-          <Argument argumentTypeRef="LoRa_Bandwidth" name="LoRa_Bandwidth" />
-          <Argument argumentTypeRef="LoRa_Coding_Rate" name="LoRa_Coding_Rate" />
+          <Argument argumentTypeRef="float_t" name="Telemetry_LoRa_Frequency" initialValue="0" />
+          <Argument argumentTypeRef="LoRa_TX_Power" name="Telemetry_LoRa_TX_Power" initialValue="0" />
+          <Argument argumentTypeRef="LoRa_Spreading_Factor" name="Telemetry_LoRa_Spreading_Factor" initialValue="0" />
+          <Argument argumentTypeRef="LoRa_Bandwidth" name="Telemetry_LoRa_Bandwidth" initialValue="0" />
+          <Argument argumentTypeRef="LoRa_Coding_Rate" name="Telemetry_LoRa_Coding_Rate" initialValue="0" />
+
+          <Argument argumentTypeRef="float_t" name="Ranging_LoRa_Frequency" initialValue="0" />
+          <Argument argumentTypeRef="LoRa_TX_Power" name="Ranging_LoRa_TX_Power" initialValue="0" />
+          <Argument argumentTypeRef="LoRa_Spreading_Factor" name="Ranging_LoRa_Spreading_Factor" initialValue="0" />
+          <Argument argumentTypeRef="LoRa_Bandwidth" name="Ranging_LoRa_Bandwidth" initialValue="0" />
+          <Argument argumentTypeRef="LoRa_Coding_Rate" name="Ranging_LoRa_Coding_Rate" initialValue="0" />
+
+          <Argument argumentTypeRef="int8_t" name="BASE_1_Address" initialValue="-1"/>
+          <Argument argumentTypeRef="float_t" name="BASE_1_Latitude" initialValue="0"/>
+          <Argument argumentTypeRef="float_t" name="BASE_1_Longitude" initialValue="0"/>
+          <Argument argumentTypeRef="float_t" name="BASE_1_Altitude" initialValue="0"/>
+
+          <Argument argumentTypeRef="int8_t" name="BASE_2_Address" initialValue="-1"/>
+          <Argument argumentTypeRef="float_t" name="BASE_2_Latitude" initialValue="0"/>
+          <Argument argumentTypeRef="float_t" name="BASE_2_Longitude" initialValue="0"/>
+          <Argument argumentTypeRef="float_t" name="BASE_2_Altitude" initialValue="0"/>
+
+          <Argument argumentTypeRef="int8_t" name="BASE_3_Address" initialValue="-1"/>
+          <Argument argumentTypeRef="float_t" name="BASE_3_Latitude" initialValue="0"/>
+          <Argument argumentTypeRef="float_t" name="BASE_3_Longitude" initialValue="0"/>
+          <Argument argumentTypeRef="float_t" name="BASE_3_Altitude" initialValue="0"/>
+
           <Argument argumentTypeRef="float_t" name="Barometer_Reference_Pressure" />
         </ArgumentList>
         <!-- Assign Packet ID -->
@@ -1384,11 +1497,33 @@
         <!-- Add arguments to container -->
 				<CommandContainer name="PFC_Set_Configuration_Container">
 					<EntryList>
-            <ArgumentRefEntry argumentRef="LoRa_Frequency" />
-            <ArgumentRefEntry argumentRef="LoRa_TX_Power" />
-            <ArgumentRefEntry argumentRef="LoRa_Spreading_Factor" />
-            <ArgumentRefEntry argumentRef="LoRa_Bandwidth" />
-            <ArgumentRefEntry argumentRef="LoRa_Coding_Rate" />
+            <ArgumentRefEntry argumentRef="Telemetry_LoRa_Frequency" />
+            <ArgumentRefEntry argumentRef="Telemetry_LoRa_TX_Power" />
+            <ArgumentRefEntry argumentRef="Telemetry_LoRa_Spreading_Factor" />
+            <ArgumentRefEntry argumentRef="Telemetry_LoRa_Bandwidth" />
+            <ArgumentRefEntry argumentRef="Telemetry_LoRa_Coding_Rate" />
+
+            <ArgumentRefEntry argumentRef="Ranging_LoRa_Frequency" />
+            <ArgumentRefEntry argumentRef="Ranging_LoRa_TX_Power" />
+            <ArgumentRefEntry argumentRef="Ranging_LoRa_Spreading_Factor" />
+            <ArgumentRefEntry argumentRef="Ranging_LoRa_Bandwidth" />
+            <ArgumentRefEntry argumentRef="Ranging_LoRa_Coding_Rate" />
+
+            <ArgumentRefEntry argumentRef="BASE_1_Address"/>
+            <ArgumentRefEntry argumentRef="BASE_1_Latitude"/>
+            <ArgumentRefEntry argumentRef="BASE_1_Longitude"/>
+            <ArgumentRefEntry argumentRef="BASE_1_Altitude"/>
+
+            <ArgumentRefEntry argumentRef="BASE_2_Address"/>
+            <ArgumentRefEntry argumentRef="BASE_2_Latitude"/>
+            <ArgumentRefEntry argumentRef="BASE_2_Longitude"/>
+            <ArgumentRefEntry argumentRef="BASE_2_Altitude"/>
+
+            <ArgumentRefEntry argumentRef="BASE_3_Address"/>
+            <ArgumentRefEntry argumentRef="BASE_3_Latitude"/>
+            <ArgumentRefEntry argumentRef="BASE_3_Longitude"/>
+            <ArgumentRefEntry argumentRef="BASE_3_Altitude"/>
+
             <ArgumentRefEntry argumentRef="Barometer_Reference_Pressure" />
 					</EntryList>
 					<BaseContainer containerRef="PFC_Telecommand_Container" />
@@ -1435,11 +1570,17 @@
       <MetaCommand name="BASE_1_Set_Configuration">
         <!-- Define arguments required for command -->
         <ArgumentList>
-          <Argument argumentTypeRef="float_t" name="LoRa_Frequency" />
-          <Argument argumentTypeRef="LoRa_TX_Power" name="LoRa_TX_Power" />
-          <Argument argumentTypeRef="LoRa_Spreading_Factor" name="LoRa_Spreading_Factor" />
-          <Argument argumentTypeRef="LoRa_Bandwidth" name="LoRa_Bandwidth" />
-          <Argument argumentTypeRef="LoRa_Coding_Rate" name="LoRa_Coding_Rate" />
+          <Argument argumentTypeRef="float_t" name="Telemetry_LoRa_Frequency" initialValue="0" />
+          <Argument argumentTypeRef="LoRa_TX_Power" name="Telemetry_LoRa_TX_Power" initialValue="0" />
+          <Argument argumentTypeRef="LoRa_Spreading_Factor" name="Telemetry_LoRa_Spreading_Factor" initialValue="0" />
+          <Argument argumentTypeRef="LoRa_Bandwidth" name="Telemetry_LoRa_Bandwidth" initialValue="0" />
+          <Argument argumentTypeRef="LoRa_Coding_Rate" name="Telemetry_LoRa_Coding_Rate" initialValue="0" />
+
+          <Argument argumentTypeRef="float_t" name="Ranging_LoRa_Frequency" initialValue="0" />
+          <Argument argumentTypeRef="LoRa_TX_Power" name="Ranging_LoRa_TX_Power" initialValue="0" />
+          <Argument argumentTypeRef="LoRa_Spreading_Factor" name="Ranging_LoRa_Spreading_Factor" initialValue="0" />
+          <Argument argumentTypeRef="LoRa_Bandwidth" name="Ranging_LoRa_Bandwidth" initialValue="0" />
+          <Argument argumentTypeRef="LoRa_Coding_Rate" name="Ranging_LoRa_Coding_Rate" initialValue="0" />
         </ArgumentList>
         <!-- Assign Packet ID -->
 				<BaseMetaCommand metaCommandRef="BASE_1_Telecommand">
@@ -1450,11 +1591,16 @@
         <!-- Add arguments to container -->
 				<CommandContainer name="BASE_1_Set_Configuration_Container">
 					<EntryList>
-            <ArgumentRefEntry argumentRef="LoRa_Frequency" />
-            <ArgumentRefEntry argumentRef="LoRa_TX_Power" />
-            <ArgumentRefEntry argumentRef="LoRa_Spreading_Factor" />
-            <ArgumentRefEntry argumentRef="LoRa_Bandwidth" />
-            <ArgumentRefEntry argumentRef="LoRa_Coding_Rate" />
+            <ArgumentRefEntry argumentRef="Telemetry_LoRa_Frequency" />
+            <ArgumentRefEntry argumentRef="Telemetry_LoRa_TX_Power" />
+            <ArgumentRefEntry argumentRef="Telemetry_LoRa_Spreading_Factor" />
+            <ArgumentRefEntry argumentRef="Telemetry_LoRa_Bandwidth" />
+            <ArgumentRefEntry argumentRef="Telemetry_LoRa_Coding_Rate" />
+            <ArgumentRefEntry argumentRef="Ranging_LoRa_Frequency" />
+            <ArgumentRefEntry argumentRef="Ranging_LoRa_TX_Power" />
+            <ArgumentRefEntry argumentRef="Ranging_LoRa_Spreading_Factor" />
+            <ArgumentRefEntry argumentRef="Ranging_LoRa_Bandwidth" />
+            <ArgumentRefEntry argumentRef="Ranging_LoRa_Coding_Rate" />
 					</EntryList>
 					<BaseContainer containerRef="BASE_1_Telecommand_Container" />
 				</CommandContainer>
@@ -1505,11 +1651,17 @@
       <MetaCommand name="BASE_2_Set_Configuration">
         <!-- Define arguments required for command -->
         <ArgumentList>
-          <Argument argumentTypeRef="float_t" name="LoRa_Frequency" />
-          <Argument argumentTypeRef="LoRa_TX_Power" name="LoRa_TX_Power" />
-          <Argument argumentTypeRef="LoRa_Spreading_Factor" name="LoRa_Spreading_Factor" />
-          <Argument argumentTypeRef="LoRa_Bandwidth" name="LoRa_Bandwidth" />
-          <Argument argumentTypeRef="LoRa_Coding_Rate" name="LoRa_Coding_Rate" />
+          <Argument argumentTypeRef="float_t" name="Telemetry_LoRa_Frequency" initialValue="0" />
+          <Argument argumentTypeRef="LoRa_TX_Power" name="Telemetry_LoRa_TX_Power" initialValue="0" />
+          <Argument argumentTypeRef="LoRa_Spreading_Factor" name="Telemetry_LoRa_Spreading_Factor" initialValue="0" />
+          <Argument argumentTypeRef="LoRa_Bandwidth" name="Telemetry_LoRa_Bandwidth" initialValue="0" />
+          <Argument argumentTypeRef="LoRa_Coding_Rate" name="Telemetry_LoRa_Coding_Rate" initialValue="0" />
+
+          <Argument argumentTypeRef="float_t" name="Ranging_LoRa_Frequency" initialValue="0" />
+          <Argument argumentTypeRef="LoRa_TX_Power" name="Ranging_LoRa_TX_Power" initialValue="0" />
+          <Argument argumentTypeRef="LoRa_Spreading_Factor" name="Ranging_LoRa_Spreading_Factor" initialValue="0" />
+          <Argument argumentTypeRef="LoRa_Bandwidth" name="Ranging_LoRa_Bandwidth" initialValue="0" />
+          <Argument argumentTypeRef="LoRa_Coding_Rate" name="Ranging_LoRa_Coding_Rate" initialValue="0" />
         </ArgumentList>
         <!-- Assign Packet ID -->
 				<BaseMetaCommand metaCommandRef="BASE_2_Telecommand">
@@ -1520,11 +1672,16 @@
         <!-- Add arguments to container -->
 				<CommandContainer name="BASE_2_Set_Configuration_Container">
 					<EntryList>
-            <ArgumentRefEntry argumentRef="LoRa_Frequency" />
-            <ArgumentRefEntry argumentRef="LoRa_TX_Power" />
-            <ArgumentRefEntry argumentRef="LoRa_Spreading_Factor" />
-            <ArgumentRefEntry argumentRef="LoRa_Bandwidth" />
-            <ArgumentRefEntry argumentRef="LoRa_Coding_Rate" />
+            <ArgumentRefEntry argumentRef="Telemetry_LoRa_Frequency" />
+            <ArgumentRefEntry argumentRef="Telemetry_LoRa_TX_Power" />
+            <ArgumentRefEntry argumentRef="Telemetry_LoRa_Spreading_Factor" />
+            <ArgumentRefEntry argumentRef="Telemetry_LoRa_Bandwidth" />
+            <ArgumentRefEntry argumentRef="Telemetry_LoRa_Coding_Rate" />
+            <ArgumentRefEntry argumentRef="Ranging_LoRa_Frequency" />
+            <ArgumentRefEntry argumentRef="Ranging_LoRa_TX_Power" />
+            <ArgumentRefEntry argumentRef="Ranging_LoRa_Spreading_Factor" />
+            <ArgumentRefEntry argumentRef="Ranging_LoRa_Bandwidth" />
+            <ArgumentRefEntry argumentRef="Ranging_LoRa_Coding_Rate" />
 					</EntryList>
 					<BaseContainer containerRef="BASE_2_Telecommand_Container" />
 				</CommandContainer>
@@ -1575,11 +1732,17 @@
       <MetaCommand name="BASE_3_Set_Configuration">
         <!-- Define arguments required for command -->
         <ArgumentList>
-          <Argument argumentTypeRef="float_t" name="LoRa_Frequency" />
-          <Argument argumentTypeRef="LoRa_TX_Power" name="LoRa_TX_Power" />
-          <Argument argumentTypeRef="LoRa_Spreading_Factor" name="LoRa_Spreading_Factor" />
-          <Argument argumentTypeRef="LoRa_Bandwidth" name="LoRa_Bandwidth" />
-          <Argument argumentTypeRef="LoRa_Coding_Rate" name="LoRa_Coding_Rate" />
+          <Argument argumentTypeRef="float_t" name="Telemetry_LoRa_Frequency" initialValue="0" />
+          <Argument argumentTypeRef="LoRa_TX_Power" name="Telemetry_LoRa_TX_Power" initialValue="0" />
+          <Argument argumentTypeRef="LoRa_Spreading_Factor" name="Telemetry_LoRa_Spreading_Factor" initialValue="0" />
+          <Argument argumentTypeRef="LoRa_Bandwidth" name="Telemetry_LoRa_Bandwidth" initialValue="0" />
+          <Argument argumentTypeRef="LoRa_Coding_Rate" name="Telemetry_LoRa_Coding_Rate" initialValue="0" />
+
+          <Argument argumentTypeRef="float_t" name="Ranging_LoRa_Frequency" initialValue="0" />
+          <Argument argumentTypeRef="LoRa_TX_Power" name="Ranging_LoRa_TX_Power" initialValue="0" />
+          <Argument argumentTypeRef="LoRa_Spreading_Factor" name="Ranging_LoRa_Spreading_Factor" initialValue="0" />
+          <Argument argumentTypeRef="LoRa_Bandwidth" name="Ranging_LoRa_Bandwidth" initialValue="0" />
+          <Argument argumentTypeRef="LoRa_Coding_Rate" name="Ranging_LoRa_Coding_Rate" initialValue="0" />
         </ArgumentList>
         <!-- Assign Packet ID -->
 				<BaseMetaCommand metaCommandRef="BASE_3_Telecommand">
@@ -1590,11 +1753,16 @@
         <!-- Add arguments to container -->
 				<CommandContainer name="BASE_3_Set_Configuration_Container">
 					<EntryList>
-            <ArgumentRefEntry argumentRef="LoRa_Frequency" />
-            <ArgumentRefEntry argumentRef="LoRa_TX_Power" />
-            <ArgumentRefEntry argumentRef="LoRa_Spreading_Factor" />
-            <ArgumentRefEntry argumentRef="LoRa_Bandwidth" />
-            <ArgumentRefEntry argumentRef="LoRa_Coding_Rate" />
+            <ArgumentRefEntry argumentRef="Telemetry_LoRa_Frequency" />
+            <ArgumentRefEntry argumentRef="Telemetry_LoRa_TX_Power" />
+            <ArgumentRefEntry argumentRef="Telemetry_LoRa_Spreading_Factor" />
+            <ArgumentRefEntry argumentRef="Telemetry_LoRa_Bandwidth" />
+            <ArgumentRefEntry argumentRef="Telemetry_LoRa_Coding_Rate" />
+            <ArgumentRefEntry argumentRef="Ranging_LoRa_Frequency" />
+            <ArgumentRefEntry argumentRef="Ranging_LoRa_TX_Power" />
+            <ArgumentRefEntry argumentRef="Ranging_LoRa_Spreading_Factor" />
+            <ArgumentRefEntry argumentRef="Ranging_LoRa_Bandwidth" />
+            <ArgumentRefEntry argumentRef="Ranging_LoRa_Coding_Rate" />
 					</EntryList>
 					<BaseContainer containerRef="BASE_3_Telecommand_Container" />
 				</CommandContainer>
