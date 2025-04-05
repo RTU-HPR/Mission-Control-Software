@@ -18,6 +18,8 @@ COMMAND_TOPIC = f"{BASE_TOPIC}/commands"
 MESSAGE_TOPIC = f"{BASE_TOPIC}/messages"
 STATUS_TOPIC = f"{BASE_TOPIC}/status"
 
+start_time = time.time_ns()
+
 # Helper function to get current UNIX timestamp in ms
 def current_millis():
     return int(round(time.time() * 1000))
@@ -27,6 +29,9 @@ def get_device_info():
     hostname = socket.gethostname()
     addresses = socket.gethostbyname_ex(hostname)[2]
     return hostname, addresses
+
+def get_time_since_start():
+    return round((time.time_ns() - start_time) / 1e3)  # Convert to usec
 
 # MQTT Callbacks
 def on_connect(client, userdata, flags, rc, properties=None):
@@ -57,7 +62,7 @@ def publish_data(client, message):
     for byte in message:
         data_array.append(byte)
     data_message = {
-        "createdAt": current_millis(),
+        "timestamp": current_millis(),
         "message": data_array
     }
     print(f"Publishing message: {data_message}")
@@ -92,13 +97,93 @@ class StreamItem:
         self.period = 1 / self.frequency
 
 
+
 master = mavutil.mavlink_connection("udpout:localhost:14540", source_system=255, source_component=0, dialect="custom")
 
-heartbeat = lambda: publish_data(client, master.mav.heartbeat_encode(random.randint(0, 100)).pack(master.mav))
-balloon_report = lambda: publish_data(client, master.mav.balloon_report_encode(random.randint(0, 100), 0, 0, 0, 0, 0).pack(master.mav))
+heartbeat = lambda: publish_data(client, master.mav.heartbeat_encode(random.randint(8000, 10000)).pack(master.mav))
+balloon_report = lambda: publish_data(client, master.mav.balloon_report_encode(
+    get_time_since_start(),
+    mavutil.mavlink.BALLOON_STATE_INIT, # state
+    0, # last command id
+    0, # last command time usec
+    random.randint(6000, 8400), # voltage
+    random.randint(30, 100) # rssi
+).pack(master.mav))
+payload_report = lambda: publish_data(client, master.mav.payload_report_encode(
+    get_time_since_start(),
+    mavutil.mavlink.PAYLOAD_STATE_INIT, # state
+    0, # last command id
+    0, # last command time usec
+    random.randint(6000, 8400), # voltage
+    random.randint(30, 100) # rssi
+).pack(master.mav))
+balloon_position_report = lambda: publish_data(client, master.mav.position_report_encode(
+    get_time_since_start(),
+    mavutil.mavlink.VEHICLE_TYPE_BALLOON, # vehicle type
+    random.randint(5, 32), # satellites used
+    random.randint(0, 8), # fix type
+    random.uniform(55, 57), # latitude
+    random.uniform(24, 25), # longitude
+    random.uniform(10, 32000), # altitude
+    random.randint(-32768, 32767), # horizontal speed
+    random.randint(-32768, 32767), # vertical speed
+    random.randint(0, round(2 * 3.14 * 1000)), # cog
+    random.randint(round(-3.14 / 2 * 1000), round(3.14 / 2 * 1000)), # inclination
+    random.uniform(10, 32000), # altitude
+).pack(master.mav))
+payload_position_report = lambda: publish_data(client, master.mav.position_report_encode(
+    get_time_since_start(),
+    mavutil.mavlink.VEHICLE_TYPE_PAYLOAD, # vehicle type
+    random.randint(5, 32), # satellites used
+    random.randint(0, 8), # fix type
+    random.uniform(55, 57), # latitude
+    random.uniform(24, 25), # longitude
+    random.uniform(10, 32000), # altitude
+    random.randint(-32768, 32767), # horizontal speed
+    random.randint(-32768, 32767), # vertical speed
+    random.randint(0, round(2 * 3.14 * 1000)), # cog
+    random.randint(round(-3.14 / 2 * 1000), round(3.14 / 2 * 1000)), # inclination
+    random.uniform(10, 32000), # altitude
+).pack(master.mav))
+rwc_report = lambda: publish_data(client, master.mav.rwc_report_encode(
+    get_time_since_start(),
+    mavutil.mavlink.RWC_STATE_INIT, # state
+    random.randint(6000, 8400),  # voltage
+    random.randint(0, round(2 * 3.14 * 1000)), # cog
+    [random.randint(-32768, 32767) for i in range(3)], # ang velocities
+    random.randint(0, 32767), # motor rpm
+    random.randint(-128, 127), # temperature
+).pack(master.mav))
+heated_container_report = lambda: publish_data(client, master.mav.heated_container_report_encode(
+    get_time_since_start(),
+    mavutil.mavlink.HEATED_CONTAINER_STATE_INIT, # state
+    random.randint(-32768, 32767),  # air temp
+    random.randint(-32768, 32767),  # baro air temp
+    random.randint(-32768, 32767),  # heatsink temp
+    random.randint(0, 1300), # pressure
+    random.randint(0, 32767), # k term
+    random.randint(0, 32767), # i term
+    random.randint(0, 32767), # duty cycle
+).pack(master.mav))
+ranging_report = lambda: publish_data(client, master.mav.ranging_report_encode(
+    get_time_since_start(),
+    mavutil.mavlink.RANGING_STATE_INIT, # state
+    random.uniform(54, 57), # latitude
+    random.uniform(23, 25), # longitude
+    random.uniform(10, 32000), # altitude
+    [random.uniform(0, 100000) for i in range(3)], # distances
+    [random.randint(0, 100000) for i in range(3)], # time since last ranging
+).pack(master.mav))
+
 streams = [
-    StreamItem("heartbeat", heartbeat, 0.1),
+    StreamItem("heartbeat", heartbeat, 1),
     StreamItem("balloon_report", balloon_report, 1),
+    StreamItem("payload_report", payload_report, 1),
+    StreamItem("balloon_position_report", balloon_position_report, 1),
+    StreamItem("payload_position_report", payload_position_report, 1),
+    StreamItem("rwc_report", rwc_report, 1),
+    StreamItem("heated_container_report", heated_container_report, 1),
+    StreamItem("ranging_report", ranging_report, 1),
 ]
 
 while True:
@@ -106,7 +191,7 @@ while True:
     for si in streams:
         if si.next_send_t < t:
             si.fn()
-            si.next_send_t = t + si.period
-    time.sleep(0.01)
+            si.next_send_t = t + si.period + random.uniform(-0.1, 0.1)  # Add some jitter to the send time
+    time.sleep(0.0001)
 
 client.loop_stop()

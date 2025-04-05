@@ -166,7 +166,7 @@ class MqttClient:
         while True:
             try:
                 msg = self.outgoing_queue.get()
-                data = {"createdAt": self._current_millis(), "message": msg}
+                data = {"timestamp": self._current_millis(), "message": msg}
                 self.db_queue.put(data)
                 self.client.publish(PROCESSED_MESSAGES_TOPIC, json.dumps(data), qos=2)
                 logger.debug(f"Published processed message: {data}")
