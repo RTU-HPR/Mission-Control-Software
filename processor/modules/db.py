@@ -18,18 +18,6 @@ def create_connection(db_path):
     return conn
 
 
-def create_tables(conn):
-    cursor = conn.cursor()
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS raw_packets (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            timestamp INTEGER,
-            packet BLOB
-        )
-    """)
-    conn.commit()
-
-
 def create_mavlink_table(conn, msg_type):
     cursor = conn.cursor()
     mavlink_message_class = getattr(mavlink, f"MAVLink_{msg_type.lower()}_message")
@@ -95,13 +83,15 @@ def insert_parsed_data(conn, msg_type, timestamp, data):
 
 def insert_message(conn, message):
     logger.debug(f"Inserting message into database: {message}")
-    msg_type = message["mavpackettype"]
+    created_at = message["createdAt"]
+    mavlink_message = message["message"]
+    msg_type = mavlink_message["mavpackettype"]
     try:
-        timestamp = message["time_usec"]
+        timestamp = mavlink_message["time_usec"]
     except KeyError:
         timestamp = 0
-    data = {k: v for k, v in message.items() if k not in ["mavpackettype", "time_usec"]}
-    logger.debug(f"Message type: {msg_type}, Timestamp: {timestamp}, Data: {data}")
+    data = {k: v for k, v in mavlink_message.items() if k not in ["mavpackettype"]}
+    logger.debug(f"Created at: {created_at}, Message type: {msg_type}, Timestamp: {timestamp}, Data: {data}")
 
     # Check if the table exists, and create it if it doesn't
     cursor = conn.cursor()
@@ -123,4 +113,4 @@ def insert_message(conn, message):
         )
     conn.commit()
 
-    insert_parsed_data(conn, msg_type, timestamp, data)
+    insert_parsed_data(conn, msg_type, created_at, data)

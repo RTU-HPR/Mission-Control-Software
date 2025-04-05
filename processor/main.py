@@ -16,6 +16,7 @@ if __name__ == "__main__":
 
     logging.basicConfig(
         level=logging.INFO,
+        # level=logging.DEBUG,
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
         handlers=[
             RotatingFileHandler(
@@ -31,7 +32,6 @@ if __name__ == "__main__":
 
     # Database setup
     conn = db.create_connection(db.DB_PATH)
-    db.create_tables(conn)
 
     # Main loop
     while True:

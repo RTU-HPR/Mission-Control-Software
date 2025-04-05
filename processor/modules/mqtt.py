@@ -161,13 +161,13 @@ class MqttClient:
             msg_dict = msg.to_dict()
             msg_dict["binary"] = list(mav_bin_msg)
             self.outgoing_queue.put(msg_dict)
-            self.db_queue.put(msg_dict)
 
     def _publish_processed_messages(self) -> None:
         while True:
             try:
                 msg = self.outgoing_queue.get()
                 data = {"createdAt": self._current_millis(), "message": msg}
+                self.db_queue.put(data)
                 self.client.publish(PROCESSED_MESSAGES_TOPIC, json.dumps(data), qos=2)
                 logger.debug(f"Published processed message: {data}")
                 self.sent_count += 1
